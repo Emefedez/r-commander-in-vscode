@@ -38,12 +38,20 @@ module.exports = {
     code: v => v.pkgs.map(p => `library(${p})`).join('\n') },
   Options: { vscode: 'workbench.action.openSettings', args: ['rCommanderPlay'] },
   installPackages: { ds: false, extraIn: 'toolsMenu', label: { en: 'Install package(s)...', es: 'Instalar paquete(s)...' },
-    fields: [{ k: 'pkgs', type: 'text', label: 'Package names separated by commas', def: 'car, RcmdrMisc' }],
-    // A terminal R without a configured repository waits for a mirror to be chosen, which looks
-    // like a stuck download: use cloud.r-project.org unless the user set a repository.
-    code: v => ['local({', '  repos <- getOption("repos")', '  if (is.null(repos) || any(repos == "@CRAN@")) repos <- c(CRAN = "https://cloud.r-project.org")',
-      '  options(timeout = max(600, getOption("timeout")))',
-      `  install.packages(c(${v.pkgs.split(/[,\s]+/).filter(Boolean).map(rs).join(', ')}), repos = repos)`, '})'].join('\n') },
+    fields: [{ k: 'pkgs', type: 'text', label: 'Package names separated by commas', def: 'car, RcmdrMisc' },
+      { k: 'flags', type: 'flags', label: 'Options', items: [['force', 'Reinstall packages that are already installed', false]] }],
+    // Only what is missing is downloaded. A terminal R without a configured repository waits for a
+    // mirror to be chosen, which looks like a stuck download: use cloud.r-project.org unless the
+    // user set a repository.
+    code(v) {
+      const wanted = v.pkgs.split(/[,\s]+/).filter(Boolean);
+      return ['local({', `  wanted <- c(${wanted.map(rs).join(', ')})`,
+        v.flags.force ? '  todo <- wanted' : '  todo <- wanted[!nzchar(vapply(wanted, function(p) system.file(package = p), ""))]',
+        '  if (length(todo) < length(wanted)) message("Already installed, not downloaded again: ", paste(setdiff(wanted, todo), collapse = ", "))',
+        '  if (!length(todo)) return(invisible(NULL))',
+        '  repos <- getOption("repos")', '  if (is.null(repos) || any(repos == "@CRAN@")) repos <- c(CRAN = "https://cloud.r-project.org")',
+        '  options(timeout = max(600, getOption("timeout")))', '  install.packages(todo, repos = repos)', '})'].join('\n');
+    } },
 
   helpCommander: { ds: false, code: () => 'help(package = "Rcmdr")' },
   browseManual: { ds: false, url: 'https://socialsciences.mcmaster.ca/jfox/Misc/Rcmdr/Getting-Started-with-the-Rcmdr.pdf' },

@@ -1,5 +1,7 @@
 runner <- new.env(parent = baseenv())
-sys.source(".vscode/r-commander-play/runner.R", runner)
+# Path of this file, so the test works from any directory
+here <- dirname(normalizePath(sub("^--file=", "", grep("^--file=", commandArgs(FALSE), value = TRUE)[1L])))
+sys.source(file.path(here, "..", "runner.R"), runner)
 
 help <- function(...) stop("Help should have been skipped")
 help.search <- help

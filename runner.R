@@ -21,9 +21,12 @@ run_code <- function(code, skip_help = TRUE, skip_commands = character(),
     on.exit(options(previous), add = TRUE)
   }
 
-  # Source references retain skipped lines in echoed output after subsetting.
-  # Deparse the remaining expressions so only executed commands are echoed.
-  expressions <- parse(text = code, keep.source = FALSE)
+  # Keep the source text, so the echo shows the code as it was written (spacing and
+  # comments included). Each expression is echoed from the end of the previous one, so
+  # the comments above it come along, and the lines of skipped commands never do.
+  expressions <- parse(text = code, keep.source = TRUE)
+  srcfile <- attr(expressions, "srcfile")
+  srcrefs <- attr(expressions, "srcref")
 
   command_name <- function(expression) {
     if (!is.call(expression)) return("")
@@ -47,8 +50,40 @@ run_code <- function(code, skip_help = TRUE, skip_commands = character(),
   }
   if (all(skip)) return(invisible(NULL))
 
-  source(exprs = expressions[!skip], local = globalenv(), echo = TRUE,
-         max.deparse.length = Inf)
+  source_lines <- function(first, last) {
+    if (last < first) character() else getSrcLines(srcfile, first, last)
+  }
+  # Comment lines get their own prompt; the expression gets "> " and then "+ " as R does.
+  echo <- function(lines, expression_lines) {
+    lines <- sub("[ \t\r]+$", "", lines)
+    lead <- length(lines) - expression_lines
+    while (lead > 0L && !nzchar(trimws(lines[1L]))) { lines <- lines[-1L]; lead <- lead - 1L }
+    lead <- max(lead, 0L)
+    prompts <- c(rep("> ", lead), "> ", rep("+ ", max(length(lines) - lead - 1L, 0L)))
+    cat(paste0(prompts, lines), sep = "\n")
+  }
+
+  previous_end <- 0L
+  for (i in seq_along(expressions)) {
+    first <- srcrefs[[i]][1L]
+    last <- srcrefs[[i]][3L]
+    start <- if (previous_end >= first) first else previous_end + 1L
+    lines <- source_lines(start, last)
+    previous_end <- last
+    if (skip[i]) next
+    echo(lines, last - first + 1L)
+    result <- tryCatch(withVisible(eval(expressions[[i]], globalenv())), error = function(e) {
+      # An error at the top level of the script reads "Error: message", as in the console.
+      call <- conditionCall(e)
+      if (is.call(call) && identical(call[[1L]], quote(eval))) e$call <- NULL
+      stop(e)
+    })
+    if (result$visible) print(result$value)
+  }
+  trailing <- source_lines(previous_end + 1L, length(srcfile$lines))
+  trailing <- sub("[ \t\r]+$", "", trailing[nzchar(trimws(trailing))])
+  if (length(trailing)) cat(paste0("> ", trailing), sep = "\n")
+  invisible(NULL)
 }
 
 
@@ -56,9 +91,8 @@ run_code <- function(code, skip_help = TRUE, skip_commands = character(),
 # writes the result, one element per line, to `file` (atomically, so the editor
 # never reads a half-written file).
 write_query <- function(file, expr) {
-  # Evaluate where the runner's helpers (session_info) are visible; the parent of
-  # that environment is the global environment, so the user's objects are too.
-  out <- tryCatch(as.character(eval(parse(text = expr), environment(write_query))),
+  # The helpers (session_info) are on the search path, the user's objects in the global environment.
+  out <- tryCatch(as.character(eval(parse(text = expr), globalenv())),
                   error = function(e) character())
   tmp <- paste0(file, ".tmp")
   writeLines(enc2utf8(out), tmp, useBytes = TRUE)

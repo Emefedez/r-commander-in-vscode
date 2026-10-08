@@ -1083,6 +1083,15 @@
 						}
 					},
 					{
+						"id": "CFA",
+						"color": "charts.purple",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Confirmatory factor analysis...",
+							"es": "Análisis confirmatorio factorial..."
+						}
+					},
+					{
 						"label": {
 							"en": "Cluster analysis",
 							"es": "Análisis de agrupación"

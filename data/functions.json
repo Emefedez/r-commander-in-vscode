@@ -43,10 +43,18 @@
 		"hyperDistributionSamples",
 		"negbinomialDistributionSamples"
 	],
+	"as_factor": [
+		"importSPSS",
+		"importSTATA"
+	],
 	"as.data.frame": [
+		"importSPSS",
+		"importSAS",
 		"importSASb7dat",
 		"importMinitab",
+		"importSTATA",
 		"importExcel",
+		"CFA",
 		"normalDistributionSamples",
 		"tDistributionSamples",
 		"chisqDistributionSamples",
@@ -127,6 +135,9 @@
 	],
 	"carPalette": [
 		"Scatter3D"
+	],
+	"cfa": [
+		"CFA"
 	],
 	"chisq.test": [
 		"frequencyDistribution",
@@ -316,6 +327,7 @@
 		"hierarchicalCluster"
 	],
 	"head": [
+		"loadDataSet",
 		"normalDistributionSamples",
 		"tDistributionSamples",
 		"chisqDistributionSamples",
@@ -393,9 +405,6 @@
 	"lmer": [
 		"linearMixedModel"
 	],
-	"load": [
-		"loadDataSet"
-	],
 	"loadings": [
 		"principalComponents"
 	],
@@ -412,6 +421,9 @@
 	"median": [
 		"numericalSummaries",
 		"statisticsTable"
+	],
+	"message": [
+		"installPackages"
 	],
 	"model.frame": [
 		"subsetRegression"
@@ -435,6 +447,9 @@
 	],
 	"numSummary": [
 		"numericalSummaries"
+	],
+	"nzchar": [
+		"installPackages"
 	],
 	"oneway.test": [
 		"oneWayAnova"
@@ -661,11 +676,20 @@
 	"rcorr.adjust": [
 		"correlationMatrix"
 	],
+	"read_dta": [
+		"importSTATA"
+	],
 	"read_excel": [
 		"importExcel"
 	],
 	"read_sas": [
 		"importSASb7dat"
+	],
+	"read_sav": [
+		"importSPSS"
+	],
+	"read_xpt": [
+		"importSAS"
 	],
 	"read.dta": [
 		"importSTATA"
@@ -677,6 +701,7 @@
 		"importSPSS"
 	],
 	"read.table": [
+		"loadDataSet",
 		"readDataSet"
 	],
 	"read.xport": [
@@ -808,6 +833,7 @@
 	],
 	"scale": [
 		"standardize",
+		"CFA",
 		"kmeansClustering"
 	],
 	"scatter3d": [
@@ -826,6 +852,9 @@
 		"numericalSummaries",
 		"statisticsTable"
 	],
+	"sem": [
+		"CFA"
+	],
 	"seq": [
 		"normalDistributionPlot",
 		"tDistributionPlot",
@@ -843,6 +872,9 @@
 	],
 	"set.seed": [
 		"setRandomSeed"
+	],
+	"setdiff": [
+		"installPackages"
 	],
 	"setwd": [
 		"Setwd"
@@ -878,6 +910,7 @@
 		"oneWayRepeatedMeasures",
 		"twoWayRepeatedMeasures",
 		"principalComponents",
+		"CFA",
 		"linearRegressionModel",
 		"linearModel",
 		"generalizedLinearModel",
@@ -894,6 +927,7 @@
 		"Symbox"
 	],
 	"system.file": [
+		"installPackages",
 		"browseRcmdrHexSticker"
 	],
 	"t.test": [
@@ -910,6 +944,9 @@
 		"twoSampleWilcoxonTest",
 		"KruskalWallisTest"
 	],
+	"textConnection": [
+		"CFA"
+	],
 	"tolower": [
 		"importSPSS"
 	],
@@ -917,6 +954,11 @@
 		"twoWayTable",
 		"twoWayTableFromCounts",
 		"multiWayTable"
+	],
+	"tryCatch": [
+		"importSPSS",
+		"importSAS",
+		"importSTATA"
 	],
 	"TukeyHSD": [
 		"oneWayAnova"

@@ -296,6 +296,9 @@
 	"factorAnalysis": {
 		"label": "Factor analysis..."
 	},
+	"CFA": {
+		"label": "Confirmatory factor analysis..."
+	},
 	"kmeansClustering": {
 		"label": "k-means cluster analysis..."
 	},

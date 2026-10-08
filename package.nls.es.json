@@ -144,6 +144,7 @@
 	"rcp.cmd.Reliability": "Fiabilidad de escala...",
 	"rcp.cmd.principalComponents": "Análisis de componentes principales...",
 	"rcp.cmd.factorAnalysis": "Análisis factorial...",
+	"rcp.cmd.CFA": "Análisis confirmatorio factorial...",
 	"rcp.cmd.kmeansClustering": "Agrupación por k-medias...",
 	"rcp.cmd.hierarchicalCluster": "Agrupación jerárquica...",
 	"rcp.cmd.hclustSummary": "Resumir la agrupación jerárquica...",

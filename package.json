@@ -665,6 +665,12 @@
 				"enablement": "isWorkspaceTrusted"
 			},
 			{
+				"command": "rcp.cmd.CFA",
+				"title": "%rcp.cmd.CFA%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
 				"command": "rcp.cmd.kmeansClustering",
 				"title": "%rcp.cmd.kmeansClustering%",
 				"category": "R Commander",
@@ -2230,9 +2236,14 @@
 					"group": "01_rcp@3"
 				},
 				{
-					"submenu": "rcp.clusterMenu",
+					"command": "rcp.cmd.CFA",
 					"when": "editorLangId == r",
 					"group": "01_rcp@4"
+				},
+				{
+					"submenu": "rcp.clusterMenu",
+					"when": "editorLangId == r",
+					"group": "01_rcp@5"
 				}
 			],
 			"rcp.statModelsMenu": [

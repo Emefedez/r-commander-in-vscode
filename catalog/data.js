@@ -26,6 +26,19 @@ const afterImport = (v, c = { ds: v.name }) => [
   v.flags?.rownames && `rownames(${v.name}) <- ${v.name}[[1]]\n${v.name}[[1]] <- NULL`,
   v.flags?.factors && `${v.name}[sapply(${v.name}, is.character)] <- lapply(${v.name}[sapply(${v.name}, is.character)], as.factor)`
 ].filter(Boolean);
+// What kind of file the user chose, from its extension.
+const fileKind = file => {
+  const f = String(file || '').toLowerCase();
+  if (/\.(rdata|rda)$/.test(f)) return 'rdata';
+  if (/\.rds$/.test(f)) return 'rds';
+  if (/\.(xlsx|xls|xlsm)$/.test(f)) return 'excel';
+  return f ? 'text' : '';
+};
+// A valid R name taken from the file name.
+const baseName = file => {
+  const stem = String(file || '').split(/[\\/]/).pop().replace(/\.[^.]*$/, '').replace(/[^A-Za-z0-9._]/g, '.');
+  return /^[A-Za-z.]/.test(stem) ? stem : `Dataset.${stem}`;
+};
 const NEWVAR = (k, label, def, optional = false) => ({ k, type: 'text', label, def, optional });
 const newCol = (c, name) => `${c.ds}$${S(name)}`;
 
@@ -49,9 +62,55 @@ module.exports = {
       return true;
     },
     code: v => `${v.name} <- data.frame(${v.columns.map(([n, col]) => `${S(n)} = ${col.code}`).join(', ')}, check.names = FALSE)` },
+  // File > Load data set. Rcmdr only runs load(file) and fails when the file holds several objects;
+  // this one lets you pick which data sets to load, rename a single one, and also opens .rds,
+  // text/CSV and Excel files.
   loadDataSet: { ds: false, detectNew: true,
-    fields: [{ k: 'file', type: 'file', mode: 'open', label: 'Select the file to load', filters: { 'R data': ['RData', 'rda', 'Rdata'] } }],
-    code: v => `load(${rs(v.file)})` },
+    fields: [
+      { k: 'file', type: 'file', mode: 'open', label: 'Select the file to load',
+        filters: { 'R data': ['RData', 'rda', 'Rda', 'RDA'], 'R single object': ['rds'], 'Text files': ['csv', 'txt', 'tsv', 'dat'], 'Excel': ['xlsx', 'xls'], 'All files': ['*'] } },
+      { k: 'objects', type: 'rlist', of: 'file', label: 'Data sets in the file (pick one or more)', when: v => fileKind(v.file) === 'rdata',
+        exprFor: file => `local({ e <- new.env(); objs <- load(${rs(file)}, envir = e); objs <- Filter(function(n) is.data.frame(get(n, e)), objs); ` +
+          `vapply(objs, function(n) paste0(n, "\\t", nrow(get(n, e)), " x ", ncol(get(n, e)), " (", paste(names(get(n, e))[seq_len(min(4, ncol(get(n, e))))], collapse = ", "), "...)"), "") })` },
+      { k: 'rename', type: 'text', optional: true, def: '', label: 'Name for the data set (blank keeps its name; only for a single data set)',
+        pattern: /^[A-Za-z.][A-Za-z0-9._]*$/, error: 'Enter a valid R name or leave it blank.', sample: 'Loaded', when: v => fileKind(v.file) === 'rdata' && (v.objects || []).length === 1 },
+      { k: 'name', type: 'name', label: 'Name for the data set', def: (c, v) => baseName(v.file), when: v => ['rds', 'text', 'excel'].includes(fileKind(v.file)) },
+      { k: 'header', type: 'flags', label: 'Options', items: [['header', 'Variable names in file', true]], when: v => ['text', 'excel'].includes(fileKind(v.file)) },
+      { k: 'sep', type: 'choice', label: 'Field separator', choices: [['auto', 'Detect from the file name'], ['', 'White space'], [',', 'Commas'], ['\t', 'Tabs'], [';', 'Semicolons']], when: v => fileKind(v.file) === 'text' },
+      { k: 'dec', type: 'choice', label: 'Decimal-point character', choices: [['.', 'Period [.]'], [',', 'Comma [,]']], when: v => fileKind(v.file) === 'text' },
+      { k: 'sheet', type: 'text', optional: true, def: '1', label: 'Sheet (number or name)', sample: '1', when: v => fileKind(v.file) === 'excel' },
+      { k: 'show', type: 'flags', label: 'After loading', items: [['show', 'Show the first rows', false]] }
+    ],
+    pkgs: undefined,
+    activeDataset: v => (v.name || v.rename || (v.objects || [])[0] || '').trim() || undefined,
+    code(v) {
+      const kind = fileKind(v.file);
+      const lines = [];
+      let names;
+      if (kind === 'rdata') {
+        const all = v.objects || [];
+        names = v.rename && all.length === 1 ? [v.rename.trim()] : all;
+        if (v.rename && all.length === 1) {
+          lines.push(`local({ e <- new.env(); load(${rs(v.file)}, envir = e); assign(${rs(names[0])}, get(${rs(all[0])}, envir = e), envir = globalenv()) })`);
+        } else {
+          // Only the chosen data sets: copy them out of a scratch environment.
+          lines.push(`local({ e <- new.env(); load(${rs(v.file)}, envir = e); for (n in ${rc(all)}) assign(n, get(n, envir = e), envir = globalenv()) })`);
+        }
+      } else if (kind === 'rds') {
+        names = [v.name];
+        lines.push(`${S(v.name)} <- readRDS(${rs(v.file)})`, `if (!is.data.frame(${S(v.name)})) ${S(v.name)} <- as.data.frame(${S(v.name)})`);
+      } else if (kind === 'excel') {
+        names = [v.name];
+        const sheet = isNumber(v.sheet) ? v.sheet.trim() : rs(v.sheet.trim() || '1');
+        lines.push(`${S(v.name)} <- as.data.frame(readxl::read_excel(${rs(v.file)}, sheet = ${sheet}, col_names = ${rbool(v.header.header)}))`);
+      } else {
+        names = [v.name];
+        const sep = v.sep === 'auto' ? (/\.csv$/i.test(v.file) ? ',' : /\.tsv$/i.test(v.file) ? '\t' : '') : v.sep;
+        lines.push(`${S(v.name)} <- read.table(${rs(v.file)}, header = ${rbool(v.header.header)}, sep = ${rs(sep)}, dec = ${rs(v.dec)}, stringsAsFactors = TRUE, strip.white = TRUE, na.strings = "NA")`);
+      }
+      if (v.show.show) lines.push(...names.map(n => `print(head(${S(n)}))`));
+      return lines.join('\n');
+    } },
   mergeDataSets: { ds: false, activeDataset: setActive,
     fields: [
       { k: 'first', type: 'dataset', label: 'First data set' },
@@ -83,7 +142,7 @@ module.exports = {
     fields: [dsName(),
       { k: 'source', type: 'choice', label: 'Read data from', choices: [['file', 'A local text file'], ['clip', 'The clipboard'], ['url', 'An Internet URL']] },
       { k: 'file', type: 'file', mode: 'open', label: 'Select the text file', when: v => v.source === 'file', filters: { 'Text files': ['txt', 'csv', 'dat', 'tsv'], 'All files': ['*'] } },
-      { k: 'url', type: 'text', label: 'URL of the data file', when: v => v.source === 'url', pattern: /^https?:\/\/\S+$/, error: 'Enter an http(s) URL.' },
+      { k: 'url', type: 'text', label: 'URL of the data file', when: v => v.source === 'url', pattern: /^(https?|ftp|file):\/\/\S+$/, error: 'Enter a URL (http, https, ftp or file).' },
       ...readOpts],
     async after(v, ui) {
       if (v.source === 'clip') v.clip = await ui.vscode.env.clipboard.readText();
@@ -91,17 +150,17 @@ module.exports = {
     },
     code: v => readTable(v, v.source === 'file' ? rs(v.file) : v.source === 'url' ? rs(v.url) : `text = ${rs(v.clip)}`) },
   importSPSS: importFile('Select the SPSS file', { 'SPSS': ['sav', 'por'] },
-    v => [`${v.name} <- foreign::read.spss(${rs(v.file)}, use.value.labels = TRUE, max.value.labels = Inf, to.data.frame = TRUE)`, ...afterImport(v)].join('\n'), ['foreign'],
+    v => [`${v.name} <- tryCatch(foreign::read.spss(${rs(v.file)}, use.value.labels = TRUE, max.value.labels = Inf, to.data.frame = TRUE),\n  error = function(e) as.data.frame(haven::as_factor(haven::read_sav(${rs(v.file)}))))`, ...afterImport(v)].join('\n'), ['foreign'],
     [importFlags([['factors', 'Convert character variables to factors', true], ['rownames', 'First column contains row names', false], ['lower', 'Convert variable names to lower case', true]])]),
   importSAS: importFile('Select the SAS xport file', { 'SAS xport': ['xpt', 'xport'] },
-    v => `${v.name} <- foreign::read.xport(${rs(v.file)})`, ['foreign']),
+    v => `${v.name} <- tryCatch(foreign::read.xport(${rs(v.file)}), error = function(e) as.data.frame(haven::read_xpt(${rs(v.file)})))`, ['foreign']),
   importSASb7dat: importFile('Select the SAS b7dat file', { 'SAS b7dat': ['sas7bdat'] },
     v => [`${v.name} <- as.data.frame(haven::read_sas(${rs(v.file)}))`, ...afterImport(v)].join('\n'), ['haven'],
     [importFlags([['factors', 'Convert character variables to factors', true], ['rownames', 'First column contains row names', false]])]),
   importMinitab: importFile('Select the Minitab file', { 'Minitab': ['mtp'] },
     v => `${v.name} <- as.data.frame(foreign::read.mtp(${rs(v.file)}))`, ['foreign']),
   importSTATA: importFile('Select the STATA file', { 'STATA': ['dta'] },
-    v => [`${v.name} <- foreign::read.dta(${rs(v.file)}, convert.dates = ${rbool(v.flags.dates)}, convert.factors = TRUE, convert.underscore = TRUE)`, ...afterImport(v)].join('\n'), ['foreign'],
+    v => [`${v.name} <- tryCatch(foreign::read.dta(${rs(v.file)}, convert.dates = ${rbool(v.flags.dates)}, convert.factors = TRUE, convert.underscore = TRUE),\n  error = function(e) as.data.frame(haven::as_factor(haven::read_dta(${rs(v.file)}))))`, ...afterImport(v)].join('\n'), ['foreign'],
     [importFlags([['factors', 'Convert character variables to factors', true], ['dates', 'Convert dates to R format', true], ['rownames', 'First column contains row names', false]])]),
   importExcel: { ...importFile('Select the Excel file', { 'Excel': ['xlsx', 'xls', 'xlsm'] },
     v => [`${v.name} <- as.data.frame(readxl::read_excel(${rs(v.file)}, sheet = ${v.sheet}, col_names = ${rbool(v.flags.header)}${v.na.trim() && v.na.trim() !== '<empty cell>' ? `, na = ${rs(v.na.trim())}` : ''}))`, ...afterImport(v)].join('\n'), ['readxl'],

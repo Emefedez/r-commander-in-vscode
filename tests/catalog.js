@@ -12,6 +12,20 @@ const model = require('../lib/formmodel');
 
 const root = path.join(__dirname, '..');
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'rcp-test-'));
+const fixtures = path.join(tmp, 'fixtures');
+spawnSync('Rscript', [path.join(__dirname, 'make-fixtures.R'), fixtures], { encoding: 'utf8' });
+// Real files for the commands that open one. Pass A uses the files only haven can read where there
+// are two (so the fallback runs), pass B the ones foreign reads directly.
+const fixtureFor = (title, pass) => {
+  const pick = (a, b) => path.join(fixtures, pass === 'A' ? a : b);
+  if (/SPSS/i.test(title)) return pick('iris.sav', 'electric.sav');
+  if (/SAS xport/i.test(title)) return pick('small.xpt', 'small8.xpt');
+  if (/b7dat/i.test(title)) return pick('iris.sas7bdat', 'iris.sas7bdat');
+  if (/STATA/i.test(title)) return pick('iris.dta', 'small.dta');
+  if (/Excel/i.test(title)) return path.join(fixtures, 'datasets.xlsx');
+  if (/file to load/i.test(title)) return pick('two-frames.RData', 'small.csv');
+  return path.join(fixtures, pass === 'A' ? 'small.tsv' : 'small.csv');
+};
 const runnerR = path.join(root, 'runner.R');
 const setupR = path.join(__dirname, 'setup.R');
 
@@ -36,7 +50,7 @@ const ANSWERS = [ // prompt substring -> typed answer
   ['Expression to compute', 'n1 + n2'], ['Random effects', '(1 | f3)'], ['Expression using these coefficient names', 'n2 / n3'], ['Expression in the coefficient names', 'n2 / n3'],
   ['Hypotheses separated', 'n2 = 0'], ['Names for the 3 bins', 'low, mid, high'], ['Subset expression', 'n1 > 1'],
   ['Right-hand side of the variance formula', 'n2'], ['Package names', 'car'], ['Name of the new variable', 'newvar'],
-  ['Values of', '1, 2, 3'], ['URL of the data file', 'https://example.com/x.csv'], ['Name of the data set in the R session', 'Dataset'],
+  ['Values of', '1, 2, 3'], ['URL of the data file', `file://${path.join(fixtures, 'small.csv')}`], ['Name of the data set in the R session', 'Dataset'],
   ['Name of the model in the R session', 'RegModel.1'], ['Package name', 'datasets'], ['Data set name', 'iris'],
   ['Rows to remove', '1, 2'], ['Rows to select', '1:10'], ['Variable names separated', 'u, w']
 ];
@@ -69,6 +83,7 @@ function fakeVscode(pass, id, log) {
       showQuickPick: async (items, opts) => {
         if (opts.canPickMany) {
           if (items[0]?.key !== undefined) return items.filter(i => i.picked);
+          if (/loading on factor [2-9]/.test(opts.placeHolder)) return []; // later CFA factors are left undefined
           const k = Math.min(items.length, id === 'twoWayRepeatedMeasures' || id === 'multiWayTable' ? 4 : 4);
           return items.slice(0, k).map(i => ({ ...i }));
         }
@@ -86,7 +101,7 @@ function fakeVscode(pass, id, log) {
         if (err) throw new Error(`Invalid default for "${opts.prompt}": ${value} (${err})`);
         return value;
       },
-      showOpenDialog: async o => [{ fsPath: o.canSelectFolders ? tmp : path.join(__dirname, 'fixtures', /R data/.test(JSON.stringify(o.filters)) ? 'sample.RData' : 'sample.csv') }],
+      showOpenDialog: async o => [{ fsPath: o.canSelectFolders ? tmp : fixtureFor(o.title, pass) }],
       showSaveDialog: async o => ({ fsPath: path.join(tmp, 'out_' + Math.random().toString(36).slice(2) + '.' + (Object.values(o.filters || { x: ['txt'] })[0][0])) }),
       showWarningMessage: async m => log.push(['warn', m]), showErrorMessage: async m => log.push(['error', m]),
       showInformationMessage: async m => log.push(['info', m]), visibleTextEditors: [], activeTextEditor: undefined
@@ -101,7 +116,7 @@ const helmert = levels => levels.map((level, i) => [level, levels.slice(1).map((
 // Stands in for the webview: fills every field the way a user clicking the first
 // option would, then runs the same validation/normalization the form uses.
 class FakeForm {
-  constructor(pass, id) { this.pass = pass; this.picks = PICKS(pass)[id] || {}; }
+  constructor(pass, id) { this.pass = pass; this.picks = PICKS(pass)[id] || {}; this.t = text => text; }
   async run(spec, title, dialog, finish, env) {
     const fields = spec.fields;
     const raw = {};
@@ -113,14 +128,19 @@ class FakeForm {
       const answer = ANSWERS.find(([k]) => String(f.label).includes(k));
       switch (f.type) {
         case 'var':
-          if (f.multi) raw[f.k] = list.slice(0, f.min === 0 ? (this.pass === 'B' ? 1 : 0) : 4).map(i => i.value);
+          if (f.multi) raw[f.k] = list.slice(0, f.min === 0 ? (f.minOrNone ? 0 : this.pass === 'B' ? 1 : 0) : 4).map(i => i.value);
           else if (f.optional) raw[f.k] = this.pass === 'B' && list[0] ? list[0].value : '';
           else raw[f.k] = (list.find(i => i.value === this.picks[pickLabel(f)]) || list[0]).value;
           break;
         case 'dataset': case 'hclust': case 'model':
           raw[f.k] = (list.find(i => i.value === this.picks[pickLabel(f)]) || list.find(i => i.value === env.activeModel) || list[0]).value; break;
         case 'models': raw[f.k] = list.slice(0, 2).map(i => i.value); break;
-        case 'installed': case 'rlist': raw[f.k] = list.slice(0, 1).map(i => i.value); break;
+        case 'installed': case 'rlist':
+          if (f.of) {
+            const lines = (await env.session.query(f.exprFor(raw[f.of], env.ctx))) || [];
+            raw[f.k] = this.pass === 'A' ? lines.map(l => l.split('\t')[0]) : lines.slice(0, 1).map(l => l.split('\t')[0]);
+          } else raw[f.k] = list.slice(0, 1).map(i => i.value);
+          break;
         case 'matrix': {
           const rows = await env.session.query(`levels(as.factor(${env.ctx.dv(values[f.of])}))`);
           raw[f.k] = helmert(rows);
@@ -138,7 +158,7 @@ class FakeForm {
         case 'renames': raw[f.k] = Object.fromEntries(list.map((i, n) => [i.value, n < 2 ? `${i.value}_r` : i.value])); break;
         case 'dir': raw[f.k] = tmp; break;
         case 'file': raw[f.k] = f.mode === 'save' ? path.join(tmp, 'out_' + Math.random().toString(36).slice(2) + '.' + Object.values(f.filters || { x: ['txt'] })[0][0])
-          : path.join(__dirname, 'fixtures', /R data/.test(JSON.stringify(f.filters)) ? 'sample.RData' : 'sample.csv'); break;
+          : fixtureFor(this.t(f.label), this.pass); break;
         default: throw new Error(`no fill rule for ${f.type}`);
       }
     }
@@ -184,7 +204,7 @@ class FakeForm {
   failures.forEach(f => console.log('  ' + f));
 
   // Execute in R. Commands that would quit, open viewers or install are only parsed.
-  const parseOnly = ['closeCommanderAndR', 'viewData', 'viewDataSet', 'editDataSet', 'startHelp', 'browseRcmdrHexSticker', 'installPackages', 'helpCommander', 'loadPackages', 'loadPlugins', 'helpDataSet'];
+  const parseOnly = ['CFA', 'importMinitab', 'closeCommanderAndR', 'viewData', 'viewDataSet', 'editDataSet', 'startHelp', 'browseRcmdrHexSticker', 'installPackages', 'helpCommander', 'loadPackages', 'loadPlugins', 'helpDataSet'];
   const rscript = `
 options(warn = 1); pdf(NULL)
 local({

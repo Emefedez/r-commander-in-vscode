@@ -18,7 +18,15 @@ assert.deepEqual(model.validate(catalog.setContrasts.fields, { f: 'f3', type: 'c
 const dependent = [['x', ['1', '1']], ['y', ['2', '2']], ['z', ['3', '3']]]; // columns repeat: not independent
 assert.ok(model.validate(catalog.setContrasts.fields, { f: 'f3', type: 'custom', matrix: dependent }, { t }).matrix, 'dependent contrasts are rejected');
 
+// Confirmatory factor analysis needs data that really has factors (see run below with CFA_data).
+const cfaValues = (extra = {}) => ({ name1: 'Visual', vars1: ['x1', 'x2', 'x3'], name2: 'Verbal', vars2: ['x4', 'x5', 'x6'], matrix: 'covariance', cor: 'correlated',
+  identify: 'factors', flags: { robust: false, AIC: true, BIC: true, GFI: true, RMSEA: true, CFI: true }, ...extra });
+const cfaCtx = context('CFA_data', { objects: [] });
+const cfaRun = values => ({ id: 'CFA', code: catalog.CFA.code(values, cfaCtx) });
 const cases = [
+  cfaRun(cfaValues()),
+  cfaRun(cfaValues({ matrix: 'correlation', cor: 'orthogonal', identify: 'loadings', flags: { robust: true, AIC: true } })),
+  cfaRun({ ...cfaValues(), name2: undefined, vars2: [], flags: { AIC: true } }),
   run('setContrasts', contrasts),
   run('effectPlots', { flags: { all: false, resid: true }, terms: ['n2'], style: 'multiline', span: '0.5' }),
   run('effectPlots', { flags: { all: false, resid: false }, terms: ['n2', 'n3'], style: 'panels', span: '0.5' }),
@@ -34,6 +42,9 @@ ids <- c(${cases.map(c => JSON.stringify(c.id)).join(', ')})
 for (i in seq_along(cases)) {
   rm(list = setdiff(ls(globalenv()), c("cases", "ids", "i")), envir = globalenv())
   source(${JSON.stringify(path.join(__dirname, 'setup.R'))})
+  set.seed(7); f1 <- rnorm(300); f2 <- 0.4 * f1 + rnorm(300)
+  CFA_data <- data.frame(x1 = f1 + rnorm(300, 0, .6), x2 = 0.8 * f1 + rnorm(300, 0, .6), x3 = 0.7 * f1 + rnorm(300, 0, .6),
+                         x4 = f2 + rnorm(300, 0, .6), x5 = 0.8 * f2 + rnorm(300, 0, .6), x6 = 0.7 * f2 + rnorm(300, 0, .6))
   res <- tryCatch({ invisible(capture.output(source(exprs = parse(text = cases[[i]]), local = globalenv()))); "OK" }, error = function(e) paste("FAIL:", conditionMessage(e)))
   cat(sprintf("%-22s %s\\n", ids[[i]], res))
   if (res != "OK") cat("   ", gsub("\\n", " | ", cases[[i]]), "\\n")

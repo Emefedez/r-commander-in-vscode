@@ -20,6 +20,9 @@ const repeatedExtras = (v, c) => [
   v.flags.plot && `  .m <- colMeans(${c.cols(v.xs)}, na.rm = TRUE)\n  plot(seq_along(.m), .m, type = "b", xaxt = "n", xlab = "", ylab = "Mean")\n  axis(1, at = seq_along(.m), labels = names(.m))`
 ].filter(Boolean);
 
+const CFA_SLOTS = [1, 2, 3, 4, 5, 6];
+const CFA_INDICES = ['AIC', 'BIC', 'GFI', 'AGFI', 'RMSEA', 'NFI', 'NNFI', 'CFI', 'RNI', 'IFI', 'SRMR', 'AICc', 'CAIC'];
+
 const tests = {
   summarizeDataSet: { code: (v, c) => `summary(${c.ds})` },
   numericalSummaries: { pkgs: ['RcmdrMisc', 'abind'],
@@ -206,6 +209,29 @@ const tests = {
       { k: 'scores', type: 'choice', label: 'Factor scores', choices: [['none', 'None'], ['regression', 'Regression'], ['Bartlett', 'Bartlett']] }],
     code: (v, c) => lines('local({', `  .FA <- factanal(~${v.xs.map(S).join(' + ')}, factors = ${v.k}, rotation = ${rs(v.rot)}, scores = ${rs(v.scores)}, data = ${c.ds})`, '  print(.FA)',
       v.scores !== 'none' && `  ${c.ds}[rownames(.FA$scores), paste0("F", 1:${v.k})] <<- .FA$scores`, '})') },
+  // Confirmatory factor analysis: factors are defined one after another, each slot appearing
+  // once the previous factor has at least two variables, as Rcmdr's "Define factor" button does.
+  CFA: { pkgs: ['sem'],
+    fields: [
+      ...CFA_SLOTS.flatMap(k => [
+        { k: `name${k}`, type: 'name', label: 'Name for factor:', def: `Factor.${k}`, when: v => k === 1 || (v[`vars${k - 1}`] || []).length >= 2 },
+        { k: `vars${k}`, type: 'var', kind: 'numeric', multi: true, min: k === 1 ? 2 : 0, minOrNone: 2, label: `Variables loading on factor ${k} (pick at least two)`,
+          when: v => k === 1 || (v[`vars${k - 1}`] || []).length >= 2 }
+      ]),
+      { k: 'matrix', type: 'choice', label: 'Matrix to Analyze', choices: [['covariance', 'Covariance'], ['correlation', 'Correlation']] },
+      { k: 'cor', type: 'choice', label: 'Factor Correlation', choices: [['correlated', 'Correlated'], ['orthogonal', 'Orthogonal']] },
+      { k: 'identify', type: 'choice', label: 'Identifying Constraints', choices: [['factors', 'Factor variances set to 1'], ['loadings', 'First loading on each factor set to 1']] },
+      flagsOf('Options', [['robust', 'Robust standard errors', false]]),
+      flagsOf('Fit Indices', CFA_INDICES.map(i => [i, i, i === 'AIC' || i === 'BIC']))],
+    code(v, c) {
+      const factors = CFA_SLOTS.filter(k => (v[`vars${k}`] || []).length).map(k => [v[`name${k}`], v[`vars${k}`]]);
+      const all = [...new Set(factors.flatMap(([, vs]) => vs))];
+      const indices = CFA_INDICES.filter(i => v.flags[i]);
+      return lines('local({', `  .model <- c(${factors.map(([n, vs]) => `'${n}: ${vs.join(', ')}'`).join(', ')})`,
+        `  .model <- sem::cfa(file = textConnection(.model)${v.cor === 'correlated' ? '' : ', covs = NULL'}, reference.indicators = ${rbool(v.identify === 'loadings')})`,
+        `  .Data <- ${c.ds}[, c(${all.map(n => `'${n}'`).join(', ')})]`, v.matrix === 'correlation' && '  .Data <- as.data.frame(scale(.Data))',
+        `  summary(sem::sem(.model, data = .Data), robust = ${rbool(v.flags.robust)}${indices.length ? `, fit.indices = ${rc(indices)}` : ''})`, '})');
+    } },
   kmeansClustering: { pkgs: ['RcmdrMisc'], assignsVar: 'KMeans',
     fields: [numVars('xs', 'Variables (pick one or more)'), { k: 'k', type: 'num', int: true, min: 2, def: '2', label: 'Number of clusters' },
       { k: 'iters', type: 'num', int: true, min: 1, def: '10', label: 'Maximum iterations:' },

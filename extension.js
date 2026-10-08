@@ -5,7 +5,7 @@ const commands = require('./data/commands.json');
 const { Commander } = require('./lib/commander');
 const { MenuTree } = require('./lib/tree');
 const { MenuHover } = require('./lib/hover');
-const { RSession, attachCall } = require('./lib/rsession');
+const { RSession } = require('./lib/rsession');
 const { t, setLanguage, resolveLanguage } = require('./lib/i18n');
 
 let lastRResource;
@@ -32,6 +32,8 @@ function configurationTarget(resource) {
 }
 
 function activate(context) {
+  // One channel to the R terminal, shared by the green button and the R Commander menus.
+  const session = new RSession(vscode, context.asAbsolutePath('runner.R'));
   const status = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 10);
   status.command = 'rCommanderPlay.showSettings';
   const refresh = () => {
@@ -53,7 +55,7 @@ function activate(context) {
     await vscode.window.showInformationMessage(`R Play: ${message} Applies on the next green ▶ run.`);
   };
   refresh();
-  registerMenus(context, resourceFor, configuration, refresh);
+  registerMenus(context, resourceFor, configuration, refresh, session);
   context.subscriptions.push(status,
     // Clears the R terminal even when the editor has the focus.
     vscode.commands.registerCommand('rCommanderPlay.clearTerminal', async () => {
@@ -85,22 +87,13 @@ function activate(context) {
         if (!code.trim()) return;
 
         const config = configuration(editor.document.uri);
-        const skipHelp = config.get('skipHelp', true) ? 'TRUE' : 'FALSE';
-        const limitOutput = config.get('limitOutput', true) ? 'TRUE' : 'FALSE';
         const configuredMax = Number(config.get('maxOutputItems', 24));
-        const maxOutputItems = Number.isInteger(configuredMax) && configuredMax >= 1 && configuredMax <= 1000000
-          ? configuredMax : 24;
-        const commands = config.get('skipCommands', []);
-        const skipped = commands.length
-          ? `c(${commands.map(command => JSON.stringify(command)).join(', ')})`
-          : 'character()';
-        const runner = JSON.stringify(context.asAbsolutePath('runner.R'));
-        // Keep runner internals private while evaluating the user's code in the R workspace.
-        const rcmdr = attachCall({
+        await session.run(code, { settings: {
+          skipHelp: config.get('skipHelp', true), skipCommands: config.get('skipCommands', []),
+          limitOutput: config.get('limitOutput', true),
+          maxOutputItems: Number.isInteger(configuredMax) && configuredMax >= 1 && configuredMax <= 1000000 ? configuredMax : 24,
           loadRcmdrFunctions: config.get('loadRcmdrFunctions', true), rcmdrPlugins: config.get('rcmdrPlugins', [])
-        });
-        const command = `local({ sys.source(${runner}, envir = environment()); ${rcmdr}run_code(${JSON.stringify(code)}, skip_help = ${skipHelp}, skip_commands = ${skipped}, limit_output = ${limitOutput}, max_output_items = ${maxOutputItems}) })`;
-        await vscode.commands.executeCommand('r.runCommand', command);
+        } });
       } catch (error) {
         await vscode.window.showErrorMessage(`Could not run R code: ${error.message || error}`);
       }
@@ -155,10 +148,9 @@ function activate(context) {
 
 // The R Commander menus: every command asks for its options, generates R code
 // and runs it in the R terminal.
-function registerMenus(context, resourceFor, configuration, refreshPlayStatus) {
+function registerMenus(context, resourceFor, configuration, refreshPlayStatus, session) {
   const applyLanguage = () => setLanguage(resolveLanguage(configuration().get('language', 'es'), vscode.env.language));
   applyLanguage();
-  const session = new RSession(vscode, context.asAbsolutePath('runner.R'));
   const commander = new Commander({
     vscode, session,
     resource: () => resourceFor(),
@@ -185,8 +177,21 @@ function registerMenus(context, resourceFor, configuration, refreshPlayStatus) {
   show();
 
   const menuTree = new MenuTree(vscode);
-  context.subscriptions.push(vscode.window.createTreeView('rCommanderMenu', { treeDataProvider: menuTree }),
-    vscode.languages.registerHoverProvider({ language: 'r' }, new MenuHover(vscode)));
+  context.subscriptions.push(vscode.window.createTreeView('rCommanderMenu', { treeDataProvider: menuTree }));
+
+  // VS Code puts the hover of the provider registered last on top, and the R language
+  // server registers its own after it starts. So register ours again once it is up, and
+  // whenever an R file is activated, to keep "where is it in the R Commander menu" first.
+  let hoverRegistration;
+  const registerHover = () => {
+    hoverRegistration?.dispose?.();
+    hoverRegistration = vscode.languages.registerHoverProvider({ language: 'r' }, new MenuHover(vscode));
+  };
+  registerHover();
+  const timers = [6000, 15000].map(ms => { const timer = setTimeout(registerHover, ms); timer.unref?.(); return timer; });
+  context.subscriptions.push(
+    { dispose: () => { timers.forEach(clearTimeout); hoverRegistration?.dispose?.(); } },
+    vscode.window.onDidChangeActiveTextEditor(editor => { if (editor?.document.languageId === 'r') registerHover(); }));
 
   context.subscriptions.push(status, vscode.window.onDidChangeActiveTextEditor(show),
     vscode.workspace.onDidChangeConfiguration(event => {

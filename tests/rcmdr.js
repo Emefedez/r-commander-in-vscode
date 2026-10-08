@@ -24,7 +24,7 @@ const { RSession } = require('../lib/rsession');
   assert.doesNotMatch(result.stderr, /could not find function/);
 
   await session.run('exists("calcular_frecuencia")', { settings: { loadRcmdrFunctions: false } });
-  assert.doesNotMatch(sent[1], /attach_rcmdr/);
+  assert.doesNotMatch(require('node:fs').readFileSync(sent[1].match(/"([^"]+)"/)[1], 'utf8'), /attach_rcmdr/);
   // The green play button runs a whole script: every graph in it must still be drawn.
   const fs = require('node:fs');
   const os = require('node:os');

@@ -4,7 +4,8 @@ const path = require('node:path');
 const { spawnSync } = require('node:child_process');
 const uri = { scheme: 'file', toString: () => 'file:///test/script.R' };
 const settings = { loadRcmdrFunctions: false, skipHelp: true, skipCommands: [], limitOutput: false, maxOutputItems: 24 };
-const handlers = {}, sent = [], notifications = [], treeViews = {};
+const handlers = {}, sent = [], notifications = [], treeViews = {}, editorListeners = [];
+let hoverRegistrations = 0, hoverDisposals = 0;
 let input, onConfigurationChange;
 const document = {
   languageId: 'r', uri, save: async () => true,
@@ -13,7 +14,7 @@ const document = {
 const editor = { document, selections: [{ isEmpty: true }] };
 const mock = {
   env: { language: 'en' },
-  languages: { registerHoverProvider: () => ({}) },
+  languages: { registerHoverProvider: () => { hoverRegistrations++; return { dispose() { hoverDisposals++; } }; } },
   EventEmitter: class { constructor() { this.event = () => ({}); } fire() {} },
   TreeItem: class { constructor(label, state) { this.label = label; this.state = state; } },
   ThemeIcon: class { constructor(id, color) { this.id = id; this.color = color; } },
@@ -41,7 +42,7 @@ const mock = {
     activeTextEditor: editor, visibleTextEditors: [editor],
     createStatusBarItem: () => ({ show() {}, hide() {}, dispose() {} }),
     createTreeView: (id, options) => { treeViews[id] = options.treeDataProvider; return {}; },
-    onDidChangeActiveTextEditor: () => ({}),
+    onDidChangeActiveTextEditor: callback => { editorListeners.push(callback); return {}; },
     showInformationMessage: async message => notifications.push(message),
     showErrorMessage: async message => { throw Error(message); },
     showInputBox: async () => input
@@ -66,6 +67,15 @@ for (const id of Object.keys(require('../data/commands.json'))) {
 }
 assert.equal(typeof handlers['rCommanderPlay.setLanguage'], 'function');
 assert.equal(typeof handlers['rCommanderPlay.clearTerminal'], 'function');
+{
+  // The menu hover must stay on top: it is registered again whenever an R file is activated.
+  assert.equal(hoverRegistrations, 1);
+  editorListeners.forEach(listener => listener(editor));
+  assert.equal(hoverRegistrations, 2, 'registered again for an R editor');
+  assert.equal(hoverDisposals, 1, 'the previous registration is disposed, not stacked');
+  editorListeners.forEach(listener => listener({ document: { languageId: 'python' } }));
+  assert.equal(hoverRegistrations, 2, 'other languages do not re-register');
+}
 {
   // The sidebar tree lists the nine menus and its leaves run registered commands.
   const provider = treeViews.rCommanderMenu;
