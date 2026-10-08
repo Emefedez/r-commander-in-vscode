@@ -25,7 +25,7 @@ Los menús en español y en inglés salen del propio paquete Rcmdr.
 
 ## Qué incluye
 
-- **Menú R Commander**: submenú dentro del menú **⋯** de cualquier archivo R, con 250 comandos y la barra de
+- **Menú R Commander**: submenú dentro del menú **⋯** de cualquier archivo R, con 358 comandos (Rcmdr y el complemento TeachStat: menú «Estadística Básica») y la barra de
   herramientas de Rcmdr (conjunto de datos activo, editar, visualizar, modelo activo).
 - **Formulario en una sola ventana** (como Rcmdr): listas de variables una al lado de otra, botones de opción,
   casillas, campos de texto y los botones *Aceptar*, *Aplicar*, *Cancelar* y *Reiniciar*. Las variables salen de

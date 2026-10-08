@@ -145,7 +145,7 @@ class FakeForm {
       const answer = ANSWERS.find(([k]) => String(f.label).includes(k));
       switch (f.type) {
         case 'var':
-          if (f.multi) raw[f.k] = list.slice(0, f.min === 0 ? (f.minOrNone ? 0 : this.pass === 'B' ? 1 : 0) : 4).map(i => i.value);
+          if (f.multi) raw[f.k] = list.slice(0, f.min === 0 ? (f.minOrNone ? 0 : (this.pass === 'B' || spec.check) ? 1 : 0) : 4).map(i => i.value);
           else if (f.optional) raw[f.k] = (this.pass === 'B' || spec.check) && list[0] ? list[0].value : '';
           else raw[f.k] = (list.find(i => i.value === this.picks[pickLabel(f)]) || list[0]).value;
           break;

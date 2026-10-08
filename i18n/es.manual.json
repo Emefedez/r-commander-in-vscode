@@ -409,5 +409,6 @@
 	"Clear R Terminal": "Limpiar el terminal de R",
 	"Download folder": "Carpeta de descargas",
 	"Enter a folder.": "Introduce una carpeta.",
-	"Keep the downloaded files in a permanent folder (reused next time; R deletes its own temporary one)": "Conservar los archivos descargados en una carpeta permanente (se reutilizan la próxima vez; R borra su carpeta temporal)"
+	"Keep the downloaded files in a permanent folder (reused next time; R deletes its own temporary one)": "Conservar los archivos descargados en una carpeta permanente (se reutilizan la próxima vez; R borra su carpeta temporal)",
+	"Probability values (optional)": "Valores de probabilidad (opcional)"
 }

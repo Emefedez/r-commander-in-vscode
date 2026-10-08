@@ -14,3 +14,7 @@ Other <- data.frame(n1 = 1:5, k = letters[1:5])
 RegModel.1 <- lm(n1 ~ n2 + n3, data = Dataset)
 GLM.1 <- glm(f2b ~ n1 + n2, family = binomial, data = Dataset)
 HClust.1 <- hclust(dist(model.matrix(~-1 + n1 + n2, Dataset)))
+# distribution objects for the generic-distribution commands of the plug-in
+MyNorm <- distr::Norm(mean = 2, sd = 3)
+MyBin <- distr::Binom(size = 5, prob = 0.3)
+MyDisc <- distr::DiscreteDistribution(c(1, 2, 3), c(0.2, 0.3, 0.5))

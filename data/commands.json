@@ -257,6 +257,9 @@
 	"twoWayRepeatedMeasures": {
 		"label": "Two-factor repeated-measures ANOVA/ANCOVA..."
 	},
+	"oneWayAnovaRE": {
+		"label": "One-Way ANOVA with random effects..."
+	},
 	"singleProportionTest": {
 		"label": "Single-sample proportion test..."
 	},
@@ -286,6 +289,12 @@
 	},
 	"FriedmanTest": {
 		"label": "Friedman rank-sum test..."
+	},
+	"randomnessFTest": {
+		"label": "Randomness test for two level factor..."
+	},
+	"randomnessNTest": {
+		"label": "Randomness test for numeric variable..."
 	},
 	"Reliability": {
 		"label": "Scale reliability..."
@@ -769,6 +778,24 @@
 	"resumenDatosTabulados": {
 		"label": "Numerical summaries - Tabulated data..."
 	},
+	"genericDistrDefine": {
+		"label": "Continuous Generic distribution definition..."
+	},
+	"genericDistrQuantiles": {
+		"label": "Continuous Generic quantiles..."
+	},
+	"genericProbabilitiesInter": {
+		"label": "Continuous Generic probabilities..."
+	},
+	"genericDistrPlot": {
+		"label": "Plot continuous Generic distribution..."
+	},
+	"genericDistrCharac": {
+		"label": "Continuous Generic characteristics..."
+	},
+	"genericDistrSamples": {
+		"label": "Sample from Continuous Generic distribution..."
+	},
 	"normalDistrQuantiles": {
 		"label": "Normal quantiles..."
 	},
@@ -858,6 +885,27 @@
 	},
 	"uniformDistrSamples": {
 		"label": "Sample from uniform distribution..."
+	},
+	"DgenericDistrDefine": {
+		"label": "Discrete Generic distribution definition..."
+	},
+	"DgenericDistrQuantiles": {
+		"label": "Discrete Generic quantiles..."
+	},
+	"DgenericProbabilitiesInter": {
+		"label": "Discrete Generic tail probabilities..."
+	},
+	"DgenericDistrMass": {
+		"label": "Discrete Generic probabilities..."
+	},
+	"DgenericDistrPlot": {
+		"label": "Plot discrete Generic distribution..."
+	},
+	"DgenericDistrCharac": {
+		"label": "Discrete Generic characteristics..."
+	},
+	"DgenericDistrSamples": {
+		"label": "Sample from Discrete Generic distribution..."
 	},
 	"binomialDistrQuantiles": {
 		"label": "Binomial quantiles..."

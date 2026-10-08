@@ -924,6 +924,15 @@
 							"en": "Two-factor repeated-measures ANOVA/ANCOVA...",
 							"es": "ANOVA/ANCOVA de dos factores con medidas repetidas..."
 						}
+					},
+					{
+						"id": "oneWayAnovaRE",
+						"color": "charts.purple",
+						"icon": "circle-filled",
+						"label": {
+							"en": "One-Way ANOVA with random effects...",
+							"es": "ANOVA de un factor con efectos aleatorios..."
+						}
 					}
 				]
 			},
@@ -1043,6 +1052,24 @@
 						"label": {
 							"en": "Friedman rank-sum test...",
 							"es": "Test de suma de rangos de Friedman..."
+						}
+					},
+					{
+						"id": "randomnessFTest",
+						"color": "charts.purple",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Randomness test for two level factor...",
+							"es": "Test de aleatoriedad para un factor de dos niveles..."
+						}
+					},
+					{
+						"id": "randomnessNTest",
+						"color": "charts.purple",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Randomness test for numeric variable...",
+							"es": "Test de aleatoriedad para una variable numérica..."
 						}
 					}
 				]
@@ -3164,6 +3191,70 @@
 						"children": [
 							{
 								"label": {
+									"en": "Continuous Generic distribution",
+									"es": "Distribución genérica continua"
+								},
+								"color": "terminal.ansiYellow",
+								"icon": "folder",
+								"children": [
+									{
+										"id": "genericDistrDefine",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Continuous Generic distribution definition...",
+											"es": "Definición de distribución genérica continua..."
+										}
+									},
+									{
+										"id": "genericDistrQuantiles",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Continuous Generic quantiles...",
+											"es": "Cuantiles genéricos continuos..."
+										}
+									},
+									{
+										"id": "genericProbabilitiesInter",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Continuous Generic probabilities...",
+											"es": "Probabilidades genéricas continuas acumuladas..."
+										}
+									},
+									{
+										"id": "genericDistrPlot",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Plot continuous Generic distribution...",
+											"es": "Gráfica de la distribución genérica continua..."
+										}
+									},
+									{
+										"id": "genericDistrCharac",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Continuous Generic characteristics...",
+											"es": "Características genéricas continuas..."
+										}
+									},
+									{
+										"id": "genericDistrSamples",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Sample from Continuous Generic distribution...",
+											"es": "Muestra de una distribución genérica continua..."
+										}
+									}
+								]
+							},
+							{
+								"label": {
 									"en": "Normal distribution",
 									"es": "Distribución normal"
 								},
@@ -3502,6 +3593,79 @@
 						"color": "terminal.ansiYellow",
 						"icon": "folder",
 						"children": [
+							{
+								"label": {
+									"en": "Discrete Generic distribution",
+									"es": "Distribución genérica discreta"
+								},
+								"color": "terminal.ansiYellow",
+								"icon": "folder",
+								"children": [
+									{
+										"id": "DgenericDistrDefine",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Discrete Generic distribution definition...",
+											"es": "Definición de distribución genérica discreta..."
+										}
+									},
+									{
+										"id": "DgenericDistrQuantiles",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Discrete Generic quantiles...",
+											"es": "Cuantiles genéricos discretos..."
+										}
+									},
+									{
+										"id": "DgenericProbabilitiesInter",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Discrete Generic tail probabilities...",
+											"es": "Probabilidades genéricas discretas acumuladas..."
+										}
+									},
+									{
+										"id": "DgenericDistrMass",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Discrete Generic probabilities...",
+											"es": "Probabilidades genéricas discretas..."
+										}
+									},
+									{
+										"id": "DgenericDistrPlot",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Plot discrete Generic distribution...",
+											"es": "Gráfica de la distribución genérica discreta..."
+										}
+									},
+									{
+										"id": "DgenericDistrCharac",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Discrete Generic characteristics...",
+											"es": "Características genéricas discretas..."
+										}
+									},
+									{
+										"id": "DgenericDistrSamples",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Sample from Discrete Generic distribution...",
+											"es": "Muestra de una distribución genérica discreta..."
+										}
+									}
+								]
+							},
 							{
 								"label": {
 									"en": "Binomial distribution",

@@ -54,19 +54,22 @@ const FAMILIES = [
     params: [['size', 'Binomial trials', '1', { positive: true, round: true }], ['prob', 'Probability of success', '0.5', { min: 0, max: 1 }]] },
   { id: 'Poisson', title: 'Poisson', ctor: 'Pois', discrete: true, xlab: 'x', params: [['lambda', 'Mean', '1', { min: 0 }]] },
   { id: 'geom', title: 'Geometric', ctor: 'Geom', discrete: true, xlab: 'Number of Failures until Success', params: [['prob', 'Probability of success', '0.5', { min: 0, max: 1 }]] },
+  { id: 'generic', title: 'Generic', generic: 'AbscontDistribution', params: [['dist', 'Distribution (pick one)']] },
+  { id: 'Dgeneric', title: 'Generic', sampleName: 'DGenericSamples', generic: 'DiscreteDistribution', discrete: true, xlab: 'x', params: [['dist', 'Distribution (pick one)']] },
   { id: 'negbinomial', title: 'NegativeBinomial', ctor: 'Nbinom', discrete: true, xlab: 'Number of Failures Until Target Successes',
     params: [['size', 'Target number of successes', '0', { min: 0, round: true }], ['prob', 'Probability of success', '0.5', { min: 0, max: 1 }]] }
 ];
-const paramFields = fam => fam.params.map(([k, label, def, o = {}]) => ({ k: `p_${k}`, type: 'num', label, def, ...(o.positive && { positive: true }), ...(o.min !== undefined && { min: o.min }), ...(o.max !== undefined && { max: o.max }) }));
+const objectsOfClass = cls => `local({ n <- ls(globalenv()); n[vapply(n, function(x) methods::is(get(x, globalenv()), "${cls}"), logical(1))] })`;
+const paramFields = fam => fam.generic ? [{ k: 'p_dist', type: 'rlist', single: true, selectFirst: true, label: 'Distribution (pick one)', expr: () => objectsOfClass(fam.generic) }] : fam.params.map(([k, label, def, o = {}]) => ({ k: `p_${k}`, type: 'num', label, def, ...(o.positive && { positive: true }), ...(o.min !== undefined && { min: o.min }), ...(o.max !== undefined && { max: o.max }) }));
 const paramValue = (fam, v, k) => {
   const o = fam.params.find(p => p[0] === k)[3] || {};
   const n = Number(v[`p_${k}`]);
   return String(o.round ? Math.round(n) : n);
 };
 // The distribution as the plug-in writes it, e.g. Norm(mean=0, sd=1), qualified so distr need not be attached.
-const distribution = (fam, v) => `distr::${fam.ctor}(${fam.params.map(([k]) => `${k}=${paramValue(fam, v, k)}`).join(', ')})`;
+const distribution = (fam, v) => fam.generic ? [].concat(v.p_dist)[0] : `distr::${fam.ctor}(${fam.params.map(([k]) => `${k}=${paramValue(fam, v, k)}`).join(', ')})`;
 const mainTitle = (fam, v) => {
-  const [a, b] = fam.params;
+  if (fam.generic) return `${fam.title} Distribution: Distribution=${[].concat(v.p_dist)[0]}`;
   const text = fam.id === 'negbinomial' ? `Trials=${paramValue(fam, v, 'size')}, Prob=${paramValue(fam, v, 'prob')}`
     : fam.id === 'F' ? `Numerator df = ${paramValue(fam, v, 'df1')}, Denominator df = ${paramValue(fam, v, 'df2')}`
       : fam.params.map(([k, label]) => `${label}=${paramValue(fam, v, k)}`).join(', ');
@@ -169,7 +172,7 @@ function distributionCommands(fam) {
       return `characRV(${distribution(fam, v)}, charact=c(${chosen.map(rs).join(', ')})${v.flags.moment ? `, moment=${v.k}` : ''}${v.flags.cmoment ? `, cmoment=${v.ck}` : ''})`;
     } };
 
-  const name = `${fam.title}Samples`;
+  const name = fam.sampleName || `${fam.title}Samples`;
   out[`${prefix}DistrSamples`] = { ds: false, activeDataset: v => v.name,
     fields: [{ k: 'name', type: 'name', label: 'Enter name for data set:', def: name }, ...params,
       { k: 'nsamples', type: 'num', int: true, positive: true, def: '100', label: 'Number of samples' },
@@ -192,8 +195,87 @@ function distributionCommands(fam) {
 
 const distributions = Object.assign({}, ...FAMILIES.map(distributionCommands));
 
+// ---- Defining a generic distribution ------------------------------------------------------------------------------------
+const PIECES = [1, 2, 3, 4];
+const numberOrBlank = /^\s*(-?Inf|[-+]?\d*\.?\d+([eE][-+]?\d+)?)?\s*$/;
+const piece = k => PIECES.flatMap(i => (i < k ? [] : [
+  { k: `def${i}`, type: 'text', label: i === 1 ? 'Definition (an expression in x)' : `Definition of piece ${i} (an expression in x)`, def: i === 1 ? '2*x' : '', optional: i > 1, sample: 'x',
+    when: v => i === 1 || (v[`def${i - 1}`] || '').trim() !== '' },
+  { k: `from${i}`, type: 'text', optional: true, def: i === 1 ? '0' : '', label: 'from', pattern: numberOrBlank, error: 'Enter a number.', sample: String(i - 1), when: v => i === 1 || (v[`def${i - 1}`] || '').trim() !== '' },
+  { k: `to${i}`, type: 'text', optional: true, def: i === 1 ? '1' : '', label: 'to', pattern: numberOrBlank, error: 'Enter a number.', sample: String(i), when: v => i === 1 || (v[`def${i - 1}`] || '').trim() !== '' }]));
+const definedPieces = v => PIECES.filter(i => (v[`def${i}`] || '').trim() !== '').map(i => ({ def: v[`def${i}`].trim(), from: (v[`from${i}`] || '').trim(), to: (v[`to${i}`] || '').trim() }));
+
+const defineContinuous = {
+  fields: [{ k: 'name', type: 'name', label: 'Enter name for the distribution', def: 'MyDistribution' },
+    { k: 'densorcum', type: 'choice', label: 'Select function to provide:', choices: [['dens', 'Density function'], ['cum', 'Distribution function']] }, ...piece(1)],
+  check(v) {
+    const pieces = definedPieces(v);
+    const from = pieces.map((p, i) => (p.from === '' ? (i === 0 ? -Infinity : NaN) : Number(p.from)));
+    const to = pieces.map((p, i) => (p.to === '' ? (i === pieces.length - 1 ? Infinity : NaN) : Number(p.to)));
+    if (from.some(Number.isNaN)) return "Some 'from' not specified.";
+    if (to.some(Number.isNaN)) return "Some 'to' not specified.";
+    if (!from.every((f, i) => f < to[i])) return "'to' must be greater than 'from'.";
+    if (!to.slice(0, -1).every((t0, i) => t0 <= from[i + 1])) return 'Overlapping definitions.';
+    if (!to.slice(0, -1).every((t0, i) => t0 === from[i + 1])) return 'Definition intervals must be consecutive.';
+    return undefined;
+  },
+  code(v) {
+    const pieces = definedPieces(v);
+    const from1 = pieces[0].from === '' ? '-Inf' : pieces[0].from;
+    const toLast = pieces[pieces.length - 1].to === '' ? 'Inf' : pieces[pieces.length - 1].to;
+    const ineq = pieces.length === 1 ? ' <= ' : ' < ';
+    const low = from1 !== '-Inf' ? `, low1=${from1}` : '';
+    const up = toLast !== 'Inf' ? `, up1=${toLast}` : '';
+    const dens = v.densorcum === 'dens';
+    let func = dens ? `function(y) sapply(y, function(x) {\n\t\t\t d <- if(x < ${from1}){\n\t\t\t\t\t 0` : `function(y) sapply(y, function(x, ...) {\n\t\t\t p <- if(x < ${from1}){\n\t\t\t\t\t 0`;
+    pieces.forEach((p, i) => { func += `\n\t\t\t\t } else if(x${ineq}${p.to === '' ? 'Inf' : p.to}){\n\t\t\t\t\t ${dens ? p.def : `eval(D(expression(${p.def}),"x"))`}`; });
+    func += `\n\t\t\t\t } else{\n\t\t\t\t\t 0 \n\t\t\t\t }\n\t\t\t return(${dens ? 'd' : 'p'})\n\t\t})${low}${up}, withStand=TRUE`;
+    return `library(distr)\n${v.name} <- AbscontDistribution(d = ${func})`;
+  }
+};
+const defineDiscrete = {
+  fields: [{ k: 'name', type: 'name', label: 'Enter name for the distribution', def: 'MyDiscreteDistribution' },
+    { k: 'massorcum', type: 'choice', label: 'Select function to provide:', choices: [['mass', 'Probability mass function'], ['cum', 'Distribution function']] },
+    { k: 'supp', type: 'numlist', label: 'Support', def: '0,1,2' }, { k: 'proba', type: 'text', optional: true, def: '', label: 'Probability values (optional)', pattern: /^[\s,\d.eE+-]*$/, error: 'Enter numbers separated by commas.', sample: '0,0,1' }],
+  check(v) {
+    const supp = v.supp.map(Number);
+    if (supp.some((x, i) => i && x <= supp[i - 1])) return 'Support is not ordered.';
+    const proba = numberList(v.proba).map(Number);
+    if (proba.length && proba.length !== supp.length) return 'The support and the probabilities must have the same number of values.';
+    if (v.massorcum === 'cum' && proba.length) {
+      if (proba.some((x, i) => i && x < proba[i - 1])) return 'Probabilities are not ordered.';
+      if (Math.abs(proba[proba.length - 1] - 1) > 1e-9) return 'Last probability must be 1.';
+    }
+    return undefined;
+  },
+  code(v) {
+    const proba = numberList(v.proba).map(Number);
+    const masses = v.massorcum === 'cum' && proba.length ? proba.map((x, i) => (i ? x - proba[i - 1] : x)) : proba;
+    const clean = x => String(Math.round(x * 1e12) / 1e12);
+    return `library(distr)\n${v.name} <- DiscreteDistribution(c(${v.supp.join(',')})${masses.length ? `, c(${masses.map(clean).join(',')})` : ''})`;
+  }
+};
+
+// Commands the plug-in adds to R Commander's Statistics menus (means, nonparametric tests).
+const extras = {
+  oneWayAnovaRE: { activeModel: v => (v.method === 'mm' ? v.name : undefined),
+    fields: [factor('g', 'Groups (pick one)'), numVar('y', 'Response Variable (pick one)'), { k: 'name', type: 'name', label: 'Enter name for model: ', def: c => c.fresh('AnovaModel') },
+      { k: 'method', type: 'choice', label: 'Variance estimations: ', choices: [['mm', 'Moments'], ['ml', 'ML'], ['reml', 'REML']] }],
+    code: (v, c) => lines(`with(${c.ds}, numSummary(${S(v.y)}, groups=${S(v.g)}, statistics=c("mean", "sd")))`,
+      v.method === 'mm' ? `${v.name} <- aovremm(${S(v.y)} ~ ${S(v.g)}, data=${c.ds})$model`
+        : `${v.name} <- aovreml(${S(v.y)} ~ ( 1 | ${S(v.g)} ), data=${c.ds}, REML=${rbool(v.method === 'reml')}, Lconfint=TRUE)$model`) },
+  randomnessFTest: { fields: [{ k: 'x', type: 'var', kind: 'twolevel', label: 'Variable (pick one)' }],
+    code: (v, c) => `with(${c.ds}, twolevelfactor.runs.test(${S(v.x)}))` },
+  randomnessNTest: { fields: [numVar('x', 'Variable (pick one)'), { k: 'flags', type: 'flags', label: 'Options', items: [['plot', 'Show graphically', false]] },
+      { k: 'threshold', type: 'text', optional: true, def: '', label: 'Cut-point (median by default):', pattern: /^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/, error: 'Cut-point must be numeric or NULL', sample: '1' }],
+    code: (v, c) => `with(${c.ds}, numeric.runs.test(${S(v.x)}, threshold=${v.threshold.trim() ? Number(v.threshold) : `median(${S(v.x)},na.rm=TRUE)`}, plot=${rbool(v.flags.plot)}))` }
+};
+
 module.exports = {
   ...distributions,
+  ...extras,
+  genericDistrDefine: { ds: false, ...defineContinuous },
+  DgenericDistrDefine: { ds: false, ...defineDiscrete },
   resumenVariablesCualitativas: {
     fields: [
       { k: 'nominal', type: 'var', kind: 'factor', multi: true, min: 0, label: 'Nominal variables' },

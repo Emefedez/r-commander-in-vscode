@@ -57,7 +57,7 @@ make install    # empaqueta e instala en VS Code; luego "Developer: Reload Windo
 ### Hecho (probado)
 - Botón verde, filtrado de ayuda/comandos, vista previa de salidas largas; botón de limpiar terminal; botón verde a la
   izquierda de *Run Source* (`navigation@-2`).
-- 256 comandos del menú de R Commander con formulario en una ventana (webview) o en pasos (`dialogStyle`), árbol
+- 358 comandos (menú de R Commander + complemento RcmdrPlugin.TeachStat, selector de conjunto de datos en el formulario) con formulario en una ventana (webview) o en pasos (`dialogStyle`), árbol
   lateral con colores/separadores, hover con la ruta del menú, carga de funciones de Rcmdr y complementos sin la
   ventana Tk, español por defecto.
 - Campos de tabla (orden de niveles, renombrar, matriz de contrastes), listas dependientes del archivo y de R.

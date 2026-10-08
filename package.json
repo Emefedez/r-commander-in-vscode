@@ -594,6 +594,12 @@
 				"enablement": "isWorkspaceTrusted"
 			},
 			{
+				"command": "rcp.cmd.oneWayAnovaRE",
+				"title": "%rcp.cmd.oneWayAnovaRE%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
 				"command": "rcp.cmd.singleProportionTest",
 				"title": "%rcp.cmd.singleProportionTest%",
 				"category": "R Commander",
@@ -650,6 +656,18 @@
 			{
 				"command": "rcp.cmd.FriedmanTest",
 				"title": "%rcp.cmd.FriedmanTest%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.randomnessFTest",
+				"title": "%rcp.cmd.randomnessFTest%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.randomnessNTest",
+				"title": "%rcp.cmd.randomnessNTest%",
 				"category": "R Commander",
 				"enablement": "isWorkspaceTrusted"
 			},
@@ -1614,6 +1632,42 @@
 				"enablement": "isWorkspaceTrusted"
 			},
 			{
+				"command": "rcp.cmd.genericDistrDefine",
+				"title": "%rcp.cmd.genericDistrDefine%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.genericDistrQuantiles",
+				"title": "%rcp.cmd.genericDistrQuantiles%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.genericProbabilitiesInter",
+				"title": "%rcp.cmd.genericProbabilitiesInter%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.genericDistrPlot",
+				"title": "%rcp.cmd.genericDistrPlot%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.genericDistrCharac",
+				"title": "%rcp.cmd.genericDistrCharac%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.genericDistrSamples",
+				"title": "%rcp.cmd.genericDistrSamples%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
 				"command": "rcp.cmd.normalDistrQuantiles",
 				"title": "%rcp.cmd.normalDistrQuantiles%",
 				"category": "R Commander",
@@ -1790,6 +1844,48 @@
 			{
 				"command": "rcp.cmd.uniformDistrSamples",
 				"title": "%rcp.cmd.uniformDistrSamples%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.DgenericDistrDefine",
+				"title": "%rcp.cmd.DgenericDistrDefine%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.DgenericDistrQuantiles",
+				"title": "%rcp.cmd.DgenericDistrQuantiles%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.DgenericProbabilitiesInter",
+				"title": "%rcp.cmd.DgenericProbabilitiesInter%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.DgenericDistrMass",
+				"title": "%rcp.cmd.DgenericDistrMass%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.DgenericDistrPlot",
+				"title": "%rcp.cmd.DgenericDistrPlot%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.DgenericDistrCharac",
+				"title": "%rcp.cmd.DgenericDistrCharac%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.DgenericDistrSamples",
+				"title": "%rcp.cmd.DgenericDistrSamples%",
 				"category": "R Commander",
 				"enablement": "isWorkspaceTrusted"
 			},
@@ -2705,6 +2801,11 @@
 					"command": "rcp.cmd.twoWayRepeatedMeasures",
 					"when": "editorLangId == r",
 					"group": "01_rcp@7"
+				},
+				{
+					"command": "rcp.cmd.oneWayAnovaRE",
+					"when": "editorLangId == r",
+					"group": "01_rcp@8"
 				}
 			],
 			"rcp.proportionsMenu": [
@@ -2761,6 +2862,16 @@
 					"command": "rcp.cmd.FriedmanTest",
 					"when": "editorLangId == r",
 					"group": "01_rcp@5"
+				},
+				{
+					"command": "rcp.cmd.randomnessFTest",
+					"when": "editorLangId == r",
+					"group": "01_rcp@6"
+				},
+				{
+					"command": "rcp.cmd.randomnessNTest",
+					"when": "editorLangId == r",
+					"group": "01_rcp@7"
 				}
 			],
 			"rcp.clusterMenu": [
@@ -3966,6 +4077,38 @@
 					"group": "01_rcp@7"
 				}
 			],
+			"rcp.genericMenuES": [
+				{
+					"command": "rcp.cmd.genericDistrDefine",
+					"when": "editorLangId == r",
+					"group": "01_rcp@1"
+				},
+				{
+					"command": "rcp.cmd.genericDistrQuantiles",
+					"when": "editorLangId == r",
+					"group": "01_rcp@2"
+				},
+				{
+					"command": "rcp.cmd.genericProbabilitiesInter",
+					"when": "editorLangId == r",
+					"group": "01_rcp@3"
+				},
+				{
+					"command": "rcp.cmd.genericDistrPlot",
+					"when": "editorLangId == r",
+					"group": "01_rcp@4"
+				},
+				{
+					"command": "rcp.cmd.genericDistrCharac",
+					"when": "editorLangId == r",
+					"group": "01_rcp@5"
+				},
+				{
+					"command": "rcp.cmd.genericDistrSamples",
+					"when": "editorLangId == r",
+					"group": "01_rcp@6"
+				}
+			],
 			"rcp.normalMenuES": [
 				{
 					"command": "rcp.cmd.normalDistrQuantiles",
@@ -4130,34 +4273,76 @@
 			],
 			"rcp.continuasMenu": [
 				{
-					"submenu": "rcp.normalMenuES",
+					"submenu": "rcp.genericMenuES",
 					"when": "editorLangId == r",
 					"group": "01_rcp@1"
 				},
 				{
-					"submenu": "rcp.tMenuES",
+					"submenu": "rcp.normalMenuES",
 					"when": "editorLangId == r",
 					"group": "01_rcp@2"
 				},
 				{
-					"submenu": "rcp.chisqMenuES",
+					"submenu": "rcp.tMenuES",
 					"when": "editorLangId == r",
 					"group": "01_rcp@3"
 				},
 				{
-					"submenu": "rcp.FMenuES",
+					"submenu": "rcp.chisqMenuES",
 					"when": "editorLangId == r",
 					"group": "01_rcp@4"
 				},
 				{
-					"submenu": "rcp.exponentialMenuES",
+					"submenu": "rcp.FMenuES",
 					"when": "editorLangId == r",
 					"group": "01_rcp@5"
 				},
 				{
-					"submenu": "rcp.uniformMenuES",
+					"submenu": "rcp.exponentialMenuES",
 					"when": "editorLangId == r",
 					"group": "01_rcp@6"
+				},
+				{
+					"submenu": "rcp.uniformMenuES",
+					"when": "editorLangId == r",
+					"group": "01_rcp@7"
+				}
+			],
+			"rcp.DgenericMenuES": [
+				{
+					"command": "rcp.cmd.DgenericDistrDefine",
+					"when": "editorLangId == r",
+					"group": "01_rcp@1"
+				},
+				{
+					"command": "rcp.cmd.DgenericDistrQuantiles",
+					"when": "editorLangId == r",
+					"group": "01_rcp@2"
+				},
+				{
+					"command": "rcp.cmd.DgenericProbabilitiesInter",
+					"when": "editorLangId == r",
+					"group": "01_rcp@3"
+				},
+				{
+					"command": "rcp.cmd.DgenericDistrMass",
+					"when": "editorLangId == r",
+					"group": "01_rcp@4"
+				},
+				{
+					"command": "rcp.cmd.DgenericDistrPlot",
+					"when": "editorLangId == r",
+					"group": "01_rcp@5"
+				},
+				{
+					"command": "rcp.cmd.DgenericDistrCharac",
+					"when": "editorLangId == r",
+					"group": "01_rcp@6"
+				},
+				{
+					"command": "rcp.cmd.DgenericDistrSamples",
+					"when": "editorLangId == r",
+					"group": "01_rcp@7"
 				}
 			],
 			"rcp.binomialMenuES": [
@@ -4290,24 +4475,29 @@
 			],
 			"rcp.discretasMenu": [
 				{
-					"submenu": "rcp.binomialMenuES",
+					"submenu": "rcp.DgenericMenuES",
 					"when": "editorLangId == r",
 					"group": "01_rcp@1"
 				},
 				{
-					"submenu": "rcp.PoissonMenuES",
+					"submenu": "rcp.binomialMenuES",
 					"when": "editorLangId == r",
 					"group": "01_rcp@2"
 				},
 				{
-					"submenu": "rcp.geometricMenuES",
+					"submenu": "rcp.PoissonMenuES",
 					"when": "editorLangId == r",
 					"group": "01_rcp@3"
 				},
 				{
-					"submenu": "rcp.negbinomialMenuES",
+					"submenu": "rcp.geometricMenuES",
 					"when": "editorLangId == r",
 					"group": "01_rcp@4"
+				},
+				{
+					"submenu": "rcp.negbinomialMenuES",
+					"when": "editorLangId == r",
+					"group": "01_rcp@5"
 				}
 			],
 			"rcp.VAleatoriaMenu": [
@@ -4912,6 +5102,10 @@
 				"label": "%rcp.continuasMenu%"
 			},
 			{
+				"id": "rcp.genericMenuES",
+				"label": "%rcp.genericMenuES%"
+			},
+			{
 				"id": "rcp.normalMenuES",
 				"label": "%rcp.normalMenuES%"
 			},
@@ -4938,6 +5132,10 @@
 			{
 				"id": "rcp.discretasMenu",
 				"label": "%rcp.discretasMenu%"
+			},
+			{
+				"id": "rcp.DgenericMenuES",
+				"label": "%rcp.DgenericMenuES%"
 			},
 			{
 				"id": "rcp.binomialMenuES",
