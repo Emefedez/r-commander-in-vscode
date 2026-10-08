@@ -44,7 +44,7 @@ for (const raw of fs.readFileSync(path.join(__dirname, 'Rcmdr-menus.txt'), 'utf8
 // Items that Rcmdr does not have or that make no sense outside its window.
 const extras = { toolbar: [] };
 for (const [id, spec] of Object.entries(catalog)) if (spec.extraIn) (extras[spec.extraIn] ||= []).push({ kind: 'command', id, label: spec.label.en, es: spec.label.es });
-for (const [menu, items] of Object.entries(extras)) if (menu !== 'toolbar') menus[menu].push(...items);
+for (const [menu, items] of Object.entries(extras)) if (menu !== 'toolbar') menus[menu].push(...(menu === 'toolsMenu' ? [{ kind: 'sep' }] : []), ...items);
 const TOOLBAR = ['selectActiveDataSet', 'editDataSet', 'viewDataSet', 'selectActiveModel'];
 const skipped = new Set();
 
@@ -141,20 +141,25 @@ const base = JSON.parse(fs.readFileSync(path.join(__dirname, 'package.base.json'
 const pkg = JSON.parse(JSON.stringify(base));
 pkg.version = '0.5.0';
 pkg.description = 'Run R code with visible output from a green play button, and use the R Commander menus (File, Data, Statistics, Graphs, Models, Distributions...) from the editor, in English or Spanish.';
+const COMMAND_ICONS = { installPackages: '$(package)' };
 pkg.contributes.commands = [...base.contributes.commands.map(c => ({ ...c, title: `%${c.command}%` })), ...[...ids].map(id => ({
-  command: `rcp.cmd.${id}`, title: `%rcp.cmd.${id}%`, category: 'R Commander', enablement: 'isWorkspaceTrusted'
+  command: `rcp.cmd.${id}`, title: `%rcp.cmd.${id}%`, category: 'R Commander', enablement: 'isWorkspaceTrusted',
+  ...(COMMAND_ICONS[id] && { icon: COMMAND_ICONS[id] })
 }))];
 pkg.contributes.commands.push({ command: 'rCommanderPlay.setLanguage', title: '%rCommanderPlay.setLanguage%', category: 'R Commander' });
 pkg.contributes.submenus = submenus;
 // Shown in the R extension's own sidebar (activity bar container "workspaceViewer").
 pkg.contributes.views = { workspaceViewer: [{ id: 'rCommanderMenu', name: 'R Commander' }] };
 pkg.activationEvents = [...new Set([...(base.activationEvents || []), 'onView:rCommanderMenu'])];
-const title = pkg.contributes.menus['editor/title'].filter(m => m.command !== 'rCommanderPlay.run' && m.command !== 'rCommanderPlay.clearTerminal');
+const ours = new Set(['rCommanderPlay.run', 'rCommanderPlay.clearTerminal', 'rCommanderPlay.interruptR']);
+const title = pkg.contributes.menus['editor/title'].filter(m => !ours.has(m.command));
 pkg.contributes.menus = {
   ...menuEntries,
   // VS Code's "Run or Debug" split button (Run Source lives in it) is navigation@-1;
   // -2 puts the green button directly to its left without taking over that button.
   'editor/title': [
+    { command: 'rCommanderPlay.interruptR', when: 'editorLangId == r', group: 'navigation@-5' },
+    { command: 'rcp.cmd.installPackages', when: 'editorLangId == r', group: 'navigation@-4' },
     { command: 'rCommanderPlay.clearTerminal', when: 'editorLangId == r', group: 'navigation@-3' },
     { command: 'rCommanderPlay.run', when: 'editorLangId == r && isWorkspaceTrusted', group: 'navigation@-2' },
     { submenu: 'rcp.top', when: 'editorLangId == r', group: '1_rcommander@1' }, ...title]
@@ -171,6 +176,14 @@ pkg.contributes.configuration.properties['rCommanderPlay.loadRcmdrFunctions'] = 
 pkg.contributes.configuration.properties['rCommanderPlay.rcmdrPlugins'] = {
   type: 'array', items: { type: 'string' }, default: [], scope: 'resource',
   description: 'R Commander plug-ins to load, for example RcmdrPlugin.TeachStat. Empty loads every installed RcmdrPlugin.* package.'
+};
+pkg.contributes.configuration.properties['rCommanderPlay.cranMirror'] = {
+  type: 'string', default: 'https://cloud.r-project.org', scope: 'window',
+  description: 'CRAN mirror used by the package installer when R has no repository configured. "Tools > Set CRAN mirror..." changes it.'
+};
+pkg.contributes.configuration.properties['rCommanderPlay.packageDownloads'] = {
+  type: 'string', default: '~/.cache/r-commander-play/packages', scope: 'window',
+  description: 'Permanent folder where the package installer keeps the downloaded files. It doubles as a small local repository that is checked before CRAN, so a package already downloaded is not downloaded again.'
 };
 pkg.contributes.configuration.properties['rCommanderPlay.dialogStyle'] = {
   type: 'string', enum: ['form', 'steps'], default: 'form', scope: 'window',

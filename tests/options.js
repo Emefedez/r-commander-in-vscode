@@ -54,3 +54,44 @@ console.log(out.stdout);
 assert.equal(out.status, 0, out.stderr);
 assert.doesNotMatch(out.stdout, /FAIL/);
 console.log('extra option combinations run in R.');
+
+// Permanent downloads: a package downloaded once is reinstalled from the download folder, with no mirror.
+// The repository is served over local HTTP, because R installs file:// repositories in place instead of downloading.
+{
+  const fs = require('node:fs');
+  const os = require('node:os');
+  const { spawn } = require('node:child_process');
+  const base = fs.mkdtempSync(path.join(os.tmpdir(), 'rcp-keep-'));
+  spawnSync('Rscript', [path.join(__dirname, 'make-repo.R'), base], { encoding: 'utf8' });
+  const port = 20000 + Math.floor(Math.random() * 20000);
+  const server = spawn('python3', ['-m', 'http.server', String(port), '--bind', '127.0.0.1', '--directory', path.join(base, 'repo')], { stdio: 'ignore' });
+  const mirror = `http://127.0.0.1:${port}`;
+  try {
+    for (let i = 0; i < 50 && spawnSync('curl', ['-sf', `${mirror}/src/contrib/PACKAGES`]).status !== 0; i++) spawnSync('sleep', ['0.1']);
+    const env = { ...process.env, R_LIBS: path.join(base, 'lib') };
+    const folder = path.join(base, 'downloads');
+    const install = (url, keep) => catalog.installPackages.code({ mirror: [url], pkgs: ['rcptwo'], names: '', flags: { suggests: false, force: false, keep }, folder }, ctx);
+    const run = code => spawnSync('Rscript', ['-e', `${code}\ncat("INSTALLED:", nzchar(system.file(package = "rcptwo")), "\\n")`], { encoding: 'utf8', env });
+    const remove = () => spawnSync('Rscript', ['-e', `remove.packages("rcptwo", lib = ${JSON.stringify(path.join(base, 'lib'))})`], { encoding: 'utf8', env });
+
+    const first = run(install(mirror, true));
+    assert.match(first.stdout, /INSTALLED: TRUE/, first.stderr);
+    assert.match(first.stderr, /trying URL 'http:\/\/127\.0\.0\.1/, 'the package was really downloaded');
+    assert.ok(fs.existsSync(path.join(folder, 'src', 'contrib', 'rcptwo_1.0.tar.gz')), 'the download was kept');
+    assert.ok(fs.existsSync(path.join(folder, 'src', 'contrib', 'PACKAGES')), 'and indexed');
+
+    remove();
+    const unreachable = 'http://127.0.0.1:9';
+    const again = run(install(unreachable, true));
+    assert.match(again.stdout, /INSTALLED: TRUE/, `reinstalled from the download folder\n${again.stderr}`);
+    assert.doesNotMatch(again.stderr, /trying URL 'http/, 'nothing was downloaded the second time');
+
+    remove();
+    const temporary = run(install(unreachable, false));
+    assert.match(temporary.stdout, /INSTALLED: FALSE/, 'without the permanent folder an unreachable mirror cannot supply it');
+    console.log('downloads are kept and reused without a mirror.');
+  } finally {
+    server.kill();
+    fs.rmSync(base, { recursive: true, force: true });
+  }
+}

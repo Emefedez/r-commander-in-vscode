@@ -68,6 +68,13 @@
 				"category": "R",
 				"icon": "$(clear-all)",
 				"enablement": "editorLangId == r"
+			},
+			{
+				"command": "rCommanderPlay.interruptR",
+				"title": "Interrupt R",
+				"category": "R",
+				"icon": "$(debug-stop)",
+				"enablement": "editorLangId == r"
 			}
 		],
 		"configuration": {

@@ -71,6 +71,13 @@
 				"enablement": "editorLangId == r"
 			},
 			{
+				"command": "rCommanderPlay.interruptR",
+				"title": "%rCommanderPlay.interruptR%",
+				"category": "R",
+				"icon": "$(debug-stop)",
+				"enablement": "editorLangId == r"
+			},
+			{
 				"command": "rcp.cmd.selectActiveDataSet",
 				"title": "%rcp.cmd.selectActiveDataSet%",
 				"category": "R Commander",
@@ -1520,6 +1527,37 @@
 				"command": "rcp.cmd.installPackages",
 				"title": "%rcp.cmd.installPackages%",
 				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted",
+				"icon": "$(package)"
+			},
+			{
+				"command": "rcp.cmd.updatePackages",
+				"title": "%rcp.cmd.updatePackages%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.installLocalPackages",
+				"title": "%rcp.cmd.installLocalPackages%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.setCranMirror",
+				"title": "%rcp.cmd.setCranMirror%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.listInstalledPackages",
+				"title": "%rcp.cmd.listInstalledPackages%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.interruptR",
+				"title": "%rcp.cmd.interruptR%",
+				"category": "R Commander",
 				"enablement": "isWorkspaceTrusted"
 			},
 			{
@@ -1645,6 +1683,18 @@
 					"default": [],
 					"scope": "resource",
 					"description": "R Commander plug-ins to load, for example RcmdrPlugin.TeachStat. Empty loads every installed RcmdrPlugin.* package."
+				},
+				"rCommanderPlay.cranMirror": {
+					"type": "string",
+					"default": "https://cloud.r-project.org",
+					"scope": "window",
+					"description": "CRAN mirror used by the package installer when R has no repository configured. \"Tools > Set CRAN mirror...\" changes it."
+				},
+				"rCommanderPlay.packageDownloads": {
+					"type": "string",
+					"default": "~/.cache/r-commander-play/packages",
+					"scope": "window",
+					"description": "Permanent folder where the package installer keeps the downloaded files. It doubles as a small local repository that is checked before CRAN, so a package already downloaded is not downloaded again."
 				},
 				"rCommanderPlay.dialogStyle": {
 					"type": "string",
@@ -3170,7 +3220,32 @@
 				{
 					"command": "rcp.cmd.installPackages",
 					"when": "editorLangId == r",
-					"group": "01_rcp@4"
+					"group": "02_rcp@1"
+				},
+				{
+					"command": "rcp.cmd.updatePackages",
+					"when": "editorLangId == r",
+					"group": "02_rcp@2"
+				},
+				{
+					"command": "rcp.cmd.installLocalPackages",
+					"when": "editorLangId == r",
+					"group": "02_rcp@3"
+				},
+				{
+					"command": "rcp.cmd.setCranMirror",
+					"when": "editorLangId == r",
+					"group": "02_rcp@4"
+				},
+				{
+					"command": "rcp.cmd.listInstalledPackages",
+					"when": "editorLangId == r",
+					"group": "02_rcp@5"
+				},
+				{
+					"command": "rcp.cmd.interruptR",
+					"when": "editorLangId == r",
+					"group": "02_rcp@6"
 				}
 			],
 			"rcp.helpMenu": [
@@ -3293,6 +3368,16 @@
 				}
 			],
 			"editor/title": [
+				{
+					"command": "rCommanderPlay.interruptR",
+					"when": "editorLangId == r",
+					"group": "navigation@-5"
+				},
+				{
+					"command": "rcp.cmd.installPackages",
+					"when": "editorLangId == r",
+					"group": "navigation@-4"
+				},
 				{
 					"command": "rCommanderPlay.clearTerminal",
 					"when": "editorLangId == r",

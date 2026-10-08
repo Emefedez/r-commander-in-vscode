@@ -6,7 +6,8 @@
 		"rCommanderPlay.toggleLimitOutput": "Limit Long Output",
 		"rCommanderPlay.configureOutputLimit": "Configure Output Preview Size",
 		"rCommanderPlay.showSettings": "Configure Green Play Button",
-		"rCommanderPlay.clearTerminal": "Clear R Terminal"
+		"rCommanderPlay.clearTerminal": "Clear R Terminal",
+		"rCommanderPlay.interruptR": "Interrupt R"
 	},
 	"es": {
 		"rCommanderPlay.run": "Ejecutar selección o archivo con salida",
@@ -15,6 +16,7 @@
 		"rCommanderPlay.toggleLimitOutput": "Limitar salidas largas",
 		"rCommanderPlay.configureOutputLimit": "Configurar tamaño de la vista previa",
 		"rCommanderPlay.showSettings": "Configurar el botón verde",
-		"rCommanderPlay.clearTerminal": "Limpiar el terminal de R"
+		"rCommanderPlay.clearTerminal": "Limpiar el terminal de R",
+		"rCommanderPlay.interruptR": "Interrumpir R"
 	}
 }

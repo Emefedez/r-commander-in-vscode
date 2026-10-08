@@ -725,6 +725,21 @@
 	"installPackages": {
 		"label": "Install package(s)..."
 	},
+	"updatePackages": {
+		"label": "Update packages..."
+	},
+	"installLocalPackages": {
+		"label": "Install package(s) from local files..."
+	},
+	"setCranMirror": {
+		"label": "Set CRAN mirror..."
+	},
+	"listInstalledPackages": {
+		"label": "Installed packages..."
+	},
+	"interruptR": {
+		"label": "Interrupt R"
+	},
 	"helpCommander": {
 		"label": "Commander help"
 	},

@@ -31,6 +31,9 @@ function configurationTarget(resource) {
     : vscode.ConfigurationTarget.Global;
 }
 
+// The R terminal that REditorSupport.r manages.
+const rTerminal = () => (vscode.window.terminals || []).find(terminal => /^R\b/.test(terminal.name));
+
 function activate(context) {
   // One channel to the R terminal, shared by the green button and the R Commander menus.
   const session = new RSession(vscode, context.asAbsolutePath('runner.R'));
@@ -59,9 +62,15 @@ function activate(context) {
   context.subscriptions.push(status,
     // Clears the R terminal even when the editor has the focus.
     vscode.commands.registerCommand('rCommanderPlay.clearTerminal', async () => {
-      const rTerminal = (vscode.window.terminals || []).find(terminal => /^R\b/.test(terminal.name));
-      if (rTerminal) rTerminal.show(true);
+      rTerminal()?.show(true);
       await vscode.commands.executeCommand('workbench.action.terminal.clear');
+    }),
+    // Ctrl+C in the R terminal: stops what R is running, like the Stop button of R's own GUIs.
+    vscode.commands.registerCommand('rCommanderPlay.interruptR', async () => {
+      const terminal = rTerminal();
+      if (!terminal) { await vscode.window.showInformationMessage(t('There is no R terminal open.')); return; }
+      terminal.sendText('\x03', false);
+      terminal.show(true);
     }),
     vscode.window.onDidChangeActiveTextEditor(refresh),
     vscode.workspace.onDidChangeConfiguration(event => {
@@ -159,9 +168,12 @@ function registerMenus(context, resourceFor, configuration, refreshPlayStatus, s
       return {
         limitOutput: config.get('limitOutput', true), maxOutputItems: Number(config.get('maxOutputItems', 24)),
         menuAction: config.get('menuAction', 'run'), dialogStyle: config.get('dialogStyle', 'form'),
+        cranMirror: config.get('cranMirror', 'https://cloud.r-project.org'),
+        packageDownloads: config.get('packageDownloads', '~/.cache/r-commander-play/packages'),
         loadRcmdrFunctions: config.get('loadRcmdrFunctions', true), rcmdrPlugins: config.get('rcmdrPlugins', [])
       };
     },
+    updateSetting: (key, value) => configuration().update(key, value, vscode.ConfigurationTarget.Global),
     notify: (text, level) => (level === 'warn' ? vscode.window.showWarningMessage(text) : vscode.window.showInformationMessage(text))
   });
 

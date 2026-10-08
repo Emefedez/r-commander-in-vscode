@@ -13,6 +13,12 @@ const model = require('../lib/formmodel');
 const root = path.join(__dirname, '..');
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'rcp-test-'));
 const fixtures = path.join(tmp, 'fixtures');
+// A tiny CRAN-like repository and a library of its own, so the package installer is tested offline
+// and never touches the real library: R_LIBS makes that library the first one every R below sees.
+const repoDir = path.join(tmp, 'repo-fixture');
+spawnSync('Rscript', [path.join(__dirname, 'make-repo.R'), repoDir], { encoding: 'utf8' });
+process.env.R_LIBS = path.join(repoDir, 'lib');
+const cranMirror = `file://${path.join(repoDir, 'repo')}`;
 spawnSync('Rscript', [path.join(__dirname, 'make-fixtures.R'), fixtures], { encoding: 'utf8' });
 // Real files for the commands that open one. Pass A uses the files only haven can read where there
 // are two (so the fallback runs), pass B the ones foreign reads directly.
@@ -23,6 +29,7 @@ const fixtureFor = (title, pass) => {
   if (/b7dat/i.test(title)) return pick('iris.sas7bdat', 'iris.sas7bdat');
   if (/STATA/i.test(title)) return pick('iris.dta', 'small.dta');
   if (/Excel/i.test(title)) return path.join(fixtures, 'datasets.xlsx');
+  if (/package archive/i.test(title)) return path.join(repoDir, 'rcptest_1.1.tar.gz');
   if (/file to load/i.test(title)) return pick('two-frames.RData', 'small.csv');
   return path.join(fixtures, pass === 'A' ? 'small.tsv' : 'small.csv');
 };
@@ -67,6 +74,8 @@ const PICKS = (pass) => ({
 function fakeVscode(pass, id, log) {
   const picks = PICKS(pass)[id] || {};
   const choose = (items, placeholder) => {
+    // The CRAN mirror is always the first line: the test repository, never a real mirror.
+    if (/CRAN mirror/.test(String(placeholder))) return items[0];
     const key = Object.keys(picks).find(k => String(placeholder).includes(k));
     if (key) return items.find(i => i.label === picks[key]) || items[0];
     const real = items.filter(i => i.name !== undefined ? typeof i.name === 'string' : true);
@@ -138,8 +147,8 @@ class FakeForm {
         case 'installed': case 'rlist':
           if (f.of) {
             const lines = (await env.session.query(f.exprFor(raw[f.of], env.ctx))) || [];
-            raw[f.k] = this.pass === 'A' ? lines.map(l => l.split('\t')[0]) : lines.slice(0, 1).map(l => l.split('\t')[0]);
-          } else raw[f.k] = list.slice(0, 1).map(i => i.value);
+            raw[f.k] = (f.selectAll || this.pass === 'A' ? lines : lines.slice(-1)).map(l => l.split('\t')[0]);
+          } else raw[f.k] = f.selectAll || f.single || f.selectFirst ? (f.selectAll ? list : list.slice(0, 1)).map(i => i.value) : this.pass === 'A' ? list.slice(0, 1).map(i => i.value) : list.slice(-1).map(i => i.value);
           break;
         case 'matrix': {
           const rows = await env.session.query(`levels(as.factor(${env.ctx.dv(values[f.of])}))`);
@@ -173,7 +182,8 @@ class FakeForm {
 }
 
 (async () => {
-  const ids = Object.keys(require('../data/commands.json'));
+  const only = process.env.ONLY ? new Set(process.env.ONLY.split(',')) : undefined;
+  const ids = Object.keys(require('../data/commands.json')).filter(id => !only || only.has(id));
   const failures = [];
   const scripts = [];
   for (const mode of ['steps', 'form']) for (const pass of ['A', 'B']) {
@@ -183,7 +193,8 @@ class FakeForm {
       const session = new TestSession();
       const commander = new Commander({
         vscode: fakeVscode(pass, id, log), session, resource: () => undefined,
-        settings: () => ({ limitOutput: false, maxOutputItems: 24, menuAction: 'run', dialogStyle: mode, loadRcmdrFunctions: false }), notify: (m, l) => log.push([l, m]),
+        settings: () => ({ limitOutput: false, maxOutputItems: 24, menuAction: 'run', dialogStyle: mode, loadRcmdrFunctions: false, cranMirror, packageDownloads: path.join(tmp, 'package-cache') }), notify: (m, l) => log.push([l, m]),
+        updateSetting: async (key, value) => log.push(['setting', key, value]),
         form: mode === 'form' ? new FakeForm(pass, id) : undefined
       });
       commander.activeModel = 'RegModel.1';
@@ -204,7 +215,7 @@ class FakeForm {
   failures.forEach(f => console.log('  ' + f));
 
   // Execute in R. Commands that would quit, open viewers or install are only parsed.
-  const parseOnly = ['CFA', 'importMinitab', 'closeCommanderAndR', 'viewData', 'viewDataSet', 'editDataSet', 'startHelp', 'browseRcmdrHexSticker', 'installPackages', 'helpCommander', 'loadPackages', 'loadPlugins', 'helpDataSet'];
+  const parseOnly = ['listInstalledPackages', 'CFA', 'importMinitab', 'closeCommanderAndR', 'viewData', 'viewDataSet', 'editDataSet', 'startHelp', 'browseRcmdrHexSticker', 'helpCommander', 'loadPackages', 'loadPlugins', 'helpDataSet'];
   const rscript = `
 options(warn = 1); pdf(NULL)
 local({

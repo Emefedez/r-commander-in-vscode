@@ -57,7 +57,7 @@ make install    # empaqueta e instala en VS Code; luego "Developer: Reload Windo
 ### Hecho (probado)
 - Botón verde, filtrado de ayuda/comandos, vista previa de salidas largas; botón de limpiar terminal; botón verde a la
   izquierda de *Run Source* (`navigation@-2`).
-- 251 comandos del menú de R Commander con formulario en una ventana (webview) o en pasos (`dialogStyle`), árbol
+- 256 comandos del menú de R Commander con formulario en una ventana (webview) o en pasos (`dialogStyle`), árbol
   lateral con colores/separadores, hover con la ruta del menú, carga de funciones de Rcmdr y complementos sin la
   ventana Tk, español por defecto.
 - Campos de tabla (orden de niveles, renombrar, matriz de contrastes), listas dependientes del archivo y de R.
@@ -71,17 +71,29 @@ make install    # empaqueta e instala en VS Code; luego "Developer: Reload Windo
 - Pruebas: `tests/catalog.js` (cada comando × 2 estilos × 2 juegos de opciones, ejecutado en R), `options.js`,
   `terminal.js`, `rcmdr.js`, `view.js`, `hover.js`, `formmodel.js`, `extension.js`, `runner.R`.
 
-### En curso (prioridad máxima)
-- **Instalador de paquetes de R** (el usuario intentó `utils::menuInstallPkgs()`, que es de RGui/Windows y no existe
-  aquí): lista de CRAN con filtro, instalar sin reinstalar, actualizar, instalar desde archivo local, elegir mirror
-  (ajuste `rCommanderPlay.cranMirror`), listar instalados.
-- **Herramientas en la barra**: botón de paquetes y botón de interrumpir R (Ctrl+C al terminal de R) junto al
-  botón verde y la escoba.
+### Hecho en la última tanda (probado)
+- **Instalador de paquetes de R** (el usuario intentó `utils::menuInstallPkgs()`, que es de RGui/Windows): en
+  *Herramientas*: *Instalar paquete(s)...* (elige mirror de una lista descargada de CRAN con la local como respaldo,
+  lista de paquetes de ese mirror con filtro, solo descarga lo que falta), *Actualizar paquetes...*, *Instalar desde
+  archivos locales...*, *Elegir mirror de CRAN...*, *Paquetes instalados...* e *Interrumpir R*.
+- **Descargas permanentes** (opción marcada por defecto): los archivos van a `rCommanderPlay.packageDownloads`
+  (`~/.cache/r-commander-play/packages`), que además es un repositorio local indexado que se consulta antes que CRAN,
+  así que un paquete ya descargado no se vuelve a bajar. Probado con un servidor HTTP local (`tests/options.js`):
+  la reinstalación funciona con un mirror inaccesible; sin la opción, falla (control).
+- **Botones de la barra** (de izquierda a derecha): interrumpir R, instalar paquetes, limpiar terminal, play verde,
+  *Run Source*.
+- Pruebas del instalador sin red ni tocar la biblioteca real: `tests/make-repo.R` crea un repositorio CRAN
+  diminuto y una biblioteca propia (`R_LIBS`).
+
+### En curso
+- Nada abierto. Pendiente de confirmar con el usuario: a qué se refiere con "la salida de la instalación es distinta
+  a la de R Commander" (pegó la salida de *Cargar paquete(s)*).
 
 ### Pendiente / bloqueado
-- `rgl` (Scatter3D, Guardar gráfico 3D): su instalación falla por un bloqueo antiguo `00LOCK-rgl` en la biblioteca
-  de usuario (probablemente de la descarga atascada). **Hay que preguntar antes de borrarlo.** Mientras tanto esos
-  dos comandos se prueban solo como código.
+- `rgl` (Scatter3D, Guardar gráfico 3D): su instalación falla con `failed to lock directory ... for modifying`,
+  es decir, un bloqueo `00LOCK-rgl` antiguo en la biblioteca de usuario (probablemente de la descarga atascada).
+  **Hay que preguntar antes de borrarlo** (el usuario rechazó que lo inspeccionara). Esos dos comandos son los
+  únicos 8 fallos de `tests/catalog.js` (912/920).
 - `importMinitab` y `CFA` se comprueban en el barrido solo como código (no hay un archivo `.mtp` de ejemplo; CFA
   necesita datos con estructura factorial, que sí se ejecutan en `tests/options.js`).
 - Probar todo en la ventana real de VS Code del usuario (hasta ahora se ha probado con renders en un navegador y

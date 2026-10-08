@@ -38,7 +38,10 @@ Los menús en español y en inglés salen del propio paquete Rcmdr.
 - **Funciones de R Commander disponibles en la sesión** (`Recode`, `Hist`, `calcular_frecuencia`...), cargadas
   sin abrir la ventana Tk: se enlazan los paquetes de los que depende Rcmdr y los complementos
   `RcmdrPlugin.*` instalados.
-- **Botón de limpiar terminal** junto al play verde.
+- **Instalador de paquetes** (lo que ofrece el menú *Paquetes* de RGui, que no existe en Linux ni en VS Code): elegir
+  mirror, instalar con lista filtrable de CRAN, actualizar, instalar desde archivos locales, ver los instalados.
+  Solo descarga lo que falta y puede conservar las descargas en una carpeta permanente para no repetirlas.
+- **Botones en la barra del editor**: interrumpir R, instalar paquetes, limpiar el terminal y el play verde.
 - **Arreglo del visor del Workspace** para listas con clase (por ejemplo un `histogram`), que daban
   `No method asJSON S3 class`.
 - **Español por defecto** (diálogos, menús y árbol), con inglés opcional.
@@ -76,6 +79,8 @@ de REditorSupport o las ventanas de R.
 
 | Ajuste | Por defecto | Qué hace |
 | --- | --- | --- |
+| `rCommanderPlay.cranMirror` | `https://cloud.r-project.org` | Mirror de CRAN del instalador de paquetes (*Herramientas ▸ Elegir mirror de CRAN...* lo cambia). |
+| `rCommanderPlay.packageDownloads` | `~/.cache/r-commander-play/packages` | Carpeta permanente de descargas del instalador; es también un repositorio local que se consulta antes que CRAN. |
 | `rCommanderPlay.language` | `es` | Idioma de los diálogos y del árbol (`es`, `en`, `auto`). Las etiquetas de los menús se fijan al arrancar VS Code: usa **R Commander: Cambiar idioma (English / Español)** y recarga la ventana. |
 | `rCommanderPlay.dialogStyle` | `form` | `form`: una ventana con todo. `steps`: una pregunta cada vez en la barra superior. |
 | `rCommanderPlay.menuAction` | `run` | `run`, `insert` o `both`. |

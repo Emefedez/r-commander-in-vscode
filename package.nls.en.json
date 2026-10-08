@@ -288,6 +288,11 @@
 	"rcp.cmd.loadPlugins": "Load Rcmdr plug-in(s)...",
 	"rcp.cmd.Options": "Options...",
 	"rcp.cmd.installPackages": "Install package(s)...",
+	"rcp.cmd.updatePackages": "Update packages...",
+	"rcp.cmd.installLocalPackages": "Install package(s) from local files...",
+	"rcp.cmd.setCranMirror": "Set CRAN mirror...",
+	"rcp.cmd.listInstalledPackages": "Installed packages...",
+	"rcp.cmd.interruptR": "Interrupt R",
 	"rcp.cmd.helpCommander": "Commander help",
 	"rcp.cmd.browseManual": "Introduction to the R Commander",
 	"rcp.cmd.browseEnglishManual": "Introduction to the R Commander (English version)",
@@ -306,5 +311,6 @@
 	"rCommanderPlay.toggleLimitOutput": "Limit Long Output",
 	"rCommanderPlay.configureOutputLimit": "Configure Output Preview Size",
 	"rCommanderPlay.showSettings": "Configure Green Play Button",
-	"rCommanderPlay.clearTerminal": "Clear R Terminal"
+	"rCommanderPlay.clearTerminal": "Clear R Terminal",
+	"rCommanderPlay.interruptR": "Interrupt R"
 }

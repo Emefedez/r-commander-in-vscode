@@ -17,9 +17,6 @@
 		"twoWayRepeatedMeasures",
 		"anovaTable"
 	],
-	"any": [
-		"installPackages"
-	],
 	"aov": [
 		"oneWayAnova"
 	],
@@ -72,7 +69,8 @@
 		"PoissonDistributionSamples",
 		"geomDistributionSamples",
 		"hyperDistributionSamples",
-		"negbinomialDistributionSamples"
+		"negbinomialDistributionSamples",
+		"listInstalledPackages"
 	],
 	"as.factor": [
 		"numericToFactor",
@@ -241,6 +239,10 @@
 		"hyperMass",
 		"hyperDistributionPlot"
 	],
+	"dir.create": [
+		"installPackages",
+		"updatePackages"
+	],
 	"discretePlot": [
 		"DiscretePlot"
 	],
@@ -288,6 +290,14 @@
 	"factanal": [
 		"factorAnalysis"
 	],
+	"file.exists": [
+		"installPackages",
+		"updatePackages"
+	],
+	"file.path": [
+		"installPackages",
+		"updatePackages"
+	],
 	"fisher.test": [
 		"twoWayTable",
 		"twoWayTableFromCounts"
@@ -306,7 +316,9 @@
 		"generalizedLinearMixedModel"
 	],
 	"getOption": [
-		"installPackages"
+		"installPackages",
+		"updatePackages",
+		"setCranMirror"
 	],
 	"getwd": [
 		"Setwd"
@@ -319,6 +331,10 @@
 	],
 	"gray.colors": [
 		"pieChart"
+	],
+	"grepl": [
+		"installPackages",
+		"updatePackages"
 	],
 	"hatvalues": [
 		"addObservationStatistics"
@@ -370,13 +386,19 @@
 		"InfluencePlot"
 	],
 	"install.packages": [
-		"installPackages"
+		"installPackages",
+		"updatePackages",
+		"installLocalPackages"
+	],
+	"installed.packages": [
+		"listInstalledPackages"
 	],
 	"IQR": [
 		"numericalSummaries"
 	],
 	"is.null": [
-		"installPackages"
+		"installPackages",
+		"updatePackages"
 	],
 	"KMeans": [
 		"kmeansClustering"
@@ -455,7 +477,9 @@
 		"oneWayAnova"
 	],
 	"options": [
-		"installPackages"
+		"installPackages",
+		"updatePackages",
+		"setCranMirror"
 	],
 	"outlierTest": [
 		"OutlierTest"
@@ -468,6 +492,10 @@
 	],
 	"partial.cor": [
 		"correlationMatrix"
+	],
+	"path.expand": [
+		"installPackages",
+		"updatePackages"
 	],
 	"pbeta": [
 		"betaProbabilities",
@@ -955,6 +983,10 @@
 		"twoWayTableFromCounts",
 		"multiWayTable"
 	],
+	"try": [
+		"installPackages",
+		"updatePackages"
+	],
 	"tryCatch": [
 		"importSPSS",
 		"importSAS",
@@ -979,7 +1011,8 @@
 	],
 	"View": [
 		"viewDataSet",
-		"viewData"
+		"viewData",
+		"listInstalledPackages"
 	],
 	"vif": [
 		"VIF"
@@ -991,6 +1024,10 @@
 	],
 	"with": [
 		"Compute"
+	],
+	"write_PACKAGES": [
+		"installPackages",
+		"updatePackages"
 	],
 	"write.table": [
 		"exportDataSet"

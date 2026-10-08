@@ -102,6 +102,17 @@ async function runAndRead() {
 }
 
 (async () => {
+  // Interrupt R sends Ctrl+C to the R terminal and to no other terminal.
+  {
+    const typed = [];
+    mock.window.terminals = [{ name: 'bash', sendText() { assert.fail('sent to the wrong terminal'); }, show() {} },
+      { name: 'R Interactive', sendText: (text, newline) => typed.push([text, newline]), show() {} }];
+    await handlers['rCommanderPlay.interruptR']();
+    assert.deepEqual(typed, [['\x03', false]]);
+    mock.window.terminals = [];
+    await handlers['rCommanderPlay.interruptR'](); // with no R terminal it only says so
+    assert.match(notifications.at(-1), /./);
+  }
   // Menu commands retain the file's settings when the terminal has focus.
   mock.window.activeTextEditor = undefined;
   input = '12';

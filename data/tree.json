@@ -2712,12 +2712,60 @@
 				}
 			},
 			{
+				"sep": true
+			},
+			{
 				"id": "installPackages",
 				"color": "terminal.ansiMagenta",
 				"icon": "circle-filled",
 				"label": {
 					"en": "Install package(s)...",
 					"es": "Instalar paquete(s)..."
+				}
+			},
+			{
+				"id": "updatePackages",
+				"color": "terminal.ansiMagenta",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Update packages...",
+					"es": "Actualizar paquetes..."
+				}
+			},
+			{
+				"id": "installLocalPackages",
+				"color": "terminal.ansiMagenta",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Install package(s) from local files...",
+					"es": "Instalar paquete(s) desde archivos locales..."
+				}
+			},
+			{
+				"id": "setCranMirror",
+				"color": "terminal.ansiMagenta",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Set CRAN mirror...",
+					"es": "Elegir mirror de CRAN..."
+				}
+			},
+			{
+				"id": "listInstalledPackages",
+				"color": "terminal.ansiMagenta",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Installed packages...",
+					"es": "Paquetes instalados..."
+				}
+			},
+			{
+				"id": "interruptR",
+				"color": "terminal.ansiMagenta",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Interrupt R",
+					"es": "Interrumpir R"
 				}
 			}
 		]
