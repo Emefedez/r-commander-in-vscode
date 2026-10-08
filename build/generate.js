@@ -185,11 +185,13 @@ pkg.contributes.menus = {
   // VS Code's "Run or Debug" split button (Run Source lives in it) is navigation@-1;
   // -2 puts the green button directly to its left without taking over that button.
   'editor/title': [
-    { command: 'rCommanderPlay.interruptR', when: 'editorLangId == r', group: 'navigation@-5' },
-    { command: 'rcp.cmd.installPackages', when: 'editorLangId == r', group: 'navigation@-4' },
     { command: 'rCommanderPlay.clearTerminal', when: 'editorLangId == r', group: 'navigation@-3' },
     { command: 'rCommanderPlay.run', when: 'editorLangId == r && isWorkspaceTrusted', group: 'navigation@-2' },
-    { submenu: 'rcp.top', when: 'editorLangId == r', group: '1_rcommander@1' }, ...title]
+    { submenu: 'rcp.top', when: 'editorLangId == r', group: '1_rcommander@1' }, ...title],
+  // The two side-by-side buttons in the R Commander sidebar header (keeps the editor toolbar short).
+  'view/title': [
+    { command: 'rCommanderPlay.interruptR', when: 'view == rCommanderMenu', group: 'navigation@1' },
+    { command: 'rcp.cmd.installPackages', when: 'view == rCommanderMenu', group: 'navigation@2' }]
 };
 pkg.contributes.configuration.properties['rCommanderPlay.language'] = {
   type: 'string', enum: ['es', 'en', 'auto'], default: 'es', scope: 'window',

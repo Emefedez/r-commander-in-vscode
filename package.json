@@ -4826,16 +4826,6 @@
 			],
 			"editor/title": [
 				{
-					"command": "rCommanderPlay.interruptR",
-					"when": "editorLangId == r",
-					"group": "navigation@-5"
-				},
-				{
-					"command": "rcp.cmd.installPackages",
-					"when": "editorLangId == r",
-					"group": "navigation@-4"
-				},
-				{
 					"command": "rCommanderPlay.clearTerminal",
 					"when": "editorLangId == r",
 					"group": "navigation@-3"
@@ -4869,6 +4859,18 @@
 					"command": "rCommanderPlay.configureOutputLimit",
 					"when": "editorLangId == r",
 					"group": "3_rCommanderPlayOutput@2"
+				}
+			],
+			"view/title": [
+				{
+					"command": "rCommanderPlay.interruptR",
+					"when": "view == rCommanderMenu",
+					"group": "navigation@1"
+				},
+				{
+					"command": "rcp.cmd.installPackages",
+					"when": "view == rCommanderMenu",
+					"group": "navigation@2"
 				}
 			]
 		},
