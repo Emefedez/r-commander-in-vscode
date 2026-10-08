@@ -898,6 +898,48 @@
 	"negbinomialDistrSamples": {
 		"label": "Sample from negative binomial distribution..."
 	},
+	"intervaloConfianzaMedia": {
+		"label": "Confidence interval for the mean..."
+	},
+	"intervaloConfianzaVarianza": {
+		"label": "Confidence interval for the variance..."
+	},
+	"intervaloConfianzaProporcion": {
+		"label": "Confidence interval for a proportion..."
+	},
+	"intervaloConfianzaMediasIndependientes": {
+		"label": "Confidence interval for the difference of independent means..."
+	},
+	"intervaloConfianzaMediasPareadas": {
+		"label": "Confidence interval for mean paired difference..."
+	},
+	"intervaloConfianza2Varianzas": {
+		"label": "Confidence interval for the ratio of two variances..."
+	},
+	"intervaloConfianzaDiferenciaProporciones": {
+		"label": "Confidence interval for difference of proportions..."
+	},
+	"contrasteHipotesisMedia": {
+		"label": "Hypothesis testing for the mean..."
+	},
+	"contrasteHipotesisVarianza": {
+		"label": "Hypothesis testing for the variance..."
+	},
+	"contrastHipotesisProporcion": {
+		"label": "Hypothesis testing for a proportion..."
+	},
+	"contrasteHipotesisMediasIndependientes": {
+		"label": "Hypothesis testing for independent means..."
+	},
+	"contrasteHipotesisMediasPareadas": {
+		"label": "Hypothesis testing for paired means..."
+	},
+	"contrasteHipotesis2Varianzas": {
+		"label": "Hypothesis testing for the ratio of two variances..."
+	},
+	"contrasteHipotesisDiferenciaProporciones": {
+		"label": "Hypothesis testing for difference of proportions..."
+	},
 	"loadPackages": {
 		"label": "Load package(s)..."
 	},

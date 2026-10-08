@@ -3652,6 +3652,202 @@
 						]
 					}
 				]
+			},
+			{
+				"label": {
+					"en": "Statistical Inference",
+					"es": "Inferencia Estadística"
+				},
+				"color": "terminal.ansiYellow",
+				"icon": "folder",
+				"children": [
+					{
+						"label": {
+							"en": "Confidence Intervals",
+							"es": "Intervalos de confianza"
+						},
+						"color": "terminal.ansiYellow",
+						"icon": "folder",
+						"children": [
+							{
+								"label": {
+									"en": "Confidence intervals for a sample",
+									"es": "Intervalos de confianza para una muestra"
+								},
+								"color": "terminal.ansiYellow",
+								"icon": "folder",
+								"children": [
+									{
+										"id": "intervaloConfianzaMedia",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Confidence interval for the mean...",
+											"es": "Intervalo de confianza para la media..."
+										}
+									},
+									{
+										"id": "intervaloConfianzaVarianza",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Confidence interval for the variance...",
+											"es": "Intervalo de confianza para la varianza..."
+										}
+									},
+									{
+										"id": "intervaloConfianzaProporcion",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Confidence interval for a proportion...",
+											"es": "Intervalo de confianza para una proporción..."
+										}
+									}
+								]
+							},
+							{
+								"label": {
+									"en": "Confidence intervals for two samples",
+									"es": "Intervalos de confianza para dos muestras"
+								},
+								"color": "terminal.ansiYellow",
+								"icon": "folder",
+								"children": [
+									{
+										"id": "intervaloConfianzaMediasIndependientes",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Confidence interval for the difference of independent means...",
+											"es": "Intervalo de confianza para la diferencia de medias independientes..."
+										}
+									},
+									{
+										"id": "intervaloConfianzaMediasPareadas",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Confidence interval for mean paired difference...",
+											"es": "Intervalo de confianza para la diferencia de medias de dos muestras pareadas..."
+										}
+									},
+									{
+										"id": "intervaloConfianza2Varianzas",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Confidence interval for the ratio of two variances...",
+											"es": "Intervalo de confianza para cociente varianzas..."
+										}
+									},
+									{
+										"id": "intervaloConfianzaDiferenciaProporciones",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Confidence interval for difference of proportions...",
+											"es": "Intervalo de confianza para diferencia de proporciones..."
+										}
+									}
+								]
+							}
+						]
+					},
+					{
+						"label": {
+							"en": "Hypothesis Testing",
+							"es": "Contrastes de hipótesis"
+						},
+						"color": "terminal.ansiYellow",
+						"icon": "folder",
+						"children": [
+							{
+								"label": {
+									"en": "Hypothesis testing for a sample",
+									"es": "Contrastes de hipótesis para una muestra"
+								},
+								"color": "terminal.ansiYellow",
+								"icon": "folder",
+								"children": [
+									{
+										"id": "contrasteHipotesisMedia",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Hypothesis testing for the mean...",
+											"es": "Contraste de hipótesis para la media..."
+										}
+									},
+									{
+										"id": "contrasteHipotesisVarianza",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Hypothesis testing for the variance...",
+											"es": "Contraste de hipótesis para la varianza..."
+										}
+									},
+									{
+										"id": "contrastHipotesisProporcion",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Hypothesis testing for a proportion...",
+											"es": "Contraste de hipótesis para una proporción..."
+										}
+									}
+								]
+							},
+							{
+								"label": {
+									"en": "Hypothesis testing for two samples",
+									"es": "Contrastes de hipótesis para dos muestras"
+								},
+								"color": "terminal.ansiYellow",
+								"icon": "folder",
+								"children": [
+									{
+										"id": "contrasteHipotesisMediasIndependientes",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Hypothesis testing for independent means...",
+											"es": "Contraste de hipótesis para medias independientes..."
+										}
+									},
+									{
+										"id": "contrasteHipotesisMediasPareadas",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Hypothesis testing for paired means...",
+											"es": "Contraste de hipótesis para medias pareadas..."
+										}
+									},
+									{
+										"id": "contrasteHipotesis2Varianzas",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Hypothesis testing for the ratio of two variances...",
+											"es": "Contraste de hipótesis para cociente varianzas..."
+										}
+									},
+									{
+										"id": "contrasteHipotesisDiferenciaProporciones",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Hypothesis testing for difference of proportions...",
+											"es": "Contraste de hipótesis para diferencia de proporciones..."
+										}
+									}
+								]
+							}
+						]
+					}
+				]
 			}
 		]
 	},

@@ -102,6 +102,15 @@
 	"as.matrix": [
 		"FriedmanTest"
 	],
+	"as.vector": [
+		"intervaloConfianzaMedia",
+		"intervaloConfianzaVarianza",
+		"intervaloConfianzaProporcion",
+		"intervaloConfianzaMediasIndependientes",
+		"intervaloConfianzaMediasPareadas",
+		"intervaloConfianza2Varianzas",
+		"intervaloConfianzaDiferenciaProporciones"
+	],
 	"assignCluster": [
 		"kmeansClustering"
 	],
@@ -261,6 +270,12 @@
 	"cov": [
 		"Reliability"
 	],
+	"Cprop.test": [
+		"intervaloConfianzaProporcion",
+		"intervaloConfianzaDiferenciaProporciones",
+		"contrastHipotesisProporcion",
+		"contrasteHipotesisDiferenciaProporciones"
+	],
 	"crPlots": [
 		"CRPlots"
 	],
@@ -415,6 +430,15 @@
 		"addObservationStatistics",
 		"BreuschPaganTest"
 	],
+	"format.pval": [
+		"contrasteHipotesisMedia",
+		"contrasteHipotesisVarianza",
+		"contrastHipotesisProporcion",
+		"contrasteHipotesisMediasIndependientes",
+		"contrasteHipotesisMediasPareadas",
+		"contrasteHipotesis2Varianzas",
+		"contrasteHipotesisDiferenciaProporciones"
+	],
 	"formula": [
 		"subsetRegression"
 	],
@@ -528,6 +552,60 @@
 	],
 	"library": [
 		"Bootstrap",
+		"normalDistrQuantiles",
+		"normalProbabilitiesInter",
+		"normalDistrPlot",
+		"normalDistrCharac",
+		"normalDistrSamples",
+		"tDistrQuantiles",
+		"tProbabilitiesInter",
+		"tDistrPlot",
+		"tDistrCharac",
+		"tDistrSamples",
+		"chisqDistrQuantiles",
+		"chisqProbabilitiesInter",
+		"chisqDistrPlot",
+		"chisqDistrCharac",
+		"chisqDistrSamples",
+		"FDistrQuantiles",
+		"FProbabilitiesInter",
+		"FDistrPlot",
+		"FDistrCharac",
+		"FDistrSamples",
+		"exponentialDistrQuantiles",
+		"exponentialProbabilitiesInter",
+		"exponentialDistrPlot",
+		"exponentialDistrCharac",
+		"exponentialDistrSamples",
+		"uniformDistrQuantiles",
+		"uniformProbabilitiesInter",
+		"uniformDistrPlot",
+		"uniformDistrCharac",
+		"uniformDistrSamples",
+		"binomialDistrQuantiles",
+		"binomialProbabilitiesInter",
+		"binomialDistrMass",
+		"binomialDistrPlot",
+		"binomialDistrCharac",
+		"binomialDistrSamples",
+		"PoissonDistrQuantiles",
+		"PoissonProbabilitiesInter",
+		"PoissonDistrMass",
+		"PoissonDistrPlot",
+		"PoissonDistrCharac",
+		"PoissonDistrSamples",
+		"geomDistrQuantiles",
+		"geomProbabilitiesInter",
+		"geomDistrMass",
+		"geomDistrPlot",
+		"geomDistrCharac",
+		"geomDistrSamples",
+		"negbinomialDistrQuantiles",
+		"negbinomialProbabilitiesInter",
+		"negbinomialDistrMass",
+		"negbinomialDistrPlot",
+		"negbinomialDistrCharac",
+		"negbinomialDistrSamples",
 		"loadPackages",
 		"loadPlugins"
 	],
@@ -563,6 +641,10 @@
 	],
 	"message": [
 		"installPackages"
+	],
+	"MKV.test": [
+		"intervaloConfianzaMedia",
+		"contrasteHipotesisMedia"
 	],
 	"model.frame": [
 		"subsetRegression"
@@ -1166,7 +1248,11 @@
 	],
 	"subset": [
 		"viewData",
-		"subsetDataSet"
+		"subsetDataSet",
+		"intervaloConfianzaMediasIndependientes",
+		"intervaloConfianza2Varianzas",
+		"contrasteHipotesisMediasIndependientes",
+		"contrasteHipotesis2Varianzas"
 	],
 	"sum": [
 		"frequencyDistribution",
@@ -1209,7 +1295,13 @@
 	"t.test": [
 		"singleSampleTTest",
 		"independentSamplesTTest",
-		"pairedTTest"
+		"pairedTTest",
+		"intervaloConfianzaMedia",
+		"intervaloConfianzaMediasIndependientes",
+		"intervaloConfianzaMediasPareadas",
+		"contrasteHipotesisMedia",
+		"contrasteHipotesisMediasIndependientes",
+		"contrasteHipotesisMediasPareadas"
 	],
 	"tapply": [
 		"statisticsTable",
@@ -1264,7 +1356,9 @@
 		"statisticsTable"
 	],
 	"var.test": [
-		"twoVariancesFTest"
+		"twoVariancesFTest",
+		"intervaloConfianza2Varianzas",
+		"contrasteHipotesis2Varianzas"
 	],
 	"vcovHC": [
 		"summarizeModel",
@@ -1278,6 +1372,14 @@
 	],
 	"vif": [
 		"VIF"
+	],
+	"VKM.test": [
+		"intervaloConfianzaVarianza",
+		"contrasteHipotesisVarianza"
+	],
+	"VUM.test": [
+		"intervaloConfianzaVarianza",
+		"contrasteHipotesisVarianza"
 	],
 	"W.numSummary": [
 		"resumenNumericoPonderada"

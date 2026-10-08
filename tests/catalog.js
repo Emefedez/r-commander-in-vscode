@@ -75,6 +75,11 @@ const PICKS = (pass) => ({
 function fakeVscode(pass, id, log) {
   const picks = PICKS(pass)[id] || {};
   const choose = (items, placeholder) => {
+    // Two different groups; the second one is the second level.
+    if (/Group 2/.test(String(placeholder))) return items[1] || items[0];
+    if (/Group 1/.test(String(placeholder))) return items[0];
+    // Commands with a cross-field check need a real variable, not "(none)".
+    if (catalog[id]?.check && items[0]?.name !== undefined && typeof items[0].name !== 'string' && items[1]) return items[1];
     // The CRAN mirror is always the first line: the test repository, never a real mirror.
     if (/CRAN mirror/.test(String(placeholder))) return items[0];
     const key = Object.keys(picks).find(k => String(placeholder).includes(k));
@@ -101,6 +106,7 @@ function fakeVscode(pass, id, log) {
       },
       showInputBox: async opts => {
         const hit = ANSWERS.find(([k]) => String(opts.prompt).includes(k));
+        if (/No\. (successes|failures)/.test(String(opts.prompt))) return pass === 'B' ? '12' : '';
         if (String(opts.prompt).includes('one number per level')) {
           const levels = String(opts.prompt).match(/\(([^)]*)\)\s*$/)[1].split(', ');
           const j = Number(String(opts.prompt).match(/Contrast (\d+)/)[1]);
@@ -139,7 +145,7 @@ class FakeForm {
       switch (f.type) {
         case 'var':
           if (f.multi) raw[f.k] = list.slice(0, f.min === 0 ? (f.minOrNone ? 0 : this.pass === 'B' ? 1 : 0) : 4).map(i => i.value);
-          else if (f.optional) raw[f.k] = this.pass === 'B' && list[0] ? list[0].value : '';
+          else if (f.optional) raw[f.k] = (this.pass === 'B' || spec.check) && list[0] ? list[0].value : '';
           else raw[f.k] = (list.find(i => i.value === this.picks[pickLabel(f)]) || list[0]).value;
           break;
         case 'dataset': case 'hclust': case 'model':
@@ -148,7 +154,8 @@ class FakeForm {
         case 'installed': case 'rlist':
           if (f.of) {
             const lines = (await env.session.query(f.exprFor(raw[f.of], env.ctx))) || [];
-            raw[f.k] = (f.selectAll || this.pass === 'A' ? lines : lines.slice(-1)).map(l => l.split('\t')[0]);
+            const names = lines.map(l => l.split('\t')[0]);
+            raw[f.k] = f.single ? [names[f.k === 'level2' ? 1 : 0]] : (f.selectAll || this.pass === 'A' ? names : names.slice(-1));
           } else raw[f.k] = f.selectAll || f.single || f.selectFirst ? (f.selectAll ? list : list.slice(0, 1)).map(i => i.value) : this.pass === 'A' ? list.slice(0, 1).map(i => i.value) : list.slice(-1).map(i => i.value);
           break;
         case 'matrix': {
@@ -156,7 +163,7 @@ class FakeForm {
           raw[f.k] = helmert(rows);
           break;
         }
-        case 'name': case 'text': raw[f.k] = answer ? answer[1] : ((this.pass === 'B' || spec.check) && f.optional && f.sample) ? f.sample : String(model.evalDefault(f.def, env.ctx, values) ?? ''); break;
+        case 'name': case 'text': raw[f.k] = answer ? answer[1] : ((this.pass === 'B' || (spec.check && !f.sampleOnlyB)) && f.optional && f.sample) ? f.sample : String(model.evalDefault(f.def, env.ctx, values) ?? ''); break;
         case 'num': case 'numlist': raw[f.k] = answer && f.type === 'numlist' ? answer[1] : String(f.def ?? ''); break;
         case 'choice': raw[f.k] = this.pass === 'B' ? list[list.length - 1].value : list[f.def || 0].value; break;
         case 'flags': raw[f.k] = Object.fromEntries(f.items.map(([key, , on]) => [key, Boolean(on)])); break;

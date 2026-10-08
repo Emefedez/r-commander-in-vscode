@@ -1872,6 +1872,90 @@
 				"enablement": "isWorkspaceTrusted"
 			},
 			{
+				"command": "rcp.cmd.intervaloConfianzaMedia",
+				"title": "%rcp.cmd.intervaloConfianzaMedia%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.intervaloConfianzaVarianza",
+				"title": "%rcp.cmd.intervaloConfianzaVarianza%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.intervaloConfianzaProporcion",
+				"title": "%rcp.cmd.intervaloConfianzaProporcion%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.intervaloConfianzaMediasIndependientes",
+				"title": "%rcp.cmd.intervaloConfianzaMediasIndependientes%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.intervaloConfianzaMediasPareadas",
+				"title": "%rcp.cmd.intervaloConfianzaMediasPareadas%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.intervaloConfianza2Varianzas",
+				"title": "%rcp.cmd.intervaloConfianza2Varianzas%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.intervaloConfianzaDiferenciaProporciones",
+				"title": "%rcp.cmd.intervaloConfianzaDiferenciaProporciones%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.contrasteHipotesisMedia",
+				"title": "%rcp.cmd.contrasteHipotesisMedia%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.contrasteHipotesisVarianza",
+				"title": "%rcp.cmd.contrasteHipotesisVarianza%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.contrastHipotesisProporcion",
+				"title": "%rcp.cmd.contrastHipotesisProporcion%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.contrasteHipotesisMediasIndependientes",
+				"title": "%rcp.cmd.contrasteHipotesisMediasIndependientes%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.contrasteHipotesisMediasPareadas",
+				"title": "%rcp.cmd.contrasteHipotesisMediasPareadas%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.contrasteHipotesis2Varianzas",
+				"title": "%rcp.cmd.contrasteHipotesis2Varianzas%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.contrasteHipotesisDiferenciaProporciones",
+				"title": "%rcp.cmd.contrasteHipotesisDiferenciaProporciones%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
 				"command": "rcp.cmd.loadPackages",
 				"title": "%rcp.cmd.loadPackages%",
 				"category": "R Commander",
@@ -4115,6 +4199,120 @@
 					"group": "01_rcp@2"
 				}
 			],
+			"rcp.IConfianzaMenu1": [
+				{
+					"command": "rcp.cmd.intervaloConfianzaMedia",
+					"when": "editorLangId == r",
+					"group": "01_rcp@1"
+				},
+				{
+					"command": "rcp.cmd.intervaloConfianzaVarianza",
+					"when": "editorLangId == r",
+					"group": "01_rcp@2"
+				},
+				{
+					"command": "rcp.cmd.intervaloConfianzaProporcion",
+					"when": "editorLangId == r",
+					"group": "01_rcp@3"
+				}
+			],
+			"rcp.IConfianzaMenu2": [
+				{
+					"command": "rcp.cmd.intervaloConfianzaMediasIndependientes",
+					"when": "editorLangId == r",
+					"group": "01_rcp@1"
+				},
+				{
+					"command": "rcp.cmd.intervaloConfianzaMediasPareadas",
+					"when": "editorLangId == r",
+					"group": "01_rcp@2"
+				},
+				{
+					"command": "rcp.cmd.intervaloConfianza2Varianzas",
+					"when": "editorLangId == r",
+					"group": "01_rcp@3"
+				},
+				{
+					"command": "rcp.cmd.intervaloConfianzaDiferenciaProporciones",
+					"when": "editorLangId == r",
+					"group": "01_rcp@4"
+				}
+			],
+			"rcp.IConfianzaMenu": [
+				{
+					"submenu": "rcp.IConfianzaMenu1",
+					"when": "editorLangId == r",
+					"group": "01_rcp@1"
+				},
+				{
+					"submenu": "rcp.IConfianzaMenu2",
+					"when": "editorLangId == r",
+					"group": "01_rcp@2"
+				}
+			],
+			"rcp.CHipotesisMenu1": [
+				{
+					"command": "rcp.cmd.contrasteHipotesisMedia",
+					"when": "editorLangId == r",
+					"group": "01_rcp@1"
+				},
+				{
+					"command": "rcp.cmd.contrasteHipotesisVarianza",
+					"when": "editorLangId == r",
+					"group": "01_rcp@2"
+				},
+				{
+					"command": "rcp.cmd.contrastHipotesisProporcion",
+					"when": "editorLangId == r",
+					"group": "01_rcp@3"
+				}
+			],
+			"rcp.CHipotesisMenu2": [
+				{
+					"command": "rcp.cmd.contrasteHipotesisMediasIndependientes",
+					"when": "editorLangId == r",
+					"group": "01_rcp@1"
+				},
+				{
+					"command": "rcp.cmd.contrasteHipotesisMediasPareadas",
+					"when": "editorLangId == r",
+					"group": "01_rcp@2"
+				},
+				{
+					"command": "rcp.cmd.contrasteHipotesis2Varianzas",
+					"when": "editorLangId == r",
+					"group": "01_rcp@3"
+				},
+				{
+					"command": "rcp.cmd.contrasteHipotesisDiferenciaProporciones",
+					"when": "editorLangId == r",
+					"group": "01_rcp@4"
+				}
+			],
+			"rcp.CHipotesisMenu": [
+				{
+					"submenu": "rcp.CHipotesisMenu1",
+					"when": "editorLangId == r",
+					"group": "01_rcp@1"
+				},
+				{
+					"submenu": "rcp.CHipotesisMenu2",
+					"when": "editorLangId == r",
+					"group": "01_rcp@2"
+				}
+			],
+			"rcp.InferenciaMenu": [
+				{
+					"submenu": "rcp.IConfianzaMenu",
+					"when": "editorLangId == r",
+					"group": "01_rcp@1"
+				},
+				{
+					"submenu": "rcp.CHipotesisMenu",
+					"when": "editorLangId == r",
+					"group": "01_rcp@2"
+				}
+			],
 			"rcp.EstadisticaUvigoMenu": [
 				{
 					"submenu": "rcp.dataMenu2",
@@ -4130,6 +4328,11 @@
 					"submenu": "rcp.VAleatoriaMenu",
 					"when": "editorLangId == r",
 					"group": "01_rcp@3"
+				},
+				{
+					"submenu": "rcp.InferenciaMenu",
+					"when": "editorLangId == r",
+					"group": "01_rcp@4"
 				}
 			],
 			"rcp.toolsMenu": [
@@ -4619,6 +4822,34 @@
 			{
 				"id": "rcp.negbinomialMenuES",
 				"label": "%rcp.negbinomialMenuES%"
+			},
+			{
+				"id": "rcp.InferenciaMenu",
+				"label": "%rcp.InferenciaMenu%"
+			},
+			{
+				"id": "rcp.IConfianzaMenu",
+				"label": "%rcp.IConfianzaMenu%"
+			},
+			{
+				"id": "rcp.IConfianzaMenu1",
+				"label": "%rcp.IConfianzaMenu1%"
+			},
+			{
+				"id": "rcp.IConfianzaMenu2",
+				"label": "%rcp.IConfianzaMenu2%"
+			},
+			{
+				"id": "rcp.CHipotesisMenu",
+				"label": "%rcp.CHipotesisMenu%"
+			},
+			{
+				"id": "rcp.CHipotesisMenu1",
+				"label": "%rcp.CHipotesisMenu1%"
+			},
+			{
+				"id": "rcp.CHipotesisMenu2",
+				"label": "%rcp.CHipotesisMenu2%"
 			},
 			{
 				"id": "rcp.toolsMenu",
