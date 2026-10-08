@@ -108,3 +108,6 @@ make install    # empaqueta e instala en VS Code; luego "Developer: Reload Windo
   procesos sin preguntar.
 - Antes de dar algo por hecho: `make test`. Si una prueba falla por el entorno, dilo, no la quites.
 - Commits pequeños y con mensaje en español; el repositorio es privado (`Emefedez/r-commander-play`).
+
+## Carga perezosa de las funciones de Rcmdr
+- `attach_rcmdr_if_used()` (runner.R) solo adjunta Rcmdr y sus dependencias (~250 MB, ~100 espacios de nombres) si el código a ejecutar menciona un nombre de `data/rcmdr-names.txt` que el usuario no tiene ya. Regenerar con `make names` al cambiar de versión de Rcmdr/complementos.

@@ -136,6 +136,20 @@ session_info <- function() {
 # and each plug-in depend on are attached, and the exports of Rcmdr and the
 # plug-ins go in one search-path entry. An empty `plugins` means every installed
 # RcmdrPlugin.* package. Safe to call on every run.
+# Attaches the R Commander functions only when `code` mentions one of their names (loading
+# Rcmdr and its dependencies takes a few hundred MB, so plain R scripts should not pay for it).
+attach_rcmdr_if_used <- function(code, names_file, plugins = character()) {
+  if ("Rcmdr functions" %in% search() || !file.exists(names_file)) return(invisible(FALSE))
+  used <- tryCatch(all.names(parse(text = code, keep.source = FALSE)), error = function(e) NULL)
+  if (is.null(used)) return(invisible(FALSE))   # unparsable: run_code reports the syntax error
+  used <- unique(used)
+  used <- used[used %in% readLines(names_file, encoding = "UTF-8")]
+  if (!length(used)) return(invisible(FALSE))
+  # Names the user already has (own definitions, packages they attached) need nothing.
+  if (all(vapply(used, exists, logical(1), envir = globalenv()))) return(invisible(FALSE))
+  attach_rcmdr(plugins)
+}
+
 attach_rcmdr <- function(plugins = character()) {
   entry <- "Rcmdr functions"
   if (entry %in% search()) return(invisible(TRUE))

@@ -1,4 +1,4 @@
-.PHONY: generate test package install
+.PHONY: generate test package install names
 
 generate:  ## regenerate package.json, translations and data/ from the catalog and Rcmdr's menus
 	node build/generate.js
@@ -18,3 +18,6 @@ package:  ## build dist/r-commander-play-<version>.vsix
 
 install: package  ## install it in VS Code
 	code --install-extension dist/r-commander-play-*.vsix --force
+
+names:  ## refresh data/rcmdr-names.txt (what makes the green button load the R Commander functions)
+	Rscript build/rcmdr-names.R
