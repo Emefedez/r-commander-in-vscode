@@ -2694,6 +2694,15 @@
 				"icon": "folder",
 				"children": [
 					{
+						"id": "newDataSet2",
+						"color": "terminal.ansiYellow",
+						"icon": "circle-filled",
+						"label": {
+							"en": "New data set...",
+							"es": "Nuevo conjunto de datos..."
+						}
+					},
+					{
 						"id": "loadDataSet",
 						"color": "terminal.ansiYellow",
 						"icon": "circle-filled",
@@ -2797,6 +2806,15 @@
 								}
 							},
 							{
+								"id": "variablesandtypesDataSet",
+								"color": "terminal.ansiYellow",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Variables and types in active data set",
+									"es": "Variables y tipos del conjunto de datos activo"
+								}
+							},
+							{
 								"id": "setCaseNames",
 								"color": "terminal.ansiYellow",
 								"icon": "circle-filled",
@@ -2870,6 +2888,15 @@
 						"icon": "folder",
 						"children": [
 							{
+								"id": "ConvertVariables",
+								"color": "terminal.ansiYellow",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Change variables type...",
+									"es": "Cambiar tipo de variables..."
+								}
+							},
+							{
 								"id": "RecodeDialog",
 								"color": "terminal.ansiYellow",
 								"icon": "circle-filled",
@@ -2906,6 +2933,33 @@
 								}
 							},
 							{
+								"id": "numericToFactor2",
+								"color": "terminal.ansiYellow",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Convert numeric variables to factors...",
+									"es": "Convertir variable numérica en factor..."
+								}
+							},
+							{
+								"id": "binVariable2",
+								"color": "terminal.ansiYellow",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Bin numeric variable...",
+									"es": "Segmentar variable numérica..."
+								}
+							},
+							{
+								"id": "reorderFactors",
+								"color": "terminal.ansiYellow",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Reorder factor levels...",
+									"es": "Reordenar niveles de factor..."
+								}
+							},
+							{
 								"id": "dropUnusedFactorLevels",
 								"color": "terminal.ansiYellow",
 								"icon": "circle-filled",
@@ -2933,6 +2987,61 @@
 								}
 							}
 						]
+					}
+				]
+			},
+			{
+				"label": {
+					"en": "Index Numbers",
+					"es": "Números Índice"
+				},
+				"color": "terminal.ansiYellow",
+				"icon": "folder",
+				"children": [
+					{
+						"id": "Sindexnumbers",
+						"color": "terminal.ansiYellow",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Simple index numbers...",
+							"es": "Números índice simples..."
+						}
+					},
+					{
+						"id": "Cindexnumbers",
+						"color": "terminal.ansiYellow",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Complex index numbers...",
+							"es": "Números índice complejos..."
+						}
+					},
+					{
+						"id": "BCindexnumbers",
+						"color": "terminal.ansiYellow",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Base change...",
+							"es": "Cambio de base..."
+						}
+					},
+					{
+						"id": "Pindexnumbers",
+						"color": "terminal.ansiYellow",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Price index...",
+							"es": "Índice de precios..."
+						}
+					},
+					{
+						"id": "Deflation",
+						"color": "terminal.ansiYellow",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Deflation...",
+							"es": "Deflación..."
+						}
 					}
 				]
 			},

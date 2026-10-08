@@ -1512,8 +1512,74 @@
 				"enablement": "isWorkspaceTrusted"
 			},
 			{
+				"command": "rcp.cmd.newDataSet2",
+				"title": "%rcp.cmd.newDataSet2%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
 				"command": "rcp.cmd.readDataSet@2",
 				"title": "%rcp.cmd.readDataSet@2%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.variablesandtypesDataSet",
+				"title": "%rcp.cmd.variablesandtypesDataSet%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.ConvertVariables",
+				"title": "%rcp.cmd.ConvertVariables%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.numericToFactor2",
+				"title": "%rcp.cmd.numericToFactor2%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.binVariable2",
+				"title": "%rcp.cmd.binVariable2%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.reorderFactors",
+				"title": "%rcp.cmd.reorderFactors%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.Sindexnumbers",
+				"title": "%rcp.cmd.Sindexnumbers%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.Cindexnumbers",
+				"title": "%rcp.cmd.Cindexnumbers%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.BCindexnumbers",
+				"title": "%rcp.cmd.BCindexnumbers%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.Pindexnumbers",
+				"title": "%rcp.cmd.Pindexnumbers%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.Deflation",
+				"title": "%rcp.cmd.Deflation%",
 				"category": "R Commander",
 				"enablement": "isWorkspaceTrusted"
 			},
@@ -3685,88 +3751,118 @@
 					"group": "01_rcp@4"
 				},
 				{
-					"command": "rcp.cmd.setCaseNames",
+					"command": "rcp.cmd.variablesandtypesDataSet",
 					"when": "editorLangId == r",
 					"group": "01_rcp@5"
+				},
+				{
+					"command": "rcp.cmd.setCaseNames",
+					"when": "editorLangId == r",
+					"group": "01_rcp@6"
 				},
 				{
 					"command": "rcp.cmd.subsetDataSet",
 					"when": "editorLangId == r",
-					"group": "01_rcp@6"
+					"group": "01_rcp@7"
 				},
 				{
 					"command": "rcp.cmd.sortDataSet",
 					"when": "editorLangId == r",
-					"group": "01_rcp@7"
+					"group": "01_rcp@8"
 				},
 				{
 					"command": "rcp.cmd.RemoveRows",
 					"when": "editorLangId == r",
-					"group": "01_rcp@8"
+					"group": "01_rcp@9"
 				},
 				{
 					"command": "rcp.cmd.filterNA",
 					"when": "editorLangId == r",
-					"group": "01_rcp@9"
+					"group": "01_rcp@10"
 				},
 				{
 					"command": "rcp.cmd.saveDataSet",
 					"when": "editorLangId == r",
-					"group": "01_rcp@10"
+					"group": "01_rcp@11"
 				},
 				{
 					"command": "rcp.cmd.exportDataSet",
 					"when": "editorLangId == r",
-					"group": "01_rcp@11"
+					"group": "01_rcp@12"
 				}
 			],
 			"rcp.variablesMenu2": [
 				{
-					"command": "rcp.cmd.RecodeDialog",
+					"command": "rcp.cmd.ConvertVariables",
 					"when": "editorLangId == r",
 					"group": "01_rcp@1"
+				},
+				{
+					"command": "rcp.cmd.RecodeDialog",
+					"when": "editorLangId == r",
+					"group": "01_rcp@2"
 				},
 				{
 					"command": "rcp.cmd.Compute",
 					"when": "editorLangId == r",
-					"group": "01_rcp@2"
+					"group": "01_rcp@3"
 				},
 				{
 					"command": "rcp.cmd.addObsNumbers",
 					"when": "editorLangId == r",
-					"group": "01_rcp@3"
+					"group": "01_rcp@4"
 				},
 				{
 					"command": "rcp.cmd.standardize",
 					"when": "editorLangId == r",
-					"group": "01_rcp@4"
-				},
-				{
-					"command": "rcp.cmd.dropUnusedFactorLevels",
-					"when": "editorLangId == r",
 					"group": "01_rcp@5"
 				},
 				{
-					"command": "rcp.cmd.renameVariables",
+					"command": "rcp.cmd.numericToFactor2",
 					"when": "editorLangId == r",
 					"group": "01_rcp@6"
 				},
 				{
-					"command": "rcp.cmd.deleteVariable",
+					"command": "rcp.cmd.binVariable2",
 					"when": "editorLangId == r",
 					"group": "01_rcp@7"
+				},
+				{
+					"command": "rcp.cmd.reorderFactors",
+					"when": "editorLangId == r",
+					"group": "01_rcp@8"
+				},
+				{
+					"command": "rcp.cmd.dropUnusedFactorLevels",
+					"when": "editorLangId == r",
+					"group": "01_rcp@9"
+				},
+				{
+					"command": "rcp.cmd.renameVariables",
+					"when": "editorLangId == r",
+					"group": "01_rcp@10"
+				},
+				{
+					"command": "rcp.cmd.deleteVariable",
+					"when": "editorLangId == r",
+					"group": "01_rcp@11"
 				}
 			],
 			"rcp.dataMenu2": [
 				{
-					"command": "rcp.cmd.loadDataSet",
+					"command": "rcp.cmd.newDataSet2",
 					"when": "editorLangId == r",
 					"group": "01_rcp@1"
 				},
 				{
-					"command": "rcp.cmd.mergeDataSets",
+					"command": "rcp.cmd.loadDataSet",
 					"when": "editorLangId == r",
 					"group": "01_rcp@2"
+				},
+				{
+					"command": "rcp.cmd.mergeDataSets",
+					"when": "editorLangId == r",
+					"group": "01_rcp@3"
 				},
 				{
 					"command": "rcp.cmd.readDataSet@2",
@@ -3787,6 +3883,33 @@
 					"submenu": "rcp.variablesMenu2",
 					"when": "editorLangId == r",
 					"group": "02_rcp@4"
+				}
+			],
+			"rcp.IndexNumberMenu": [
+				{
+					"command": "rcp.cmd.Sindexnumbers",
+					"when": "editorLangId == r",
+					"group": "01_rcp@1"
+				},
+				{
+					"command": "rcp.cmd.Cindexnumbers",
+					"when": "editorLangId == r",
+					"group": "01_rcp@2"
+				},
+				{
+					"command": "rcp.cmd.BCindexnumbers",
+					"when": "editorLangId == r",
+					"group": "01_rcp@3"
+				},
+				{
+					"command": "rcp.cmd.Pindexnumbers",
+					"when": "editorLangId == r",
+					"group": "01_rcp@4"
+				},
+				{
+					"command": "rcp.cmd.Deflation",
+					"when": "editorLangId == r",
+					"group": "01_rcp@5"
 				}
 			],
 			"rcp.tablesMenuES": [
@@ -4320,19 +4443,24 @@
 					"group": "01_rcp@1"
 				},
 				{
-					"submenu": "rcp.EDescriptivaMenu",
+					"submenu": "rcp.IndexNumberMenu",
 					"when": "editorLangId == r",
 					"group": "01_rcp@2"
 				},
 				{
-					"submenu": "rcp.VAleatoriaMenu",
+					"submenu": "rcp.EDescriptivaMenu",
 					"when": "editorLangId == r",
 					"group": "01_rcp@3"
 				},
 				{
-					"submenu": "rcp.InferenciaMenu",
+					"submenu": "rcp.VAleatoriaMenu",
 					"when": "editorLangId == r",
 					"group": "01_rcp@4"
+				},
+				{
+					"submenu": "rcp.InferenciaMenu",
+					"when": "editorLangId == r",
+					"group": "01_rcp@5"
 				}
 			],
 			"rcp.toolsMenu": [
@@ -4762,6 +4890,10 @@
 			{
 				"id": "rcp.variablesMenu2",
 				"label": "%rcp.variablesMenu2%"
+			},
+			{
+				"id": "rcp.IndexNumberMenu",
+				"label": "%rcp.IndexNumberMenu%"
 			},
 			{
 				"id": "rcp.EDescriptivaMenu",

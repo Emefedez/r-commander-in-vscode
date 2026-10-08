@@ -54,6 +54,7 @@ class TestSession extends RSession {
 }
 
 const ANSWERS = [ // prompt substring -> typed answer
+  ['Bin Names', 'low,mid,high'],
   ['Probabilities', '0.25, 0.5'], ['From (>)', '-1'], ['To (<=)', '1'],
   ['Expression to compute', 'n1 + n2'], ['Random effects', '(1 | f3)'], ['Expression using these coefficient names', 'n2 / n3'], ['Expression in the coefficient names', 'n2 / n3'],
   ['Hypotheses separated', 'n2 = 0'], ['Names for the 3 bins', 'low, mid, high'], ['Subset expression', 'n1 > 1'],
@@ -64,7 +65,7 @@ const ANSWERS = [ // prompt substring -> typed answer
 ];
 // single-pick overrides: command id -> { prompt substring: label }
 const PICKS = (pass) => ({
-  generalizedLinearModel: { 'Response variable': pass === 'A' ? 'f2b' : 'n3' },
+  Deflation: { 'Base variable': 'yr' }, generalizedLinearModel: { 'Response variable': pass === 'A' ? 'f2b' : 'n3' },
   generalizedLinearMixedModel: { 'Response variable': pass === 'A' ? 'f2b' : 'n3' },
   multinomialLogitModel: { 'Response variable': 'f3' }, ordinalRegressionModel: { 'Response variable': 'f3' },
   mergeDataSets: { 'First data set': 'Dataset', 'Second data set': pass === 'A' ? 'Other' : 'Dataset' },

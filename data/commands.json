@@ -717,9 +717,42 @@
 	"negbinomialDistributionSamples": {
 		"label": "Sample from negative binomial distribution..."
 	},
+	"newDataSet2": {
+		"label": "New data set..."
+	},
 	"readDataSet@2": {
 		"label": "Import data from text file, clipboard, or URL...",
 		"target": "readDataSet"
+	},
+	"variablesandtypesDataSet": {
+		"label": "Variables and types in active data set"
+	},
+	"ConvertVariables": {
+		"label": "Change variables type..."
+	},
+	"numericToFactor2": {
+		"label": "Convert numeric variables to factors..."
+	},
+	"binVariable2": {
+		"label": "Bin numeric variable..."
+	},
+	"reorderFactors": {
+		"label": "Reorder factor levels..."
+	},
+	"Sindexnumbers": {
+		"label": "Simple index numbers..."
+	},
+	"Cindexnumbers": {
+		"label": "Complex index numbers..."
+	},
+	"BCindexnumbers": {
+		"label": "Base change..."
+	},
+	"Pindexnumbers": {
+		"label": "Price index..."
+	},
+	"Deflation": {
+		"label": "Deflation..."
 	},
 	"resumenVariablesCualitativas": {
 		"label": "Frequency distributions for qualitative variables..."

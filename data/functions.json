@@ -97,10 +97,18 @@
 		"characterToFactor",
 		"dropUnusedFactorLevels",
 		"setContrasts",
-		"stemAndLeaf"
+		"stemAndLeaf",
+		"ConvertVariables",
+		"numericToFactor2"
 	],
 	"as.matrix": [
-		"FriedmanTest"
+		"FriedmanTest",
+		"Sindexnumbers",
+		"BCindexnumbers",
+		"Deflation"
+	],
+	"as.ordered": [
+		"binVariable2"
 	],
 	"as.vector": [
 		"intervaloConfianzaMedia",
@@ -148,7 +156,8 @@
 		"generalizedLinearMixedModel"
 	],
 	"binVariable": [
-		"binVariable"
+		"binVariable",
+		"binVariable2"
 	],
 	"biplot": [
 		"kmeansClustering"
@@ -244,6 +253,9 @@
 	"compareCoefs": [
 		"compareCoefficients"
 	],
+	"ComplexIN": [
+		"Cindexnumbers"
+	],
 	"confint": [
 		"confidenceIntervals",
 		"Bootstrap"
@@ -312,6 +324,9 @@
 	"dchisq": [
 		"chisqDistributionPlot"
 	],
+	"Deflat": [
+		"Deflation"
+	],
 	"deltaMethod": [
 		"DeltaMethodConfInt"
 	],
@@ -378,6 +393,11 @@
 	"dpois": [
 		"PoissonMass",
 		"PoissonDistributionPlot"
+	],
+	"drop": [
+		"Sindexnumbers",
+		"BCindexnumbers",
+		"Deflation"
 	],
 	"droplevels": [
 		"dropUnusedFactorLevels"
@@ -611,6 +631,9 @@
 	],
 	"linearHypothesis": [
 		"testLinearHypothesis"
+	],
+	"listTypesVariables": [
+		"variablesandtypesDataSet"
 	],
 	"lm": [
 		"multiWayAnova",
@@ -1231,6 +1254,10 @@
 	"setwd": [
 		"Setwd"
 	],
+	"Sindex": [
+		"Sindexnumbers",
+		"BCindexnumbers"
+	],
 	"stack": [
 		"Stack"
 	],
@@ -1390,9 +1417,12 @@
 		"pairedWilcoxonTest"
 	],
 	"with": [
-		"Compute"
+		"Compute",
+		"binVariable2"
 	],
 	"within": [
+		"ConvertVariables",
+		"numericToFactor2",
 		"normalDistrSamples",
 		"tDistrSamples",
 		"chisqDistrSamples",
