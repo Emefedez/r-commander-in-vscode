@@ -1,0 +1,5 @@
+dist/
+*.vsix
+node_modules/
+build/missing-es.txt
+.DS_Store

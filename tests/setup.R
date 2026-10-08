@@ -1,0 +1,12 @@
+set.seed(1)
+Dataset <- data.frame(n1 = rexp(60) + 0.5, n2 = runif(60) + 1, n3 = rpois(60, 3) + 1, n4 = rnorm(60, 10, 2),
+                      n5 = rexp(60) + 0.1, n6 = rnorm(60))
+Dataset$f2 <- factor(rep(c("a", "b"), 30))
+Dataset$f3 <- factor(rep(c("x", "y", "z"), 20))
+Dataset$f2b <- factor(sample(c("no", "yes"), 60, TRUE))
+Dataset$d <- rep(1:4, 15)
+Dataset$chr <- rep(c("u", "v", "w", "t"), 15)
+Other <- data.frame(n1 = 1:5, k = letters[1:5])
+RegModel.1 <- lm(n1 ~ n2 + n3, data = Dataset)
+GLM.1 <- glm(f2b ~ n1 + n2, family = binomial, data = Dataset)
+HClust.1 <- hclust(dist(model.matrix(~-1 + n1 + n2, Dataset)))

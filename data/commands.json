@@ -1,0 +1,752 @@
+{
+	"selectActiveDataSet": {
+		"label": "Select active data set..."
+	},
+	"editDataSet": {
+		"label": "Edit data set"
+	},
+	"viewDataSet": {
+		"label": "View data set"
+	},
+	"selectActiveModel": {
+		"label": "Select active model..."
+	},
+	"Setwd": {
+		"label": "Change working directory..."
+	},
+	"loadLog": {
+		"label": "Open script file..."
+	},
+	"saveLog": {
+		"label": "Save script..."
+	},
+	"saveLogAs": {
+		"label": "Save script as..."
+	},
+	"loadRmd": {
+		"label": "Open R Markdown file..."
+	},
+	"saveRmd": {
+		"label": "Save R Markdown file..."
+	},
+	"saveRmdAs": {
+		"label": "Save R Markdown file as..."
+	},
+	"saveWorkspace": {
+		"label": "Save R workspace..."
+	},
+	"saveWorkspaceAs": {
+		"label": "Save R workspace as..."
+	},
+	"closeCommanderAndR": {
+		"label": "From Commander and R"
+	},
+	"restartCommander": {
+		"label": "Restart the Commander"
+	},
+	"onCut": {
+		"label": "Cut"
+	},
+	"onCopy": {
+		"label": "Copy"
+	},
+	"onPaste": {
+		"label": "Paste"
+	},
+	"onDelete": {
+		"label": "Delete"
+	},
+	"onFind": {
+		"label": "Find..."
+	},
+	"onSelectAll": {
+		"label": "Select all"
+	},
+	"onUndo": {
+		"label": "Undo"
+	},
+	"onRedo": {
+		"label": "Redo"
+	},
+	"onClear": {
+		"label": "Clear window"
+	},
+	"newDataSet": {
+		"label": "New data set..."
+	},
+	"loadDataSet": {
+		"label": "Load data set..."
+	},
+	"mergeDataSets": {
+		"label": "Merge data sets..."
+	},
+	"readDataSet": {
+		"label": "from text file, clipboard, or URL..."
+	},
+	"importSPSS": {
+		"label": "from SPSS data set..."
+	},
+	"importSAS": {
+		"label": "from SAS xport file..."
+	},
+	"importSASb7dat": {
+		"label": "from SAS b7dat file..."
+	},
+	"importMinitab": {
+		"label": "from Minitab data set..."
+	},
+	"importSTATA": {
+		"label": "from STATA data set..."
+	},
+	"importExcel": {
+		"label": "from Excel file..."
+	},
+	"listDataSetsInPackages": {
+		"label": "List data sets in packages"
+	},
+	"readDataFromPackage": {
+		"label": "Read data set from an attached package..."
+	},
+	"viewData": {
+		"label": "View data..."
+	},
+	"refreshActiveDataSet": {
+		"label": "Refresh active data set"
+	},
+	"helpDataSet": {
+		"label": "Help on active data set (if available)"
+	},
+	"variablesDataSet": {
+		"label": "Variables in active data set"
+	},
+	"setCaseNames": {
+		"label": "Set case names..."
+	},
+	"subsetDataSet": {
+		"label": "Subset active data set..."
+	},
+	"sortDataSet": {
+		"label": "Sort active data set..."
+	},
+	"Aggregate": {
+		"label": "Aggregate variables in active data set..."
+	},
+	"SelectRows": {
+		"label": "Select row(s) from active data set..."
+	},
+	"RemoveRows": {
+		"label": "Remove row(s) from active data set..."
+	},
+	"Stack": {
+		"label": "Stack variables in active data set..."
+	},
+	"filterNA": {
+		"label": "Remove cases with missing data..."
+	},
+	"reshapeLong2Wide": {
+		"label": "Reshape data set from long to wide format..."
+	},
+	"reshapeWide2Long": {
+		"label": "Reshape data set from wide to long format..."
+	},
+	"convertStrings2Factors": {
+		"label": "Convert all character variables to factors"
+	},
+	"saveDataSet": {
+		"label": "Save active data set..."
+	},
+	"exportDataSet": {
+		"label": "Export active data set..."
+	},
+	"editDataValue": {
+		"label": "Edit one value..."
+	},
+	"RecodeDialog": {
+		"label": "Recode variables..."
+	},
+	"Compute": {
+		"label": "Compute new variable..."
+	},
+	"addObsNumbers": {
+		"label": "Add observation numbers to data set"
+	},
+	"standardize": {
+		"label": "Standardize variables..."
+	},
+	"numericToFactor": {
+		"label": "Convert numeric variables to factors..."
+	},
+	"characterToFactor": {
+		"label": "Convert character variables to factors..."
+	},
+	"binVariable": {
+		"label": "Bin numeric variable..."
+	},
+	"reorderFactor": {
+		"label": "Reorder factor levels..."
+	},
+	"dropUnusedFactorLevels": {
+		"label": "Drop unused factor levels..."
+	},
+	"setContrasts": {
+		"label": "Define contrasts for a factor..."
+	},
+	"renameVariables": {
+		"label": "Rename variables..."
+	},
+	"deleteVariable": {
+		"label": "Delete variables from data set ..."
+	},
+	"summarizeDataSet": {
+		"label": "Active data set"
+	},
+	"numericalSummaries": {
+		"label": "Numerical summaries..."
+	},
+	"frequencyDistribution": {
+		"label": "Frequency distributions..."
+	},
+	"countMissing": {
+		"label": "Count missing observations"
+	},
+	"statisticsTable": {
+		"label": "Table of statistics..."
+	},
+	"correlationMatrix": {
+		"label": "Correlation matrix..."
+	},
+	"correlationTest": {
+		"label": "Correlation test..."
+	},
+	"NormalityTest": {
+		"label": "Test of normality..."
+	},
+	"transformVariables": {
+		"label": "Transform toward normality..."
+	},
+	"twoWayTable": {
+		"label": "Two-way table..."
+	},
+	"twoWayTableFromCounts": {
+		"label": "Two-way table from counts..."
+	},
+	"multiWayTable": {
+		"label": "Multi-way table..."
+	},
+	"enterTable": {
+		"label": "Enter and analyze two-way table..."
+	},
+	"singleSampleTTest": {
+		"label": "Single-sample t-test..."
+	},
+	"independentSamplesTTest": {
+		"label": "Independent samples t-test..."
+	},
+	"pairedTTest": {
+		"label": "Paired t-test..."
+	},
+	"oneWayAnova": {
+		"label": "One-way ANOVA..."
+	},
+	"multiWayAnova": {
+		"label": "Multi-way ANOVA..."
+	},
+	"oneWayRepeatedMeasures": {
+		"label": "One-factor repeated-measures ANOVA/ANCOVA..."
+	},
+	"twoWayRepeatedMeasures": {
+		"label": "Two-factor repeated-measures ANOVA/ANCOVA..."
+	},
+	"singleProportionTest": {
+		"label": "Single-sample proportion test..."
+	},
+	"twoSampleProportionsTest": {
+		"label": "Two-sample proportions test..."
+	},
+	"twoVariancesFTest": {
+		"label": "Two-variances F-test..."
+	},
+	"BartlettTest": {
+		"label": "Bartlett's test..."
+	},
+	"LeveneTest": {
+		"label": "Levene's test..."
+	},
+	"twoSampleWilcoxonTest": {
+		"label": "Two-sample Wilcoxon test..."
+	},
+	"onesampleWilcoxonTest": {
+		"label": "Single-sample Wilcoxon test..."
+	},
+	"pairedWilcoxonTest": {
+		"label": "Paired-samples Wilcoxon test..."
+	},
+	"KruskalWallisTest": {
+		"label": "Kruskal-Wallis test..."
+	},
+	"FriedmanTest": {
+		"label": "Friedman rank-sum test..."
+	},
+	"Reliability": {
+		"label": "Scale reliability..."
+	},
+	"principalComponents": {
+		"label": "Principal-components analysis..."
+	},
+	"factorAnalysis": {
+		"label": "Factor analysis..."
+	},
+	"kmeansClustering": {
+		"label": "k-means cluster analysis..."
+	},
+	"hierarchicalCluster": {
+		"label": "Hierarchical cluster analysis..."
+	},
+	"hclustSummary": {
+		"label": "Summarize hierarchical clustering..."
+	},
+	"appendHclustGroup": {
+		"label": "Add hierarchical clustering to data set..."
+	},
+	"linearRegressionModel": {
+		"label": "Linear regression..."
+	},
+	"linearModel": {
+		"label": "Linear model..."
+	},
+	"generalizedLinearModel": {
+		"label": "Generalized linear model..."
+	},
+	"multinomialLogitModel": {
+		"label": "Multinomial logit model..."
+	},
+	"ordinalRegressionModel": {
+		"label": "Ordinal regression model..."
+	},
+	"linearMixedModel": {
+		"label": "Linear mixed model..."
+	},
+	"generalizedLinearMixedModel": {
+		"label": "Generalized linear mixed model..."
+	},
+	"setPalette": {
+		"label": "Color palette..."
+	},
+	"indexPlot": {
+		"label": "Index plot..."
+	},
+	"DotPlot": {
+		"label": "Dot plot..."
+	},
+	"Histogram": {
+		"label": "Histogram..."
+	},
+	"DiscretePlot": {
+		"label": "Plot discrete numeric variable..."
+	},
+	"DensityPlot": {
+		"label": "Density estimate..."
+	},
+	"stemAndLeaf": {
+		"label": "Stem-and-leaf display..."
+	},
+	"boxPlot": {
+		"label": "Boxplot..."
+	},
+	"QQPlot": {
+		"label": "Quantile-comparison plot..."
+	},
+	"Symbox": {
+		"label": "Symmetry boxplot..."
+	},
+	"scatterPlot": {
+		"label": "Scatterplot..."
+	},
+	"scatterPlotMatrix": {
+		"label": "Scatterplot matrix..."
+	},
+	"linePlot": {
+		"label": "Line graph..."
+	},
+	"Xyplot": {
+		"label": "XY conditioning plot..."
+	},
+	"PlotMeans": {
+		"label": "Plot of means..."
+	},
+	"stripChart": {
+		"label": "Strip chart..."
+	},
+	"barGraph": {
+		"label": "Bar graph..."
+	},
+	"pieChart": {
+		"label": "Pie chart..."
+	},
+	"Scatter3D": {
+		"label": "3D scatterplot..."
+	},
+	"saveRglGraph": {
+		"label": "Save graph to file"
+	},
+	"saveBitmap": {
+		"label": "as bitmap..."
+	},
+	"savePDF": {
+		"label": "as PDF/Postscript/EPS..."
+	},
+	"summarizeModel": {
+		"label": "Summarize model"
+	},
+	"compareCoefficients": {
+		"label": "Compare model coefficients..."
+	},
+	"addObservationStatistics": {
+		"label": "Add observation statistics to data..."
+	},
+	"aic": {
+		"label": "Akaike Information Criterion (AIC)"
+	},
+	"bic": {
+		"label": "Bayesian Information Criterion (BIC)"
+	},
+	"stepwiseRegression": {
+		"label": "Stepwise model selection..."
+	},
+	"subsetRegression": {
+		"label": "Subset model selection..."
+	},
+	"confidenceIntervals": {
+		"label": "Confidence intervals..."
+	},
+	"Bootstrap": {
+		"label": "Bootstrap confidence intervals..."
+	},
+	"DeltaMethodConfInt": {
+		"label": "Delta method confidence interval..."
+	},
+	"anovaTable": {
+		"label": "ANOVA table..."
+	},
+	"compareModels": {
+		"label": "Compare two models..."
+	},
+	"testLinearHypothesis": {
+		"label": "Linear hypothesis..."
+	},
+	"VIF": {
+		"label": "Variance-inflation factors"
+	},
+	"BreuschPaganTest": {
+		"label": "Breusch-Pagan test for heteroscedasticity..."
+	},
+	"DurbinWatsonTest": {
+		"label": "Durbin-Watson test for autocorrelation..."
+	},
+	"RESETtest": {
+		"label": "RESET test for nonlinearity..."
+	},
+	"OutlierTest": {
+		"label": "Bonferroni outlier test"
+	},
+	"transformResponse": {
+		"label": "Response transformation..."
+	},
+	"plotModel": {
+		"label": "Basic diagnostic plots"
+	},
+	"residualQQPlot": {
+		"label": "Residual quantile-comparison plot..."
+	},
+	"CRPlots": {
+		"label": "Component+residual plots..."
+	},
+	"AVPlots": {
+		"label": "Added-variable plots..."
+	},
+	"InfluencePlot": {
+		"label": "Influence plot..."
+	},
+	"InfluenceIndexPlot": {
+		"label": "Influence index plot..."
+	},
+	"effectPlots": {
+		"label": "Effect plots..."
+	},
+	"predictorEffectPlots": {
+		"label": "Predictor effect plots..."
+	},
+	"setRandomSeed": {
+		"label": "Set random number generator seed..."
+	},
+	"normalQuantiles": {
+		"label": "Normal quantiles..."
+	},
+	"normalProbabilities": {
+		"label": "Normal probabilities..."
+	},
+	"normalDistributionPlot": {
+		"label": "Plot normal distribution..."
+	},
+	"normalDistributionSamples": {
+		"label": "Sample from normal distribution..."
+	},
+	"tQuantiles": {
+		"label": "t quantiles..."
+	},
+	"tProbabilities": {
+		"label": "t probabilities..."
+	},
+	"tDistributionPlot": {
+		"label": "Plot t distribution..."
+	},
+	"tDistributionSamples": {
+		"label": "Sample from t distribution..."
+	},
+	"chisqQuantiles": {
+		"label": "Chi-squared quantiles..."
+	},
+	"chisqProbabilities": {
+		"label": "Chi-squared probabilities..."
+	},
+	"chisqDistributionPlot": {
+		"label": "Plot chi-squared distribution..."
+	},
+	"chisqDistributionSamples": {
+		"label": "Sample from chi-squared distribution..."
+	},
+	"FQuantiles": {
+		"label": "F quantiles..."
+	},
+	"FProbabilities": {
+		"label": "F probabilities..."
+	},
+	"FDistributionPlot": {
+		"label": "Plot F distribution..."
+	},
+	"FDistributionSamples": {
+		"label": "Sample from F distribution..."
+	},
+	"exponentialQuantiles": {
+		"label": "Exponential quantiles..."
+	},
+	"exponentialProbabilities": {
+		"label": "Exponential probabilities..."
+	},
+	"exponentialDistributionPlot": {
+		"label": "Plot exponential distribution..."
+	},
+	"exponentialDistributionSamples": {
+		"label": "Sample from exponential distribution..."
+	},
+	"uniformQuantiles": {
+		"label": "Uniform quantiles..."
+	},
+	"uniformProbabilities": {
+		"label": "Uniform probabilities..."
+	},
+	"uniformDistributionPlot": {
+		"label": "Plot uniform distribution..."
+	},
+	"uniformDistributionSamples": {
+		"label": "Sample from uniform distribution..."
+	},
+	"betaQuantiles": {
+		"label": "Beta quantiles..."
+	},
+	"betaProbabilities": {
+		"label": "Beta probabilities..."
+	},
+	"betaDistributionPlot": {
+		"label": "Plot beta distribution..."
+	},
+	"betaDistributionSamples": {
+		"label": "Sample from beta distribution..."
+	},
+	"CauchyQuantiles": {
+		"label": "Cauchy quantiles..."
+	},
+	"CauchyProbabilities": {
+		"label": "Cauchy probabilities..."
+	},
+	"CauchyDistributionPlot": {
+		"label": "Plot Cauchy distribution..."
+	},
+	"CauchyDistributionSamples": {
+		"label": "Sample from Cauchy distribution..."
+	},
+	"logisticQuantiles": {
+		"label": "Logistic quantiles..."
+	},
+	"logisticProbabilities": {
+		"label": "Logistic probabilities..."
+	},
+	"logisticDistributionPlot": {
+		"label": "Plot logistic distribution..."
+	},
+	"logisticDistributionSamples": {
+		"label": "Sample from logistic distribution..."
+	},
+	"lognormalQuantiles": {
+		"label": "Lognormal quantiles..."
+	},
+	"lognormalProbabilities": {
+		"label": "Lognormal probabilities..."
+	},
+	"lognormalDistributionPlot": {
+		"label": "Plot lognormal distribution..."
+	},
+	"lognormalDistributionSamples": {
+		"label": "Sample from lognormal distribution..."
+	},
+	"gammaQuantiles": {
+		"label": "Gamma quantiles..."
+	},
+	"gammaProbabilities": {
+		"label": "Gamma probabilities..."
+	},
+	"gammaDistributionPlot": {
+		"label": "Plot gamma distribution..."
+	},
+	"gammaDistributionSamples": {
+		"label": "Sample from gamma distribution..."
+	},
+	"WeibullQuantiles": {
+		"label": "Weibull quantiles..."
+	},
+	"WeibullProbabilities": {
+		"label": "Weibull probabilities..."
+	},
+	"WeibullDistributionPlot": {
+		"label": "Plot Weibull distribution..."
+	},
+	"WeibullDistributionSamples": {
+		"label": "Sample from Weibull distribution..."
+	},
+	"GumbelQuantiles": {
+		"label": "Gumbel quantiles..."
+	},
+	"GumbelProbabilities": {
+		"label": "Gumbel probabilities..."
+	},
+	"GumbelDistributionPlot": {
+		"label": "Plot Gumbel distribution..."
+	},
+	"GumbelDistributionSamples": {
+		"label": "Sample from Gumbel distribution..."
+	},
+	"binomialQuantiles": {
+		"label": "Binomial quantiles..."
+	},
+	"binomialProbabilities": {
+		"label": "Binomial tail probabilities..."
+	},
+	"binomialMass": {
+		"label": "Binomial probabilities..."
+	},
+	"binomialDistributionPlot": {
+		"label": "Plot binomial distribution..."
+	},
+	"binomialDistributionSamples": {
+		"label": "Sample from binomial distribution..."
+	},
+	"PoissonQuantiles": {
+		"label": "Poisson quantiles..."
+	},
+	"PoissonProbabilities": {
+		"label": "Poisson tail probabilities..."
+	},
+	"PoissonMass": {
+		"label": "Poisson probabilities..."
+	},
+	"PoissonDistributionPlot": {
+		"label": "Plot Poisson distribution..."
+	},
+	"PoissonDistributionSamples": {
+		"label": "Sample from Poisson distribution..."
+	},
+	"geomQuantiles": {
+		"label": "Geometric quantiles..."
+	},
+	"geomProbabilities": {
+		"label": "Geometric tail probabilities..."
+	},
+	"geomMass": {
+		"label": "Geometric probabilities..."
+	},
+	"geomDistributionPlot": {
+		"label": "Plot geometric distribution..."
+	},
+	"geomDistributionSamples": {
+		"label": "Sample from geometric distribution..."
+	},
+	"hyperQuantiles": {
+		"label": "Hypergeometric quantiles..."
+	},
+	"hyperProbabilities": {
+		"label": "Hypergeometric tail probabilities..."
+	},
+	"hyperMass": {
+		"label": "Hypergeometric probabilities..."
+	},
+	"hyperDistributionPlot": {
+		"label": "Plot hypergeometric distribution..."
+	},
+	"hyperDistributionSamples": {
+		"label": "Sample from hypergeometric distribution..."
+	},
+	"negbinomialQuantiles": {
+		"label": "Negative binomial quantiles..."
+	},
+	"negbinomialProbabilities": {
+		"label": "Negative binomial tail probabilities..."
+	},
+	"negbinomialMass": {
+		"label": "Negative binomial probabilities..."
+	},
+	"negbinomialDistributionPlot": {
+		"label": "Plot negative binomial distribution..."
+	},
+	"negbinomialDistributionSamples": {
+		"label": "Sample from negative binomial distribution..."
+	},
+	"loadPackages": {
+		"label": "Load package(s)..."
+	},
+	"loadPlugins": {
+		"label": "Load Rcmdr plug-in(s)..."
+	},
+	"Options": {
+		"label": "Options..."
+	},
+	"installPackages": {
+		"label": "Install package(s)..."
+	},
+	"helpCommander": {
+		"label": "Commander help"
+	},
+	"browseManual": {
+		"label": "Introduction to the R Commander"
+	},
+	"browseEnglishManual": {
+		"label": "Introduction to the R Commander (English version)"
+	},
+	"browseRcmdrWebsite": {
+		"label": "R Commander website"
+	},
+	"helpAboutCommander": {
+		"label": "About Rcmdr"
+	},
+	"browseRcmdrHexSticker": {
+		"label": "R Commander hex sticker"
+	},
+	"startHelp": {
+		"label": "Start R help system"
+	},
+	"browseRWebsite": {
+		"label": "R website"
+	},
+	"browseRMarkdown": {
+		"label": "Using R Markdown"
+	}
+}

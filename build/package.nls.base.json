@@ -1,0 +1,20 @@
+{
+	"en": {
+		"rCommanderPlay.run": "Run Selection or File with Output",
+		"rCommanderPlay.toggleSkipHelp": "Skip Help Commands (? and help)",
+		"rCommanderPlay.configureSkippedCommands": "Configure Commands to Skip",
+		"rCommanderPlay.toggleLimitOutput": "Limit Long Output",
+		"rCommanderPlay.configureOutputLimit": "Configure Output Preview Size",
+		"rCommanderPlay.showSettings": "Configure Green Play Button",
+		"rCommanderPlay.clearTerminal": "Clear R Terminal"
+	},
+	"es": {
+		"rCommanderPlay.run": "Ejecutar selección o archivo con salida",
+		"rCommanderPlay.toggleSkipHelp": "Omitir comandos de ayuda (? y help)",
+		"rCommanderPlay.configureSkippedCommands": "Configurar comandos a omitir",
+		"rCommanderPlay.toggleLimitOutput": "Limitar salidas largas",
+		"rCommanderPlay.configureOutputLimit": "Configurar tamaño de la vista previa",
+		"rCommanderPlay.showSettings": "Configurar el botón verde",
+		"rCommanderPlay.clearTerminal": "Limpiar el terminal de R"
+	}
+}

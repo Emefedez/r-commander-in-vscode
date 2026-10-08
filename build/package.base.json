@@ -1,0 +1,138 @@
+{
+	"name": "r-commander-play",
+	"displayName": "R Commander Style Play Button",
+	"description": "Run selected R code or the current script in an interactive R session with visible results.",
+	"version": "0.4.0",
+	"activationEvents": [
+		"onLanguage:r"
+	],
+	"publisher": "local-tools",
+	"engines": {
+		"vscode": "^1.85.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"main": "./extension.js",
+	"extensionDependencies": [
+		"REditorSupport.r"
+	],
+	"capabilities": {
+		"untrustedWorkspaces": {
+			"supported": false,
+			"description": "Running R code requires a trusted workspace."
+		}
+	},
+	"contributes": {
+		"commands": [
+			{
+				"command": "rCommanderPlay.run",
+				"title": "Run Selection or File with Output",
+				"category": "R",
+				"icon": {
+					"light": "icons/play-light.svg",
+					"dark": "icons/play-dark.svg"
+				},
+				"enablement": "editorLangId == r && isWorkspaceTrusted"
+			},
+			{
+				"command": "rCommanderPlay.toggleSkipHelp",
+				"title": "Skip Help Commands (? and help)",
+				"category": "R",
+				"toggled": "config.rCommanderPlay.skipHelp"
+			},
+			{
+				"command": "rCommanderPlay.configureSkippedCommands",
+				"title": "Configure Commands to Skip",
+				"category": "R"
+			},
+			{
+				"command": "rCommanderPlay.toggleLimitOutput",
+				"title": "Limit Long Output",
+				"category": "R",
+				"toggled": "config.rCommanderPlay.limitOutput"
+			},
+			{
+				"command": "rCommanderPlay.configureOutputLimit",
+				"title": "Configure Output Preview Size",
+				"category": "R"
+			},
+			{
+				"command": "rCommanderPlay.showSettings",
+				"title": "Configure Green Play Button",
+				"category": "R"
+			},
+			{
+				"command": "rCommanderPlay.clearTerminal",
+				"title": "Clear R Terminal",
+				"category": "R",
+				"icon": "$(clear-all)",
+				"enablement": "editorLangId == r"
+			}
+		],
+		"configuration": {
+			"title": "R Commander Play",
+			"properties": {
+				"rCommanderPlay.skipHelp": {
+					"type": "boolean",
+					"default": true,
+					"scope": "resource",
+					"description": "Skip standalone ?, ??, help() and help.search() commands when using the green play button."
+				},
+				"rCommanderPlay.skipCommands": {
+					"type": "array",
+					"items": {
+						"type": "string",
+						"minLength": 1
+					},
+					"default": [],
+					"scope": "resource",
+					"description": "Standalone function calls to skip with the green play button, for example fix, View, or utils::example. Calls inside functions or other expressions are kept."
+				},
+				"rCommanderPlay.limitOutput": {
+					"type": "boolean",
+					"default": true,
+					"scope": "resource",
+					"description": "Show a short preview of long vectors, matrices and data frames with the green play button. Hidden entries remain in memory. Turn off to use the R session's normal printing limits."
+				},
+				"rCommanderPlay.maxOutputItems": {
+					"type": "integer",
+					"default": 24,
+					"minimum": 1,
+					"maximum": 1000000,
+					"scope": "resource",
+					"description": "Maximum printed entries per result when Limit Long Output is enabled. R reports the omitted entries or rows. Applies to print methods that respect max.print."
+				}
+			}
+		},
+		"menus": {
+			"editor/title": [
+				{
+					"command": "rCommanderPlay.run",
+					"when": "editorLangId == r && isWorkspaceTrusted",
+					"group": "navigation@1"
+				},
+				{
+					"command": "rCommanderPlay.toggleSkipHelp",
+					"when": "editorLangId == r",
+					"group": "2_rCommanderPlay@1"
+				},
+				{
+					"command": "rCommanderPlay.configureSkippedCommands",
+					"when": "editorLangId == r",
+					"group": "2_rCommanderPlay@2"
+				},
+				{
+					"command": "rCommanderPlay.toggleLimitOutput",
+					"when": "editorLangId == r",
+					"group": "3_rCommanderPlayOutput@1"
+				},
+				{
+					"command": "rCommanderPlay.configureOutputLimit",
+					"when": "editorLangId == r",
+					"group": "3_rCommanderPlayOutput@2"
+				}
+			]
+		}
+	}
+}

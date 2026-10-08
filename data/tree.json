@@ -1,0 +1,2822 @@
+[
+	{
+		"id": "selectActiveDataSet",
+		"color": "charts.green",
+		"icon": "database",
+		"label": {
+			"en": "Select active data set...",
+			"es": "Seleccionar conjunto de datos activo..."
+		}
+	},
+	{
+		"id": "editDataSet",
+		"color": "charts.green",
+		"icon": "edit",
+		"label": {
+			"en": "Edit data set",
+			"es": "Editar conjunto de datos"
+		}
+	},
+	{
+		"id": "viewDataSet",
+		"color": "charts.green",
+		"icon": "eye",
+		"label": {
+			"en": "View data set",
+			"es": "Visualizar conjunto de datos"
+		}
+	},
+	{
+		"id": "selectActiveModel",
+		"color": "charts.red",
+		"icon": "beaker",
+		"label": {
+			"en": "Select active model...",
+			"es": "Selecciona el modelo activo..."
+		}
+	},
+	{
+		"sep": true
+	},
+	{
+		"label": {
+			"en": "File",
+			"es": "Fichero"
+		},
+		"color": "charts.blue",
+		"icon": "file",
+		"children": [
+			{
+				"id": "Setwd",
+				"color": "charts.blue",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Change working directory...",
+					"es": "Cambiar directorio de trabajo..."
+				}
+			},
+			{
+				"sep": true
+			},
+			{
+				"id": "loadLog",
+				"color": "charts.blue",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Open script file...",
+					"es": "Abrir archivo de instrucciones..."
+				}
+			},
+			{
+				"id": "saveLog",
+				"color": "charts.blue",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Save script...",
+					"es": "Guardar las instrucciones..."
+				}
+			},
+			{
+				"id": "saveLogAs",
+				"color": "charts.blue",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Save script as...",
+					"es": "Guardar las instrucciones como..."
+				}
+			},
+			{
+				"sep": true
+			},
+			{
+				"id": "loadRmd",
+				"color": "charts.blue",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Open R Markdown file...",
+					"es": "Abrir archivo R Markdown..."
+				}
+			},
+			{
+				"id": "saveRmd",
+				"color": "charts.blue",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Save R Markdown file...",
+					"es": "Guardar fichero R Markdown..."
+				}
+			},
+			{
+				"id": "saveRmdAs",
+				"color": "charts.blue",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Save R Markdown file as...",
+					"es": "Guardar el fichero R Markdown como..."
+				}
+			},
+			{
+				"sep": true
+			},
+			{
+				"id": "saveWorkspace",
+				"color": "charts.blue",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Save R workspace...",
+					"es": "Guardar el entorno de trabajo R..."
+				}
+			},
+			{
+				"id": "saveWorkspaceAs",
+				"color": "charts.blue",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Save R workspace as...",
+					"es": "Guardar el entorno de trabajo R como..."
+				}
+			},
+			{
+				"sep": true
+			},
+			{
+				"label": {
+					"en": "Exit",
+					"es": "Salir"
+				},
+				"color": "charts.blue",
+				"icon": "folder",
+				"children": [
+					{
+						"id": "closeCommanderAndR",
+						"color": "charts.blue",
+						"icon": "circle-filled",
+						"label": {
+							"en": "From Commander and R",
+							"es": "De Commander y R"
+						}
+					},
+					{
+						"id": "restartCommander",
+						"color": "charts.blue",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Restart the Commander",
+							"es": "Reiniciar R Commander"
+						}
+					}
+				]
+			}
+		]
+	},
+	{
+		"label": {
+			"en": "Edit",
+			"es": "Editar"
+		},
+		"color": "charts.yellow",
+		"icon": "edit",
+		"children": [
+			{
+				"id": "onCut",
+				"color": "charts.yellow",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Cut",
+					"es": "Cortar"
+				}
+			},
+			{
+				"id": "onCopy",
+				"color": "charts.yellow",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Copy",
+					"es": "Copiar"
+				}
+			},
+			{
+				"id": "onPaste",
+				"color": "charts.yellow",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Paste",
+					"es": "Pegar"
+				}
+			},
+			{
+				"id": "onDelete",
+				"color": "charts.yellow",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Delete",
+					"es": "Borrar"
+				}
+			},
+			{
+				"sep": true
+			},
+			{
+				"id": "onFind",
+				"color": "charts.yellow",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Find...",
+					"es": "Buscar..."
+				}
+			},
+			{
+				"id": "onSelectAll",
+				"color": "charts.yellow",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Select all",
+					"es": "Seleccionar todo"
+				}
+			},
+			{
+				"sep": true
+			},
+			{
+				"id": "onUndo",
+				"color": "charts.yellow",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Undo",
+					"es": "Deshacer"
+				}
+			},
+			{
+				"id": "onRedo",
+				"color": "charts.yellow",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Redo",
+					"es": "Rehacer"
+				}
+			},
+			{
+				"sep": true
+			},
+			{
+				"id": "onClear",
+				"color": "charts.yellow",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Clear window",
+					"es": "Limpiar ventana"
+				}
+			}
+		]
+	},
+	{
+		"label": {
+			"en": "Data",
+			"es": "Datos"
+		},
+		"color": "charts.green",
+		"icon": "database",
+		"children": [
+			{
+				"id": "newDataSet",
+				"color": "charts.green",
+				"icon": "circle-filled",
+				"label": {
+					"en": "New data set...",
+					"es": "Nuevo conjunto de datos..."
+				}
+			},
+			{
+				"id": "loadDataSet",
+				"color": "charts.green",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Load data set...",
+					"es": "Cargar conjunto de datos..."
+				}
+			},
+			{
+				"id": "mergeDataSets",
+				"color": "charts.green",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Merge data sets...",
+					"es": "Fusionar conjuntos de datos..."
+				}
+			},
+			{
+				"sep": true
+			},
+			{
+				"label": {
+					"en": "Import data",
+					"es": "Importar datos"
+				},
+				"color": "charts.green",
+				"icon": "folder",
+				"children": [
+					{
+						"id": "readDataSet",
+						"color": "charts.green",
+						"icon": "circle-filled",
+						"label": {
+							"en": "from text file, clipboard, or URL...",
+							"es": "desde archivo de texto, portapapeles o URL..."
+						}
+					},
+					{
+						"id": "importSPSS",
+						"color": "charts.green",
+						"icon": "circle-filled",
+						"label": {
+							"en": "from SPSS data set...",
+							"es": "desde datos SPSS..."
+						}
+					},
+					{
+						"id": "importSAS",
+						"color": "charts.green",
+						"icon": "circle-filled",
+						"label": {
+							"en": "from SAS xport file...",
+							"es": "desde un archivo SAS exportado..."
+						}
+					},
+					{
+						"id": "importSASb7dat",
+						"color": "charts.green",
+						"icon": "circle-filled",
+						"label": {
+							"en": "from SAS b7dat file...",
+							"es": "desde un archivo SAS b7dat..."
+						}
+					},
+					{
+						"id": "importMinitab",
+						"color": "charts.green",
+						"icon": "circle-filled",
+						"label": {
+							"en": "from Minitab data set...",
+							"es": "desde datos Minitab..."
+						}
+					},
+					{
+						"id": "importSTATA",
+						"color": "charts.green",
+						"icon": "circle-filled",
+						"label": {
+							"en": "from STATA data set...",
+							"es": "desde datos STATA..."
+						}
+					},
+					{
+						"id": "importExcel",
+						"color": "charts.green",
+						"icon": "circle-filled",
+						"label": {
+							"en": "from Excel file...",
+							"es": "desde un archivo de Excel..."
+						}
+					}
+				]
+			},
+			{
+				"label": {
+					"en": "Data in packages",
+					"es": "Conjunto de datos en paquetes"
+				},
+				"color": "charts.green",
+				"icon": "folder",
+				"children": [
+					{
+						"id": "listDataSetsInPackages",
+						"color": "charts.green",
+						"icon": "circle-filled",
+						"label": {
+							"en": "List data sets in packages",
+							"es": "Lista de conjuntos de datos en paquetes"
+						}
+					},
+					{
+						"id": "readDataFromPackage",
+						"color": "charts.green",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Read data set from an attached package...",
+							"es": "Leer conjunto de datos desde paquete adjunto..."
+						}
+					}
+				]
+			},
+			{
+				"label": {
+					"en": "Active data set",
+					"es": "Conjunto de datos activo"
+				},
+				"color": "charts.green",
+				"icon": "folder",
+				"children": [
+					{
+						"id": "viewData",
+						"color": "charts.green",
+						"icon": "circle-filled",
+						"label": {
+							"en": "View data...",
+							"es": "Visualizar datos..."
+						}
+					},
+					{
+						"id": "selectActiveDataSet",
+						"color": "charts.green",
+						"icon": "database",
+						"label": {
+							"en": "Select active data set...",
+							"es": "Seleccionar conjunto de datos activo..."
+						}
+					},
+					{
+						"id": "refreshActiveDataSet",
+						"color": "charts.green",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Refresh active data set",
+							"es": "Actualizar conjunto de datos activo"
+						}
+					},
+					{
+						"id": "helpDataSet",
+						"color": "charts.green",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Help on active data set (if available)",
+							"es": "Ayuda sobre el conjunto de datos activo (si es posible)"
+						}
+					},
+					{
+						"id": "variablesDataSet",
+						"color": "charts.green",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Variables in active data set",
+							"es": "Variables del conjunto de datos activo"
+						}
+					},
+					{
+						"id": "setCaseNames",
+						"color": "charts.green",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Set case names...",
+							"es": "Establecer nombres de casos..."
+						}
+					},
+					{
+						"id": "subsetDataSet",
+						"color": "charts.green",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Subset active data set...",
+							"es": "Filtrar el conjunto de datos activo..."
+						}
+					},
+					{
+						"id": "sortDataSet",
+						"color": "charts.green",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Sort active data set...",
+							"es": "Ordenar el conjunto de datos activo..."
+						}
+					},
+					{
+						"id": "Aggregate",
+						"color": "charts.green",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Aggregate variables in active data set...",
+							"es": "Agregar variables del conjunto de datos activo..."
+						}
+					},
+					{
+						"id": "SelectRows",
+						"color": "charts.green",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Select row(s) from active data set...",
+							"es": "Seleccionar fila(s) del conjunto de datos activo..."
+						}
+					},
+					{
+						"id": "RemoveRows",
+						"color": "charts.green",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Remove row(s) from active data set...",
+							"es": "Borrar fila(s) del conjunto de datos activo..."
+						}
+					},
+					{
+						"id": "Stack",
+						"color": "charts.green",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Stack variables in active data set...",
+							"es": "Apilar variables del conjunto de datos activo..."
+						}
+					},
+					{
+						"id": "filterNA",
+						"color": "charts.green",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Remove cases with missing data...",
+							"es": "Eliminar los casos con valores omitidos..."
+						}
+					},
+					{
+						"id": "reshapeLong2Wide",
+						"color": "charts.green",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Reshape data set from long to wide format...",
+							"es": "Reorganizar el conjunto de datos de formato largo a ancho ..."
+						}
+					},
+					{
+						"id": "reshapeWide2Long",
+						"color": "charts.green",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Reshape data set from wide to long format...",
+							"es": "Reorganizar el conjunto de datos de formato ancho a largo ..."
+						}
+					},
+					{
+						"id": "convertStrings2Factors",
+						"color": "charts.green",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Convert all character variables to factors",
+							"es": "Convertir todas las variables de caracteres en factores"
+						}
+					},
+					{
+						"id": "saveDataSet",
+						"color": "charts.green",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Save active data set...",
+							"es": "Guardar el conjunto de datos activos..."
+						}
+					},
+					{
+						"id": "exportDataSet",
+						"color": "charts.green",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Export active data set...",
+							"es": "Exportar el conjunto de datos activo..."
+						}
+					},
+					{
+						"id": "editDataValue",
+						"color": "charts.green",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Edit one value...",
+							"es": "Editar un valor..."
+						}
+					}
+				]
+			},
+			{
+				"label": {
+					"en": "Manage variables in active data set",
+					"es": "Modificar variables del conjunto de datos activo"
+				},
+				"color": "charts.green",
+				"icon": "folder",
+				"children": [
+					{
+						"id": "RecodeDialog",
+						"color": "charts.green",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Recode variables...",
+							"es": "Recodificar variables..."
+						}
+					},
+					{
+						"id": "Compute",
+						"color": "charts.green",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Compute new variable...",
+							"es": "Calcular una nueva variable..."
+						}
+					},
+					{
+						"id": "addObsNumbers",
+						"color": "charts.green",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Add observation numbers to data set",
+							"es": "Añadir números de observaciones al conjunto de datos"
+						}
+					},
+					{
+						"id": "standardize",
+						"color": "charts.green",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Standardize variables...",
+							"es": "Tipificar variables..."
+						}
+					},
+					{
+						"id": "numericToFactor",
+						"color": "charts.green",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Convert numeric variables to factors...",
+							"es": "Convertir variable numérica en factor..."
+						}
+					},
+					{
+						"id": "characterToFactor",
+						"color": "charts.green",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Convert character variables to factors...",
+							"es": "Convertir variables de caracteres en factores ..."
+						}
+					},
+					{
+						"id": "binVariable",
+						"color": "charts.green",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Bin numeric variable...",
+							"es": "Segmentar variable numérica..."
+						}
+					},
+					{
+						"id": "reorderFactor",
+						"color": "charts.green",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Reorder factor levels...",
+							"es": "Reordenar niveles de factor..."
+						}
+					},
+					{
+						"id": "dropUnusedFactorLevels",
+						"color": "charts.green",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Drop unused factor levels...",
+							"es": "Descartar niveles sin uso..."
+						}
+					},
+					{
+						"id": "setContrasts",
+						"color": "charts.green",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Define contrasts for a factor...",
+							"es": "Definir contrastes de un factor..."
+						}
+					},
+					{
+						"id": "renameVariables",
+						"color": "charts.green",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Rename variables...",
+							"es": "Renombrar variables..."
+						}
+					},
+					{
+						"id": "deleteVariable",
+						"color": "charts.green",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Delete variables from data set ...",
+							"es": "Eliminar variables del conjunto de datos..."
+						}
+					}
+				]
+			}
+		]
+	},
+	{
+		"label": {
+			"en": "Statistics",
+			"es": "Estadísticos"
+		},
+		"color": "charts.purple",
+		"icon": "graph",
+		"children": [
+			{
+				"label": {
+					"en": "Summaries",
+					"es": "Resúmenes"
+				},
+				"color": "charts.purple",
+				"icon": "folder",
+				"children": [
+					{
+						"id": "summarizeDataSet",
+						"color": "charts.purple",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Active data set",
+							"es": "Conjunto de datos activo"
+						}
+					},
+					{
+						"id": "numericalSummaries",
+						"color": "charts.purple",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Numerical summaries...",
+							"es": "Resúmenes numéricos..."
+						}
+					},
+					{
+						"id": "frequencyDistribution",
+						"color": "charts.purple",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Frequency distributions...",
+							"es": "Distribución de frecuencias..."
+						}
+					},
+					{
+						"id": "countMissing",
+						"color": "charts.purple",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Count missing observations",
+							"es": "Número de observaciones ausentes"
+						}
+					},
+					{
+						"id": "statisticsTable",
+						"color": "charts.purple",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Table of statistics...",
+							"es": "Tabla de estadísticas..."
+						}
+					},
+					{
+						"id": "correlationMatrix",
+						"color": "charts.purple",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Correlation matrix...",
+							"es": "Matriz de correlaciones..."
+						}
+					},
+					{
+						"id": "correlationTest",
+						"color": "charts.purple",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Correlation test...",
+							"es": "Test de correlación..."
+						}
+					},
+					{
+						"id": "NormalityTest",
+						"color": "charts.purple",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Test of normality...",
+							"es": "Test de normalidad..."
+						}
+					},
+					{
+						"id": "transformVariables",
+						"color": "charts.purple",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Transform toward normality...",
+							"es": "Transformación para normalizar..."
+						}
+					}
+				]
+			},
+			{
+				"label": {
+					"en": "Contingency tables",
+					"es": "Tablas de contingencia"
+				},
+				"color": "charts.purple",
+				"icon": "folder",
+				"children": [
+					{
+						"id": "twoWayTable",
+						"color": "charts.purple",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Two-way table...",
+							"es": "Tabla de doble entrada..."
+						}
+					},
+					{
+						"id": "twoWayTableFromCounts",
+						"color": "charts.purple",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Two-way table from counts...",
+							"es": "Tabla de doble entrada desde frecuencias..."
+						}
+					},
+					{
+						"id": "multiWayTable",
+						"color": "charts.purple",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Multi-way table...",
+							"es": "Tabla de entradas múltiples..."
+						}
+					},
+					{
+						"id": "enterTable",
+						"color": "charts.purple",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Enter and analyze two-way table...",
+							"es": "Introducir y analizar una tabla de doble entrada..."
+						}
+					}
+				]
+			},
+			{
+				"label": {
+					"en": "Means",
+					"es": "Medias"
+				},
+				"color": "charts.purple",
+				"icon": "folder",
+				"children": [
+					{
+						"id": "singleSampleTTest",
+						"color": "charts.purple",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Single-sample t-test...",
+							"es": "Test t para una muestra..."
+						}
+					},
+					{
+						"id": "independentSamplesTTest",
+						"color": "charts.purple",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Independent samples t-test...",
+							"es": "Test t para muestras independientes..."
+						}
+					},
+					{
+						"id": "pairedTTest",
+						"color": "charts.purple",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Paired t-test...",
+							"es": "Test t para datos relacionados..."
+						}
+					},
+					{
+						"id": "oneWayAnova",
+						"color": "charts.purple",
+						"icon": "circle-filled",
+						"label": {
+							"en": "One-way ANOVA...",
+							"es": "ANOVA de un factor..."
+						}
+					},
+					{
+						"id": "multiWayAnova",
+						"color": "charts.purple",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Multi-way ANOVA...",
+							"es": "ANOVA de múltiples factores..."
+						}
+					},
+					{
+						"id": "oneWayRepeatedMeasures",
+						"color": "charts.purple",
+						"icon": "circle-filled",
+						"label": {
+							"en": "One-factor repeated-measures ANOVA/ANCOVA...",
+							"es": "ANOVA/ANCOVA de un factor con medidas repetidas..."
+						}
+					},
+					{
+						"id": "twoWayRepeatedMeasures",
+						"color": "charts.purple",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Two-factor repeated-measures ANOVA/ANCOVA...",
+							"es": "ANOVA/ANCOVA de dos factores con medidas repetidas..."
+						}
+					}
+				]
+			},
+			{
+				"label": {
+					"en": "Proportions",
+					"es": "Proporciones"
+				},
+				"color": "charts.purple",
+				"icon": "folder",
+				"children": [
+					{
+						"id": "singleProportionTest",
+						"color": "charts.purple",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Single-sample proportion test...",
+							"es": "Test de proporciones para una muestra..."
+						}
+					},
+					{
+						"id": "twoSampleProportionsTest",
+						"color": "charts.purple",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Two-sample proportions test...",
+							"es": "Test de proporciones para dos muestras..."
+						}
+					}
+				]
+			},
+			{
+				"label": {
+					"en": "Variances",
+					"es": "Varianzas"
+				},
+				"color": "charts.purple",
+				"icon": "folder",
+				"children": [
+					{
+						"id": "twoVariancesFTest",
+						"color": "charts.purple",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Two-variances F-test...",
+							"es": "Test F para dos varianzas..."
+						}
+					},
+					{
+						"id": "BartlettTest",
+						"color": "charts.purple",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Bartlett's test...",
+							"es": "Test de Bartlett..."
+						}
+					},
+					{
+						"id": "LeveneTest",
+						"color": "charts.purple",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Levene's test...",
+							"es": "Test de Levene..."
+						}
+					}
+				]
+			},
+			{
+				"label": {
+					"en": "Nonparametric tests",
+					"es": "Test no paramétricos"
+				},
+				"color": "charts.purple",
+				"icon": "folder",
+				"children": [
+					{
+						"id": "twoSampleWilcoxonTest",
+						"color": "charts.purple",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Two-sample Wilcoxon test...",
+							"es": "Test de Wilcoxon para dos muestras..."
+						}
+					},
+					{
+						"id": "onesampleWilcoxonTest",
+						"color": "charts.purple",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Single-sample Wilcoxon test...",
+							"es": "Test de Wilcoxon para una muestra..."
+						}
+					},
+					{
+						"id": "pairedWilcoxonTest",
+						"color": "charts.purple",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Paired-samples Wilcoxon test...",
+							"es": "Test de Wilcoxon para muestras pareadas..."
+						}
+					},
+					{
+						"id": "KruskalWallisTest",
+						"color": "charts.purple",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Kruskal-Wallis test...",
+							"es": "Test de Kruskal-Wallis..."
+						}
+					},
+					{
+						"id": "FriedmanTest",
+						"color": "charts.purple",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Friedman rank-sum test...",
+							"es": "Test de suma de rangos de Friedman..."
+						}
+					}
+				]
+			},
+			{
+				"label": {
+					"en": "Dimensional analysis",
+					"es": "Análisis dimensional"
+				},
+				"color": "charts.purple",
+				"icon": "folder",
+				"children": [
+					{
+						"id": "Reliability",
+						"color": "charts.purple",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Scale reliability...",
+							"es": "Fiabilidad de escala..."
+						}
+					},
+					{
+						"id": "principalComponents",
+						"color": "charts.purple",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Principal-components analysis...",
+							"es": "Análisis de componentes principales..."
+						}
+					},
+					{
+						"id": "factorAnalysis",
+						"color": "charts.purple",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Factor analysis...",
+							"es": "Análisis factorial..."
+						}
+					},
+					{
+						"label": {
+							"en": "Cluster analysis",
+							"es": "Análisis de agrupación"
+						},
+						"color": "charts.purple",
+						"icon": "folder",
+						"children": [
+							{
+								"id": "kmeansClustering",
+								"color": "charts.purple",
+								"icon": "circle-filled",
+								"label": {
+									"en": "k-means cluster analysis...",
+									"es": "Agrupación por k-medias..."
+								}
+							},
+							{
+								"id": "hierarchicalCluster",
+								"color": "charts.purple",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Hierarchical cluster analysis...",
+									"es": "Agrupación jerárquica..."
+								}
+							},
+							{
+								"id": "hclustSummary",
+								"color": "charts.purple",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Summarize hierarchical clustering...",
+									"es": "Resumir la agrupación jerárquica..."
+								}
+							},
+							{
+								"id": "appendHclustGroup",
+								"color": "charts.purple",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Add hierarchical clustering to data set...",
+									"es": "Agregar la agrupación jerárquica al conjunto de datos..."
+								}
+							}
+						]
+					}
+				]
+			},
+			{
+				"label": {
+					"en": "Fit models",
+					"es": "Ajuste de modelos"
+				},
+				"color": "charts.purple",
+				"icon": "folder",
+				"children": [
+					{
+						"id": "linearRegressionModel",
+						"color": "charts.purple",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Linear regression...",
+							"es": "Regresión lineal..."
+						}
+					},
+					{
+						"id": "linearModel",
+						"color": "charts.purple",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Linear model...",
+							"es": "Modelo lineal..."
+						}
+					},
+					{
+						"id": "generalizedLinearModel",
+						"color": "charts.purple",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Generalized linear model...",
+							"es": "Modelo lineal generalizado..."
+						}
+					},
+					{
+						"id": "multinomialLogitModel",
+						"color": "charts.purple",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Multinomial logit model...",
+							"es": "Modelo logit multinominal..."
+						}
+					},
+					{
+						"id": "ordinalRegressionModel",
+						"color": "charts.purple",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Ordinal regression model...",
+							"es": "Modelo ordinal de regresión ..."
+						}
+					},
+					{
+						"id": "linearMixedModel",
+						"color": "charts.purple",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Linear mixed model...",
+							"es": "Modelo lineal mixto..."
+						}
+					},
+					{
+						"id": "generalizedLinearMixedModel",
+						"color": "charts.purple",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Generalized linear mixed model...",
+							"es": "Modelo lineal mixto generalizado..."
+						}
+					}
+				]
+			}
+		]
+	},
+	{
+		"label": {
+			"en": "Graphs",
+			"es": "Gráficas"
+		},
+		"color": "charts.orange",
+		"icon": "graph-line",
+		"children": [
+			{
+				"id": "setPalette",
+				"color": "charts.orange",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Color palette...",
+					"es": "Gama de colores..."
+				}
+			},
+			{
+				"sep": true
+			},
+			{
+				"id": "indexPlot",
+				"color": "charts.orange",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Index plot...",
+					"es": "Gráfica secuencial..."
+				}
+			},
+			{
+				"id": "DotPlot",
+				"color": "charts.orange",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Dot plot...",
+					"es": "Diagrama de puntos..."
+				}
+			},
+			{
+				"id": "Histogram",
+				"color": "charts.orange",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Histogram...",
+					"es": "Histograma..."
+				}
+			},
+			{
+				"id": "DiscretePlot",
+				"color": "charts.orange",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Plot discrete numeric variable...",
+					"es": "Dibujar una variable numérica discreta..."
+				}
+			},
+			{
+				"id": "DensityPlot",
+				"color": "charts.orange",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Density estimate...",
+					"es": "Estimar densidad..."
+				}
+			},
+			{
+				"id": "stemAndLeaf",
+				"color": "charts.orange",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Stem-and-leaf display...",
+					"es": "Gráfica de tallos y hojas..."
+				}
+			},
+			{
+				"id": "boxPlot",
+				"color": "charts.orange",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Boxplot...",
+					"es": "Diagrama de caja..."
+				}
+			},
+			{
+				"id": "QQPlot",
+				"color": "charts.orange",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Quantile-comparison plot...",
+					"es": "Gráfica de comparación de cuantiles..."
+				}
+			},
+			{
+				"id": "Symbox",
+				"color": "charts.orange",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Symmetry boxplot...",
+					"es": "Diagrama de caja de simetría..."
+				}
+			},
+			{
+				"sep": true
+			},
+			{
+				"id": "scatterPlot",
+				"color": "charts.orange",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Scatterplot...",
+					"es": "Diagrama de dispersión..."
+				}
+			},
+			{
+				"id": "scatterPlotMatrix",
+				"color": "charts.orange",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Scatterplot matrix...",
+					"es": "Matriz de diagramas de dispersión..."
+				}
+			},
+			{
+				"id": "linePlot",
+				"color": "charts.orange",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Line graph...",
+					"es": "Gráfica lineal..."
+				}
+			},
+			{
+				"id": "Xyplot",
+				"color": "charts.orange",
+				"icon": "circle-filled",
+				"label": {
+					"en": "XY conditioning plot...",
+					"es": "Gráfica XY..."
+				}
+			},
+			{
+				"id": "PlotMeans",
+				"color": "charts.orange",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Plot of means...",
+					"es": "Gráfica de las medias..."
+				}
+			},
+			{
+				"id": "stripChart",
+				"color": "charts.orange",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Strip chart...",
+					"es": "Diagrama de puntos..."
+				}
+			},
+			{
+				"sep": true
+			},
+			{
+				"id": "barGraph",
+				"color": "charts.orange",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Bar graph...",
+					"es": "Gráfica de barras..."
+				}
+			},
+			{
+				"id": "pieChart",
+				"color": "charts.orange",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Pie chart...",
+					"es": "Gráfica de sectores..."
+				}
+			},
+			{
+				"sep": true
+			},
+			{
+				"label": {
+					"en": "3D graph",
+					"es": "Gráficos 3D"
+				},
+				"color": "charts.orange",
+				"icon": "folder",
+				"children": [
+					{
+						"id": "Scatter3D",
+						"color": "charts.orange",
+						"icon": "circle-filled",
+						"label": {
+							"en": "3D scatterplot...",
+							"es": "Diagrama de dispersión en 3D..."
+						}
+					},
+					{
+						"id": "saveRglGraph",
+						"color": "charts.orange",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Save graph to file",
+							"es": "Guardar gráfico en archivo"
+						}
+					}
+				]
+			},
+			{
+				"label": {
+					"en": "Save graph to file",
+					"es": "Guardar gráfico en archivo"
+				},
+				"color": "charts.orange",
+				"icon": "folder",
+				"children": [
+					{
+						"id": "saveBitmap",
+						"color": "charts.orange",
+						"icon": "circle-filled",
+						"label": {
+							"en": "as bitmap...",
+							"es": "como mapa de bits..."
+						}
+					},
+					{
+						"id": "savePDF",
+						"color": "charts.orange",
+						"icon": "circle-filled",
+						"label": {
+							"en": "as PDF/Postscript/EPS...",
+							"es": "como PDF/Postscript/EPS..."
+						}
+					},
+					{
+						"id": "saveRglGraph",
+						"color": "charts.orange",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Save graph to file",
+							"es": "Guardar gráfico en archivo"
+						}
+					}
+				]
+			}
+		]
+	},
+	{
+		"label": {
+			"en": "Models",
+			"es": "Modelos"
+		},
+		"color": "charts.red",
+		"icon": "beaker",
+		"children": [
+			{
+				"id": "selectActiveModel",
+				"color": "charts.red",
+				"icon": "beaker",
+				"label": {
+					"en": "Select active model...",
+					"es": "Selecciona el modelo activo..."
+				}
+			},
+			{
+				"id": "summarizeModel",
+				"color": "charts.red",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Summarize model",
+					"es": "Resumir el modelo"
+				}
+			},
+			{
+				"id": "compareCoefficients",
+				"color": "charts.red",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Compare model coefficients...",
+					"es": "Comparar coeficientes del modelo..."
+				}
+			},
+			{
+				"id": "addObservationStatistics",
+				"color": "charts.red",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Add observation statistics to data...",
+					"es": "Añadir las estadísticas de las observaciones a los datos..."
+				}
+			},
+			{
+				"sep": true
+			},
+			{
+				"id": "aic",
+				"color": "charts.red",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Akaike Information Criterion (AIC)",
+					"es": "Criterio de Información de Akaike (AIC)"
+				}
+			},
+			{
+				"id": "bic",
+				"color": "charts.red",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Bayesian Information Criterion (BIC)",
+					"es": "Criterio de Información Bayesiano (BIC)"
+				}
+			},
+			{
+				"id": "stepwiseRegression",
+				"color": "charts.red",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Stepwise model selection...",
+					"es": "Selección de modelo paso a paso..."
+				}
+			},
+			{
+				"id": "subsetRegression",
+				"color": "charts.red",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Subset model selection...",
+					"es": "Selección de modelo..."
+				}
+			},
+			{
+				"sep": true
+			},
+			{
+				"id": "confidenceIntervals",
+				"color": "charts.red",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Confidence intervals...",
+					"es": "Intervalos de confianza..."
+				}
+			},
+			{
+				"id": "Bootstrap",
+				"color": "charts.red",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Bootstrap confidence intervals...",
+					"es": "Intervalo de confianza bootstrap..."
+				}
+			},
+			{
+				"id": "DeltaMethodConfInt",
+				"color": "charts.red",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Delta method confidence interval...",
+					"es": "Intervalo de confianza método delta..."
+				}
+			},
+			{
+				"label": {
+					"en": "Hypothesis tests",
+					"es": "Test de hipótesis"
+				},
+				"color": "charts.red",
+				"icon": "folder",
+				"children": [
+					{
+						"id": "anovaTable",
+						"color": "charts.red",
+						"icon": "circle-filled",
+						"label": {
+							"en": "ANOVA table...",
+							"es": "Tabla ANOVA..."
+						}
+					},
+					{
+						"id": "compareModels",
+						"color": "charts.red",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Compare two models...",
+							"es": "Comparar dos modelos..."
+						}
+					},
+					{
+						"id": "testLinearHypothesis",
+						"color": "charts.red",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Linear hypothesis...",
+							"es": "Hipótesis lineal..."
+						}
+					}
+				]
+			},
+			{
+				"sep": true
+			},
+			{
+				"label": {
+					"en": "Numerical diagnostics",
+					"es": "Diagnósticos numéricos"
+				},
+				"color": "charts.red",
+				"icon": "folder",
+				"children": [
+					{
+						"id": "VIF",
+						"color": "charts.red",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Variance-inflation factors",
+							"es": "Factores de inflación de varianza"
+						}
+					},
+					{
+						"id": "BreuschPaganTest",
+						"color": "charts.red",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Breusch-Pagan test for heteroscedasticity...",
+							"es": "Test de Breusch-Pagan para heteroscedasticidad..."
+						}
+					},
+					{
+						"id": "DurbinWatsonTest",
+						"color": "charts.red",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Durbin-Watson test for autocorrelation...",
+							"es": "Test de Durbin-Watson para autocorrelación..."
+						}
+					},
+					{
+						"id": "RESETtest",
+						"color": "charts.red",
+						"icon": "circle-filled",
+						"label": {
+							"en": "RESET test for nonlinearity...",
+							"es": "Test RESET de no linealidad..."
+						}
+					},
+					{
+						"id": "OutlierTest",
+						"color": "charts.red",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Bonferroni outlier test",
+							"es": "Test de valores atípicos de Bonferroni"
+						}
+					},
+					{
+						"id": "transformResponse",
+						"color": "charts.red",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Response transformation...",
+							"es": "Transformación de la respuesta..."
+						}
+					}
+				]
+			},
+			{
+				"label": {
+					"en": "Graphs",
+					"es": "Gráficas"
+				},
+				"color": "charts.red",
+				"icon": "folder",
+				"children": [
+					{
+						"id": "plotModel",
+						"color": "charts.red",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Basic diagnostic plots",
+							"es": "Gráficas básicas de diagnóstico"
+						}
+					},
+					{
+						"id": "residualQQPlot",
+						"color": "charts.red",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Residual quantile-comparison plot...",
+							"es": "Gráfica de comparación de cuantiles de los residuos..."
+						}
+					},
+					{
+						"id": "CRPlots",
+						"color": "charts.red",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Component+residual plots...",
+							"es": "Gráfica de componentes+residuos..."
+						}
+					},
+					{
+						"id": "AVPlots",
+						"color": "charts.red",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Added-variable plots...",
+							"es": "Gráfica de variables agregadas..."
+						}
+					},
+					{
+						"id": "InfluencePlot",
+						"color": "charts.red",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Influence plot...",
+							"es": "Gráfica de influencia..."
+						}
+					},
+					{
+						"id": "InfluenceIndexPlot",
+						"color": "charts.red",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Influence index plot...",
+							"es": "Gráfica de índice de influencia..."
+						}
+					},
+					{
+						"id": "effectPlots",
+						"color": "charts.red",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Effect plots...",
+							"es": "Gráfica de los efectos..."
+						}
+					},
+					{
+						"id": "predictorEffectPlots",
+						"color": "charts.red",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Predictor effect plots...",
+							"es": "Gráfica de efectos del predictor..."
+						}
+					}
+				]
+			}
+		]
+	},
+	{
+		"label": {
+			"en": "Distributions",
+			"es": "Distribuciones"
+		},
+		"color": "terminal.ansiCyan",
+		"icon": "pulse",
+		"children": [
+			{
+				"id": "setRandomSeed",
+				"color": "terminal.ansiCyan",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Set random number generator seed...",
+					"es": "Establecer la semilla del generador de números aleatorios..."
+				}
+			},
+			{
+				"label": {
+					"en": "Continuous distributions",
+					"es": "Distribuciones continuas"
+				},
+				"color": "terminal.ansiCyan",
+				"icon": "folder",
+				"children": [
+					{
+						"label": {
+							"en": "Normal distribution",
+							"es": "Distribución normal"
+						},
+						"color": "terminal.ansiCyan",
+						"icon": "folder",
+						"children": [
+							{
+								"id": "normalQuantiles",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Normal quantiles...",
+									"es": "Cuantiles normales..."
+								}
+							},
+							{
+								"id": "normalProbabilities",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Normal probabilities...",
+									"es": "Probabilidades normales acumuladas..."
+								}
+							},
+							{
+								"id": "normalDistributionPlot",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Plot normal distribution...",
+									"es": "Gráfica de la distribución normal..."
+								}
+							},
+							{
+								"id": "normalDistributionSamples",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Sample from normal distribution...",
+									"es": "Muestra de una distribución normal..."
+								}
+							}
+						]
+					},
+					{
+						"label": {
+							"en": "t distribution",
+							"es": "Distribución t"
+						},
+						"color": "terminal.ansiCyan",
+						"icon": "folder",
+						"children": [
+							{
+								"id": "tQuantiles",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "t quantiles...",
+									"es": "Cuantiles t..."
+								}
+							},
+							{
+								"id": "tProbabilities",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "t probabilities...",
+									"es": "Probabilidades t acumuladas..."
+								}
+							},
+							{
+								"id": "tDistributionPlot",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Plot t distribution...",
+									"es": "Gráfica de la distribución t..."
+								}
+							},
+							{
+								"id": "tDistributionSamples",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Sample from t distribution...",
+									"es": "Muestra de una distribución t..."
+								}
+							}
+						]
+					},
+					{
+						"label": {
+							"en": "Chi-squared distribution",
+							"es": "Distribución Chi-cuadrado"
+						},
+						"color": "terminal.ansiCyan",
+						"icon": "folder",
+						"children": [
+							{
+								"id": "chisqQuantiles",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Chi-squared quantiles...",
+									"es": "Cuantiles Chi-cuadrado..."
+								}
+							},
+							{
+								"id": "chisqProbabilities",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Chi-squared probabilities...",
+									"es": "Probabilidades Chi-cuadrado acumuladas..."
+								}
+							},
+							{
+								"id": "chisqDistributionPlot",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Plot chi-squared distribution...",
+									"es": "Gráfica de la distribución Chi-cuadrado..."
+								}
+							},
+							{
+								"id": "chisqDistributionSamples",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Sample from chi-squared distribution...",
+									"es": "Muestra de una distribución Chi-cuadrado..."
+								}
+							}
+						]
+					},
+					{
+						"label": {
+							"en": "F distribution",
+							"es": "Distribución F"
+						},
+						"color": "terminal.ansiCyan",
+						"icon": "folder",
+						"children": [
+							{
+								"id": "FQuantiles",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "F quantiles...",
+									"es": "Cuantiles F..."
+								}
+							},
+							{
+								"id": "FProbabilities",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "F probabilities...",
+									"es": "Probabilidades F acumuladas..."
+								}
+							},
+							{
+								"id": "FDistributionPlot",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Plot F distribution...",
+									"es": "Gráfica de la distribución F..."
+								}
+							},
+							{
+								"id": "FDistributionSamples",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Sample from F distribution...",
+									"es": "Muestra de una distribución F..."
+								}
+							}
+						]
+					},
+					{
+						"label": {
+							"en": "Exponential distribution",
+							"es": "Distribución exponencial"
+						},
+						"color": "terminal.ansiCyan",
+						"icon": "folder",
+						"children": [
+							{
+								"id": "exponentialQuantiles",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Exponential quantiles...",
+									"es": "Cuantiles exponenciales..."
+								}
+							},
+							{
+								"id": "exponentialProbabilities",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Exponential probabilities...",
+									"es": "Probabilidades exponenciales acumuladas..."
+								}
+							},
+							{
+								"id": "exponentialDistributionPlot",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Plot exponential distribution...",
+									"es": "Gráfica de la distribución exponencial..."
+								}
+							},
+							{
+								"id": "exponentialDistributionSamples",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Sample from exponential distribution...",
+									"es": "Muestra de una distribución exponencial..."
+								}
+							}
+						]
+					},
+					{
+						"label": {
+							"en": "Uniform distribution",
+							"es": "Distribución uniforme"
+						},
+						"color": "terminal.ansiCyan",
+						"icon": "folder",
+						"children": [
+							{
+								"id": "uniformQuantiles",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Uniform quantiles...",
+									"es": "Cuantiles uniformes..."
+								}
+							},
+							{
+								"id": "uniformProbabilities",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Uniform probabilities...",
+									"es": "Probabilidades uniformes acumuladas..."
+								}
+							},
+							{
+								"id": "uniformDistributionPlot",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Plot uniform distribution...",
+									"es": "Gráfica de la distribución uniforme..."
+								}
+							},
+							{
+								"id": "uniformDistributionSamples",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Sample from uniform distribution...",
+									"es": "Muestra de una distribución uniforme..."
+								}
+							}
+						]
+					},
+					{
+						"label": {
+							"en": "Beta distribution",
+							"es": "Distribución beta"
+						},
+						"color": "terminal.ansiCyan",
+						"icon": "folder",
+						"children": [
+							{
+								"id": "betaQuantiles",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Beta quantiles...",
+									"es": "Cuantiles beta..."
+								}
+							},
+							{
+								"id": "betaProbabilities",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Beta probabilities...",
+									"es": "Probabilidades beta acumuladas..."
+								}
+							},
+							{
+								"id": "betaDistributionPlot",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Plot beta distribution...",
+									"es": "Gráfica de la distribución beta..."
+								}
+							},
+							{
+								"id": "betaDistributionSamples",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Sample from beta distribution...",
+									"es": "Muestra de una distribución beta..."
+								}
+							}
+						]
+					},
+					{
+						"label": {
+							"en": "Cauchy distribution",
+							"es": "Distribución de Cauchy"
+						},
+						"color": "terminal.ansiCyan",
+						"icon": "folder",
+						"children": [
+							{
+								"id": "CauchyQuantiles",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Cauchy quantiles...",
+									"es": "Cuantiles de Cauchy..."
+								}
+							},
+							{
+								"id": "CauchyProbabilities",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Cauchy probabilities...",
+									"es": "Probabilidades de Cauchy acumuladas..."
+								}
+							},
+							{
+								"id": "CauchyDistributionPlot",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Plot Cauchy distribution...",
+									"es": "Gráfica de la distribución de Cauchy..."
+								}
+							},
+							{
+								"id": "CauchyDistributionSamples",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Sample from Cauchy distribution...",
+									"es": "Muestra de una distribución de Cauchy..."
+								}
+							}
+						]
+					},
+					{
+						"label": {
+							"en": "Logistic distribution",
+							"es": "Distribución logística"
+						},
+						"color": "terminal.ansiCyan",
+						"icon": "folder",
+						"children": [
+							{
+								"id": "logisticQuantiles",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Logistic quantiles...",
+									"es": "Cuantiles logísticos..."
+								}
+							},
+							{
+								"id": "logisticProbabilities",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Logistic probabilities...",
+									"es": "Probabilidades logísticas acumuladas..."
+								}
+							},
+							{
+								"id": "logisticDistributionPlot",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Plot logistic distribution...",
+									"es": "Gráfica de la distribución logística..."
+								}
+							},
+							{
+								"id": "logisticDistributionSamples",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Sample from logistic distribution...",
+									"es": "Muestra de una distribución logística..."
+								}
+							}
+						]
+					},
+					{
+						"label": {
+							"en": "Lognormal distribution",
+							"es": "Distribución lognormal"
+						},
+						"color": "terminal.ansiCyan",
+						"icon": "folder",
+						"children": [
+							{
+								"id": "lognormalQuantiles",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Lognormal quantiles...",
+									"es": "Cuantiles lognormal..."
+								}
+							},
+							{
+								"id": "lognormalProbabilities",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Lognormal probabilities...",
+									"es": "Probabilidades lognormal acumuladas..."
+								}
+							},
+							{
+								"id": "lognormalDistributionPlot",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Plot lognormal distribution...",
+									"es": "Gráfica de la distribución lognormal..."
+								}
+							},
+							{
+								"id": "lognormalDistributionSamples",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Sample from lognormal distribution...",
+									"es": "Muestra de una distribución lognormal..."
+								}
+							}
+						]
+					},
+					{
+						"label": {
+							"en": "Gamma distribution",
+							"es": "Distribución gamma"
+						},
+						"color": "terminal.ansiCyan",
+						"icon": "folder",
+						"children": [
+							{
+								"id": "gammaQuantiles",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Gamma quantiles...",
+									"es": "Cuantiles gamma..."
+								}
+							},
+							{
+								"id": "gammaProbabilities",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Gamma probabilities...",
+									"es": "Probabilidades gamma acumuladas..."
+								}
+							},
+							{
+								"id": "gammaDistributionPlot",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Plot gamma distribution...",
+									"es": "Gráfica de la distribución gamma..."
+								}
+							},
+							{
+								"id": "gammaDistributionSamples",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Sample from gamma distribution...",
+									"es": "Muestra de una distribución gamma..."
+								}
+							}
+						]
+					},
+					{
+						"label": {
+							"en": "Weibull distribution",
+							"es": "Distribución Weibull"
+						},
+						"color": "terminal.ansiCyan",
+						"icon": "folder",
+						"children": [
+							{
+								"id": "WeibullQuantiles",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Weibull quantiles...",
+									"es": "Cuantiles Weibull..."
+								}
+							},
+							{
+								"id": "WeibullProbabilities",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Weibull probabilities...",
+									"es": "Probabilidades Weibull acumuladas..."
+								}
+							},
+							{
+								"id": "WeibullDistributionPlot",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Plot Weibull distribution...",
+									"es": "Gráfica de la distribución Weibull..."
+								}
+							},
+							{
+								"id": "WeibullDistributionSamples",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Sample from Weibull distribution...",
+									"es": "Muestra de una distribución Weibull..."
+								}
+							}
+						]
+					},
+					{
+						"label": {
+							"en": "Gumbel distribution",
+							"es": "Distribución Gumbel"
+						},
+						"color": "terminal.ansiCyan",
+						"icon": "folder",
+						"children": [
+							{
+								"id": "GumbelQuantiles",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Gumbel quantiles...",
+									"es": "Cuantiles Gumbel..."
+								}
+							},
+							{
+								"id": "GumbelProbabilities",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Gumbel probabilities...",
+									"es": "Probabilidades Gumbel acumuladas..."
+								}
+							},
+							{
+								"id": "GumbelDistributionPlot",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Plot Gumbel distribution...",
+									"es": "Gráfica de la distribución Gumbel..."
+								}
+							},
+							{
+								"id": "GumbelDistributionSamples",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Sample from Gumbel distribution...",
+									"es": "Muestra de una distribución Gumbel..."
+								}
+							}
+						]
+					}
+				]
+			},
+			{
+				"label": {
+					"en": "Discrete distributions",
+					"es": "Distribuciones discretas"
+				},
+				"color": "terminal.ansiCyan",
+				"icon": "folder",
+				"children": [
+					{
+						"label": {
+							"en": "Binomial distribution",
+							"es": "Distribución binomial"
+						},
+						"color": "terminal.ansiCyan",
+						"icon": "folder",
+						"children": [
+							{
+								"id": "binomialQuantiles",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Binomial quantiles...",
+									"es": "Cuantiles binomiales..."
+								}
+							},
+							{
+								"id": "binomialProbabilities",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Binomial tail probabilities...",
+									"es": "Probabilidades binomiales acumuladas..."
+								}
+							},
+							{
+								"id": "binomialMass",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Binomial probabilities...",
+									"es": "Probabilidades binomiales..."
+								}
+							},
+							{
+								"id": "binomialDistributionPlot",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Plot binomial distribution...",
+									"es": "Gráfica de la distribución binomial..."
+								}
+							},
+							{
+								"id": "binomialDistributionSamples",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Sample from binomial distribution...",
+									"es": "Muestra de una distribución binomial..."
+								}
+							}
+						]
+					},
+					{
+						"label": {
+							"en": "Poisson distribution",
+							"es": "Distribución de Poisson"
+						},
+						"color": "terminal.ansiCyan",
+						"icon": "folder",
+						"children": [
+							{
+								"id": "PoissonQuantiles",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Poisson quantiles...",
+									"es": "Cuantiles de Poisson..."
+								}
+							},
+							{
+								"id": "PoissonProbabilities",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Poisson tail probabilities...",
+									"es": "Probabilidades de Poisson acumuladas..."
+								}
+							},
+							{
+								"id": "PoissonMass",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Poisson probabilities...",
+									"es": "Probabilidades de Poisson..."
+								}
+							},
+							{
+								"id": "PoissonDistributionPlot",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Plot Poisson distribution...",
+									"es": "Gráfica de la distribución de Poisson..."
+								}
+							},
+							{
+								"id": "PoissonDistributionSamples",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Sample from Poisson distribution...",
+									"es": "Muestra de una distribución de Poisson..."
+								}
+							}
+						]
+					},
+					{
+						"label": {
+							"en": "Geometric distribution",
+							"es": "Distribución geométrica"
+						},
+						"color": "terminal.ansiCyan",
+						"icon": "folder",
+						"children": [
+							{
+								"id": "geomQuantiles",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Geometric quantiles...",
+									"es": "Cuantiles geométricos..."
+								}
+							},
+							{
+								"id": "geomProbabilities",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Geometric tail probabilities...",
+									"es": "Probabilidades geométricas acumuladas..."
+								}
+							},
+							{
+								"id": "geomMass",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Geometric probabilities...",
+									"es": "Probabilidades geométricas..."
+								}
+							},
+							{
+								"id": "geomDistributionPlot",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Plot geometric distribution...",
+									"es": "Gráfica de la distribución geométrica..."
+								}
+							},
+							{
+								"id": "geomDistributionSamples",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Sample from geometric distribution...",
+									"es": "Muestra de una distribución geométrica..."
+								}
+							}
+						]
+					},
+					{
+						"label": {
+							"en": "Hypergeometric distribution",
+							"es": "Distribución hipergeométrica"
+						},
+						"color": "terminal.ansiCyan",
+						"icon": "folder",
+						"children": [
+							{
+								"id": "hyperQuantiles",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Hypergeometric quantiles...",
+									"es": "Cuantiles hipergeométricos..."
+								}
+							},
+							{
+								"id": "hyperProbabilities",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Hypergeometric tail probabilities...",
+									"es": "Probabilidades hipergeométricas acumuladas..."
+								}
+							},
+							{
+								"id": "hyperMass",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Hypergeometric probabilities...",
+									"es": "Probabilidades hipergeométricas..."
+								}
+							},
+							{
+								"id": "hyperDistributionPlot",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Plot hypergeometric distribution...",
+									"es": "Gráfica de la distribución hipergeométrica..."
+								}
+							},
+							{
+								"id": "hyperDistributionSamples",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Sample from hypergeometric distribution...",
+									"es": "Muestra de una distribución hipergeométrica..."
+								}
+							}
+						]
+					},
+					{
+						"label": {
+							"en": "Negative binomial distribution",
+							"es": "Distribución binomial negativa"
+						},
+						"color": "terminal.ansiCyan",
+						"icon": "folder",
+						"children": [
+							{
+								"id": "negbinomialQuantiles",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Negative binomial quantiles...",
+									"es": "Cuantiles binomiales negativos..."
+								}
+							},
+							{
+								"id": "negbinomialProbabilities",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Negative binomial tail probabilities...",
+									"es": "Probabilidades binomiales negativas acumuladas..."
+								}
+							},
+							{
+								"id": "negbinomialMass",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Negative binomial probabilities...",
+									"es": "Probabilidades binomiales negativas..."
+								}
+							},
+							{
+								"id": "negbinomialDistributionPlot",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Plot negative binomial distribution...",
+									"es": "Gráfica de la distribución binomial negativa..."
+								}
+							},
+							{
+								"id": "negbinomialDistributionSamples",
+								"color": "terminal.ansiCyan",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Sample from negative binomial distribution...",
+									"es": "Muestra de una distribución binomial negativa..."
+								}
+							}
+						]
+					}
+				]
+			}
+		]
+	},
+	{
+		"label": {
+			"en": "Tools",
+			"es": "Herramientas"
+		},
+		"color": "terminal.ansiMagenta",
+		"icon": "tools",
+		"children": [
+			{
+				"id": "loadPackages",
+				"color": "terminal.ansiMagenta",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Load package(s)...",
+					"es": "Cargar paquete(s)..."
+				}
+			},
+			{
+				"id": "loadPlugins",
+				"color": "terminal.ansiMagenta",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Load Rcmdr plug-in(s)...",
+					"es": "Cargar plugin(s) de Rcmdr..."
+				}
+			},
+			{
+				"id": "Options",
+				"color": "terminal.ansiMagenta",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Options...",
+					"es": "Opciones..."
+				}
+			},
+			{
+				"id": "installPackages",
+				"color": "terminal.ansiMagenta",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Install package(s)...",
+					"es": "Instalar paquete(s)..."
+				}
+			}
+		]
+	},
+	{
+		"label": {
+			"en": "Help",
+			"es": "Ayuda"
+		},
+		"color": "terminal.ansiBlue",
+		"icon": "question",
+		"children": [
+			{
+				"id": "helpCommander",
+				"color": "terminal.ansiBlue",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Commander help",
+					"es": "Ayuda de R Commander"
+				}
+			},
+			{
+				"id": "browseManual",
+				"color": "terminal.ansiBlue",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Introduction to the R Commander",
+					"es": "Introducción a R Commander"
+				}
+			},
+			{
+				"id": "browseEnglishManual",
+				"color": "terminal.ansiBlue",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Introduction to the R Commander (English version)",
+					"es": "Introduction to the R Commander (English version)"
+				}
+			},
+			{
+				"id": "browseRcmdrWebsite",
+				"color": "terminal.ansiBlue",
+				"icon": "circle-filled",
+				"label": {
+					"en": "R Commander website",
+					"es": "Sitio de R Commander"
+				}
+			},
+			{
+				"id": "helpAboutCommander",
+				"color": "terminal.ansiBlue",
+				"icon": "circle-filled",
+				"label": {
+					"en": "About Rcmdr",
+					"es": "Información sobre Rcmdr"
+				}
+			},
+			{
+				"id": "browseRcmdrHexSticker",
+				"color": "terminal.ansiBlue",
+				"icon": "circle-filled",
+				"label": {
+					"en": "R Commander hex sticker",
+					"es": "R Commander hex sticker"
+				}
+			},
+			{
+				"sep": true
+			},
+			{
+				"id": "helpDataSet",
+				"color": "terminal.ansiBlue",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Help on active data set (if available)",
+					"es": "Ayuda sobre el conjunto de datos activo (si es posible)"
+				}
+			},
+			{
+				"sep": true
+			},
+			{
+				"id": "startHelp",
+				"color": "terminal.ansiBlue",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Start R help system",
+					"es": "Iniciar la ayuda de R"
+				}
+			},
+			{
+				"id": "browseRWebsite",
+				"color": "terminal.ansiBlue",
+				"icon": "circle-filled",
+				"label": {
+					"en": "R website",
+					"es": "Sitio R"
+				}
+			},
+			{
+				"id": "browseRMarkdown",
+				"color": "terminal.ansiBlue",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Using R Markdown",
+					"es": "Usando R Markdown"
+				}
+			}
+		]
+	}
+]
