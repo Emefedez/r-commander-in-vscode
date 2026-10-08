@@ -54,6 +54,7 @@ class TestSession extends RSession {
 }
 
 const ANSWERS = [ // prompt substring -> typed answer
+  ['Probabilities', '0.25, 0.5'], ['From (>)', '-1'], ['To (<=)', '1'],
   ['Expression to compute', 'n1 + n2'], ['Random effects', '(1 | f3)'], ['Expression using these coefficient names', 'n2 / n3'], ['Expression in the coefficient names', 'n2 / n3'],
   ['Hypotheses separated', 'n2 = 0'], ['Names for the 3 bins', 'low, mid, high'], ['Subset expression', 'n1 > 1'],
   ['Right-hand side of the variance formula', 'n2'], ['Package names', 'car'], ['Name of the new variable', 'newvar'],
@@ -155,8 +156,8 @@ class FakeForm {
           raw[f.k] = helmert(rows);
           break;
         }
-        case 'name': case 'text': raw[f.k] = answer ? answer[1] : (this.pass === 'B' && f.optional && f.sample) ? f.sample : String(model.evalDefault(f.def, env.ctx, values) ?? ''); break;
-        case 'num': case 'numlist': raw[f.k] = String(f.def ?? ''); break;
+        case 'name': case 'text': raw[f.k] = answer ? answer[1] : ((this.pass === 'B' || spec.check) && f.optional && f.sample) ? f.sample : String(model.evalDefault(f.def, env.ctx, values) ?? ''); break;
+        case 'num': case 'numlist': raw[f.k] = answer && f.type === 'numlist' ? answer[1] : String(f.def ?? ''); break;
         case 'choice': raw[f.k] = this.pass === 'B' ? list[list.length - 1].value : list[f.def || 0].value; break;
         case 'flags': raw[f.k] = Object.fromEntries(f.items.map(([key, , on]) => [key, Boolean(on)])); break;
         case 'levelorder': {
@@ -173,6 +174,8 @@ class FakeForm {
     }
     const errors = model.validate(fields, raw, env);
     if (Object.keys(errors).length) throw new Error(`form validation failed: ${JSON.stringify(errors)}`);
+    const problem = spec.check?.(model.normalize(fields, raw));
+    if (problem) throw new Error(`form check failed: ${problem}`);
     const layout = model.layout(fields, raw, env);
     assert.equal(layout.length, fields.length);
     const values = model.normalize(fields, raw, env);
@@ -220,6 +223,7 @@ class FakeForm {
   const rscript = `
 options(warn = 1); pdf(NULL)
 local({
+setup_runner <- new.env(); sys.source(${JSON.stringify(runnerR)}, setup_runner); suppressMessages(setup_runner$attach_rcmdr())
 cases <- jsonlite::fromJSON(${JSON.stringify(path.join(tmp, 'cases.json'))}, simplifyVector = FALSE)
 parse_only <- c(${parseOnly.map(p => JSON.stringify(p)).join(', ')})
 for (case in cases) {

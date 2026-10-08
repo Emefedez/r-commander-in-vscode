@@ -38,7 +38,17 @@
 		"PoissonDistributionSamples",
 		"geomDistributionSamples",
 		"hyperDistributionSamples",
-		"negbinomialDistributionSamples"
+		"negbinomialDistributionSamples",
+		"normalDistrSamples",
+		"tDistrSamples",
+		"chisqDistrSamples",
+		"FDistrSamples",
+		"exponentialDistrSamples",
+		"uniformDistrSamples",
+		"binomialDistrSamples",
+		"PoissonDistrSamples",
+		"geomDistrSamples",
+		"negbinomialDistrSamples"
 	],
 	"as_factor": [
 		"importSPSS",
@@ -70,6 +80,16 @@
 		"geomDistributionSamples",
 		"hyperDistributionSamples",
 		"negbinomialDistributionSamples",
+		"normalDistrSamples",
+		"tDistrSamples",
+		"chisqDistrSamples",
+		"FDistrSamples",
+		"exponentialDistrSamples",
+		"uniformDistrSamples",
+		"binomialDistrSamples",
+		"PoissonDistrSamples",
+		"geomDistrSamples",
+		"negbinomialDistrSamples",
 		"listInstalledPackages"
 	],
 	"as.factor": [
@@ -103,6 +123,14 @@
 	"BIC": [
 		"bic"
 	],
+	"Binom": [
+		"binomialDistrQuantiles",
+		"binomialProbabilitiesInter",
+		"binomialDistrMass",
+		"binomialDistrPlot",
+		"binomialDistrCharac",
+		"binomialDistrSamples"
+	],
 	"binom.test": [
 		"singleProportionTest"
 	],
@@ -131,11 +159,42 @@
 	"browseURL": [
 		"browseRcmdrHexSticker"
 	],
+	"calcular_frecuencia": [
+		"resumenVariablesCualitativas"
+	],
+	"calcularResumenDatosTabulados": [
+		"resumenDatosTabulados"
+	],
+	"calcularResumenVariablesContinuas": [
+		"resumenNumericoVContinua"
+	],
+	"calcularResumenVariablesDiscretas": [
+		"resumenNumericoVDiscreta"
+	],
 	"carPalette": [
 		"Scatter3D"
 	],
 	"cfa": [
 		"CFA"
+	],
+	"characRV": [
+		"normalDistrCharac",
+		"tDistrCharac",
+		"chisqDistrCharac",
+		"FDistrCharac",
+		"exponentialDistrCharac",
+		"uniformDistrCharac",
+		"binomialDistrCharac",
+		"PoissonDistrCharac",
+		"geomDistrCharac",
+		"negbinomialDistrCharac"
+	],
+	"Chisq": [
+		"chisqDistrQuantiles",
+		"chisqProbabilitiesInter",
+		"chisqDistrPlot",
+		"chisqDistrCharac",
+		"chisqDistrSamples"
 	],
 	"chisq.test": [
 		"frequencyDistribution",
@@ -148,6 +207,30 @@
 	"colMeans": [
 		"oneWayRepeatedMeasures",
 		"twoWayRepeatedMeasures"
+	],
+	"colorRamp": [
+		"normalProbabilitiesInter",
+		"tProbabilitiesInter",
+		"chisqProbabilitiesInter",
+		"FProbabilitiesInter",
+		"exponentialProbabilitiesInter",
+		"uniformProbabilitiesInter",
+		"binomialProbabilitiesInter",
+		"PoissonProbabilitiesInter",
+		"geomProbabilitiesInter",
+		"negbinomialProbabilitiesInter"
+	],
+	"colorRampPalette": [
+		"normalProbabilitiesInter",
+		"tProbabilitiesInter",
+		"chisqProbabilitiesInter",
+		"FProbabilitiesInter",
+		"exponentialProbabilitiesInter",
+		"uniformProbabilitiesInter",
+		"binomialProbabilitiesInter",
+		"PoissonProbabilitiesInter",
+		"geomProbabilitiesInter",
+		"negbinomialProbabilitiesInter"
 	],
 	"compareCoefs": [
 		"compareCoefficients"
@@ -181,9 +264,21 @@
 	"crPlots": [
 		"CRPlots"
 	],
+	"cumsum": [
+		"binomialDistrMass",
+		"PoissonDistrMass",
+		"geomDistrMass",
+		"negbinomialDistrMass"
+	],
 	"cutree": [
 		"hclustSummary",
 		"appendHclustGroup"
+	],
+	"d": [
+		"binomialDistrMass",
+		"PoissonDistrMass",
+		"geomDistrMass",
+		"negbinomialDistrMass"
 	],
 	"data": [
 		"listDataSetsInPackages",
@@ -287,8 +382,22 @@
 	"edit": [
 		"editDataSet"
 	],
+	"Exp": [
+		"exponentialDistrQuantiles",
+		"exponentialProbabilitiesInter",
+		"exponentialDistrPlot",
+		"exponentialDistrCharac",
+		"exponentialDistrSamples"
+	],
 	"factanal": [
 		"factorAnalysis"
+	],
+	"Fd": [
+		"FDistrQuantiles",
+		"FProbabilitiesInter",
+		"FDistrPlot",
+		"FDistrCharac",
+		"FDistrSamples"
 	],
 	"file.exists": [
 		"installPackages",
@@ -314,6 +423,14 @@
 	],
 	"gaussian": [
 		"generalizedLinearMixedModel"
+	],
+	"Geom": [
+		"geomDistrQuantiles",
+		"geomProbabilitiesInter",
+		"geomDistrMass",
+		"geomDistrPlot",
+		"geomDistrCharac",
+		"geomDistrSamples"
 	],
 	"getOption": [
 		"installPackages",
@@ -460,6 +577,21 @@
 	"na.omit": [
 		"filterNA"
 	],
+	"Nbinom": [
+		"negbinomialDistrQuantiles",
+		"negbinomialProbabilitiesInter",
+		"negbinomialDistrMass",
+		"negbinomialDistrPlot",
+		"negbinomialDistrCharac",
+		"negbinomialDistrSamples"
+	],
+	"Norm": [
+		"normalDistrQuantiles",
+		"normalProbabilitiesInter",
+		"normalDistrPlot",
+		"normalDistrCharac",
+		"normalDistrSamples"
+	],
 	"normalityTest": [
 		"NormalityTest"
 	],
@@ -483,6 +615,18 @@
 	],
 	"outlierTest": [
 		"OutlierTest"
+	],
+	"p": [
+		"normalProbabilitiesInter",
+		"tProbabilitiesInter",
+		"chisqProbabilitiesInter",
+		"FProbabilitiesInter",
+		"exponentialProbabilitiesInter",
+		"uniformProbabilitiesInter",
+		"binomialProbabilitiesInter",
+		"PoissonProbabilitiesInter",
+		"geomProbabilitiesInter",
+		"negbinomialProbabilitiesInter"
 	],
 	"packageDescription": [
 		"helpAboutCommander"
@@ -551,6 +695,28 @@
 	"plotMeans": [
 		"PlotMeans"
 	],
+	"plotRegions": [
+		"normalProbabilitiesInter",
+		"normalDistrPlot",
+		"tProbabilitiesInter",
+		"tDistrPlot",
+		"chisqProbabilitiesInter",
+		"chisqDistrPlot",
+		"FProbabilitiesInter",
+		"FDistrPlot",
+		"exponentialProbabilitiesInter",
+		"exponentialDistrPlot",
+		"uniformProbabilitiesInter",
+		"uniformDistrPlot",
+		"binomialProbabilitiesInter",
+		"binomialDistrPlot",
+		"PoissonProbabilitiesInter",
+		"PoissonDistrPlot",
+		"geomProbabilitiesInter",
+		"geomDistrPlot",
+		"negbinomialProbabilitiesInter",
+		"negbinomialDistrPlot"
+	],
 	"pnbinom": [
 		"negbinomialProbabilities",
 		"negbinomialDistributionPlot"
@@ -558,6 +724,14 @@
 	"pnorm": [
 		"normalProbabilities",
 		"normalDistributionPlot"
+	],
+	"Pois": [
+		"PoissonDistrQuantiles",
+		"PoissonProbabilitiesInter",
+		"PoissonDistrMass",
+		"PoissonDistrPlot",
+		"PoissonDistrCharac",
+		"PoissonDistrSamples"
 	],
 	"polr": [
 		"ordinalRegressionModel"
@@ -592,6 +766,28 @@
 	"pweibull": [
 		"WeibullProbabilities",
 		"WeibullDistributionPlot"
+	],
+	"q": [
+		"normalDistrQuantiles",
+		"normalDistrPlot",
+		"tDistrQuantiles",
+		"tDistrPlot",
+		"chisqDistrQuantiles",
+		"chisqDistrPlot",
+		"FDistrQuantiles",
+		"FDistrPlot",
+		"exponentialDistrQuantiles",
+		"exponentialDistrPlot",
+		"uniformDistrQuantiles",
+		"uniformDistrPlot",
+		"binomialDistrQuantiles",
+		"binomialDistrPlot",
+		"PoissonDistrQuantiles",
+		"PoissonDistrPlot",
+		"geomDistrQuantiles",
+		"geomDistrPlot",
+		"negbinomialDistrQuantiles",
+		"negbinomialDistrPlot"
 	],
 	"qbeta": [
 		"betaQuantiles",
@@ -686,6 +882,18 @@
 		"WeibullQuantiles",
 		"WeibullDistributionPlot"
 	],
+	"r": [
+		"normalDistrSamples",
+		"tDistrSamples",
+		"chisqDistrSamples",
+		"FDistrSamples",
+		"exponentialDistrSamples",
+		"uniformDistrSamples",
+		"binomialDistrSamples",
+		"PoissonDistrSamples",
+		"geomDistrSamples",
+		"negbinomialDistrSamples"
+	],
 	"rainbow_hcl": [
 		"pieChart"
 	],
@@ -766,6 +974,18 @@
 	"rgamma": [
 		"gammaDistributionSamples"
 	],
+	"rgb": [
+		"normalProbabilitiesInter",
+		"tProbabilitiesInter",
+		"chisqProbabilitiesInter",
+		"FProbabilitiesInter",
+		"exponentialProbabilitiesInter",
+		"uniformProbabilitiesInter",
+		"binomialProbabilitiesInter",
+		"PoissonProbabilitiesInter",
+		"geomProbabilitiesInter",
+		"negbinomialProbabilitiesInter"
+	],
 	"rgeom": [
 		"geomDistributionSamples"
 	],
@@ -808,7 +1028,17 @@
 		"PoissonDistributionSamples",
 		"geomDistributionSamples",
 		"hyperDistributionSamples",
-		"negbinomialDistributionSamples"
+		"negbinomialDistributionSamples",
+		"normalDistrSamples",
+		"tDistrSamples",
+		"chisqDistrSamples",
+		"FDistrSamples",
+		"exponentialDistrSamples",
+		"uniformDistrSamples",
+		"binomialDistrSamples",
+		"PoissonDistrSamples",
+		"geomDistrSamples",
+		"negbinomialDistrSamples"
 	],
 	"rowPercents": [
 		"twoSampleProportionsTest"
@@ -831,7 +1061,17 @@
 		"PoissonDistributionSamples",
 		"geomDistributionSamples",
 		"hyperDistributionSamples",
-		"negbinomialDistributionSamples"
+		"negbinomialDistributionSamples",
+		"normalDistrSamples",
+		"tDistrSamples",
+		"chisqDistrSamples",
+		"FDistrSamples",
+		"exponentialDistrSamples",
+		"uniformDistrSamples",
+		"binomialDistrSamples",
+		"PoissonDistrSamples",
+		"geomDistrSamples",
+		"negbinomialDistrSamples"
 	],
 	"rpois": [
 		"PoissonDistributionSamples"
@@ -896,7 +1136,9 @@
 		"lognormalDistributionPlot",
 		"gammaDistributionPlot",
 		"WeibullDistributionPlot",
-		"GumbelDistributionPlot"
+		"GumbelDistributionPlot",
+		"resumenNumericoVDiscreta",
+		"resumenNumericoVContinua"
 	],
 	"set.seed": [
 		"setRandomSeed"
@@ -951,6 +1193,12 @@
 		"Bootstrap",
 		"transformResponse"
 	],
+	"support": [
+		"binomialDistrMass",
+		"PoissonDistrMass",
+		"geomDistrMass",
+		"negbinomialDistrMass"
+	],
 	"symbox": [
 		"Symbox"
 	],
@@ -971,6 +1219,13 @@
 		"twoVariancesFTest",
 		"twoSampleWilcoxonTest",
 		"KruskalWallisTest"
+	],
+	"Td": [
+		"tDistrQuantiles",
+		"tProbabilitiesInter",
+		"tDistrPlot",
+		"tDistrCharac",
+		"tDistrSamples"
 	],
 	"textConnection": [
 		"CFA"
@@ -998,6 +1253,13 @@
 	"unclass": [
 		"principalComponents"
 	],
+	"Unif": [
+		"uniformDistrQuantiles",
+		"uniformProbabilitiesInter",
+		"uniformDistrPlot",
+		"uniformDistrCharac",
+		"uniformDistrSamples"
+	],
 	"var": [
 		"statisticsTable"
 	],
@@ -1017,6 +1279,9 @@
 	"vif": [
 		"VIF"
 	],
+	"W.numSummary": [
+		"resumenNumericoPonderada"
+	],
 	"wilcox.test": [
 		"twoSampleWilcoxonTest",
 		"onesampleWilcoxonTest",
@@ -1024,6 +1289,18 @@
 	],
 	"with": [
 		"Compute"
+	],
+	"within": [
+		"normalDistrSamples",
+		"tDistrSamples",
+		"chisqDistrSamples",
+		"FDistrSamples",
+		"exponentialDistrSamples",
+		"uniformDistrSamples",
+		"binomialDistrSamples",
+		"PoissonDistrSamples",
+		"geomDistrSamples",
+		"negbinomialDistrSamples"
 	],
 	"write_PACKAGES": [
 		"installPackages",

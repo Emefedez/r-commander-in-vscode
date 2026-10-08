@@ -32,7 +32,8 @@ run_code <- function(code, skip_help = TRUE, skip_commands = character(),
     if (!is.call(expression)) return("")
     head <- expression[[1L]]
     if (is.symbol(head)) return(as.character(head))
-    if (is.call(head) && as.character(head[[1L]]) %in% c("::", ":::")) {
+    # A curried call such as pkg::f(x)(y) has a call as its head; only pkg::f is a name to look at.
+    if (is.call(head) && is.symbol(head[[1L]]) && as.character(head[[1L]]) %in% c("::", ":::")) {
       return(paste0(as.character(head[[2L]]), "::", as.character(head[[3L]])))
     }
     ""

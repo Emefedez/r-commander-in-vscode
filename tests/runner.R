@@ -80,3 +80,13 @@ stopifnot(inherits(invalid, "error"), getOption("max.print") == 1000L)
 options(max.print = original_max)
 
 cat("R filtering and output preview checks passed.\n")
+
+# Calls whose head is itself a call (f(x)(y), pkg::f(x)(y)) are ordinary code and must run.
+curried_output <- capture.output(runner$run_code(paste(
+  "make_adder <- function(n) function(x) x + n",
+  "make_adder(2)(3)",
+  "stats::setNames(c(a = 1, b = 2), c('p', 'q'))[['q']]",
+  "(function() 7)()", sep = "\n"), skip_help = FALSE, limit_output = FALSE, quiet = TRUE))
+stopifnot(any(grepl("^\\[1\\] 5$", curried_output)), any(grepl("^\\[1\\] 7$", curried_output)),
+          any(grepl("^> make_adder\\(2\\)\\(3\\)$", curried_output)))
+cat("Curried calls run.\n")

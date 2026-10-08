@@ -1518,6 +1518,360 @@
 				"enablement": "isWorkspaceTrusted"
 			},
 			{
+				"command": "rcp.cmd.resumenVariablesCualitativas",
+				"title": "%rcp.cmd.resumenVariablesCualitativas%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.resumenNumericoVDiscreta",
+				"title": "%rcp.cmd.resumenNumericoVDiscreta%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.resumenNumericoVContinua",
+				"title": "%rcp.cmd.resumenNumericoVContinua%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.resumenNumericoPonderada",
+				"title": "%rcp.cmd.resumenNumericoPonderada%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.resumenDatosTabulados",
+				"title": "%rcp.cmd.resumenDatosTabulados%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.normalDistrQuantiles",
+				"title": "%rcp.cmd.normalDistrQuantiles%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.normalProbabilitiesInter",
+				"title": "%rcp.cmd.normalProbabilitiesInter%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.normalDistrPlot",
+				"title": "%rcp.cmd.normalDistrPlot%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.normalDistrCharac",
+				"title": "%rcp.cmd.normalDistrCharac%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.normalDistrSamples",
+				"title": "%rcp.cmd.normalDistrSamples%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.tDistrQuantiles",
+				"title": "%rcp.cmd.tDistrQuantiles%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.tProbabilitiesInter",
+				"title": "%rcp.cmd.tProbabilitiesInter%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.tDistrPlot",
+				"title": "%rcp.cmd.tDistrPlot%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.tDistrCharac",
+				"title": "%rcp.cmd.tDistrCharac%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.tDistrSamples",
+				"title": "%rcp.cmd.tDistrSamples%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.chisqDistrQuantiles",
+				"title": "%rcp.cmd.chisqDistrQuantiles%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.chisqProbabilitiesInter",
+				"title": "%rcp.cmd.chisqProbabilitiesInter%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.chisqDistrPlot",
+				"title": "%rcp.cmd.chisqDistrPlot%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.chisqDistrCharac",
+				"title": "%rcp.cmd.chisqDistrCharac%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.chisqDistrSamples",
+				"title": "%rcp.cmd.chisqDistrSamples%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.FDistrQuantiles",
+				"title": "%rcp.cmd.FDistrQuantiles%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.FProbabilitiesInter",
+				"title": "%rcp.cmd.FProbabilitiesInter%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.FDistrPlot",
+				"title": "%rcp.cmd.FDistrPlot%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.FDistrCharac",
+				"title": "%rcp.cmd.FDistrCharac%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.FDistrSamples",
+				"title": "%rcp.cmd.FDistrSamples%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.exponentialDistrQuantiles",
+				"title": "%rcp.cmd.exponentialDistrQuantiles%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.exponentialProbabilitiesInter",
+				"title": "%rcp.cmd.exponentialProbabilitiesInter%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.exponentialDistrPlot",
+				"title": "%rcp.cmd.exponentialDistrPlot%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.exponentialDistrCharac",
+				"title": "%rcp.cmd.exponentialDistrCharac%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.exponentialDistrSamples",
+				"title": "%rcp.cmd.exponentialDistrSamples%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.uniformDistrQuantiles",
+				"title": "%rcp.cmd.uniformDistrQuantiles%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.uniformProbabilitiesInter",
+				"title": "%rcp.cmd.uniformProbabilitiesInter%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.uniformDistrPlot",
+				"title": "%rcp.cmd.uniformDistrPlot%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.uniformDistrCharac",
+				"title": "%rcp.cmd.uniformDistrCharac%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.uniformDistrSamples",
+				"title": "%rcp.cmd.uniformDistrSamples%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.binomialDistrQuantiles",
+				"title": "%rcp.cmd.binomialDistrQuantiles%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.binomialProbabilitiesInter",
+				"title": "%rcp.cmd.binomialProbabilitiesInter%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.binomialDistrMass",
+				"title": "%rcp.cmd.binomialDistrMass%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.binomialDistrPlot",
+				"title": "%rcp.cmd.binomialDistrPlot%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.binomialDistrCharac",
+				"title": "%rcp.cmd.binomialDistrCharac%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.binomialDistrSamples",
+				"title": "%rcp.cmd.binomialDistrSamples%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.PoissonDistrQuantiles",
+				"title": "%rcp.cmd.PoissonDistrQuantiles%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.PoissonProbabilitiesInter",
+				"title": "%rcp.cmd.PoissonProbabilitiesInter%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.PoissonDistrMass",
+				"title": "%rcp.cmd.PoissonDistrMass%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.PoissonDistrPlot",
+				"title": "%rcp.cmd.PoissonDistrPlot%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.PoissonDistrCharac",
+				"title": "%rcp.cmd.PoissonDistrCharac%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.PoissonDistrSamples",
+				"title": "%rcp.cmd.PoissonDistrSamples%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.geomDistrQuantiles",
+				"title": "%rcp.cmd.geomDistrQuantiles%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.geomProbabilitiesInter",
+				"title": "%rcp.cmd.geomProbabilitiesInter%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.geomDistrMass",
+				"title": "%rcp.cmd.geomDistrMass%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.geomDistrPlot",
+				"title": "%rcp.cmd.geomDistrPlot%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.geomDistrCharac",
+				"title": "%rcp.cmd.geomDistrCharac%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.geomDistrSamples",
+				"title": "%rcp.cmd.geomDistrSamples%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.negbinomialDistrQuantiles",
+				"title": "%rcp.cmd.negbinomialDistrQuantiles%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.negbinomialProbabilitiesInter",
+				"title": "%rcp.cmd.negbinomialProbabilitiesInter%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.negbinomialDistrMass",
+				"title": "%rcp.cmd.negbinomialDistrMass%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.negbinomialDistrPlot",
+				"title": "%rcp.cmd.negbinomialDistrPlot%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.negbinomialDistrCharac",
+				"title": "%rcp.cmd.negbinomialDistrCharac%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.negbinomialDistrSamples",
+				"title": "%rcp.cmd.negbinomialDistrSamples%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
 				"command": "rcp.cmd.loadPackages",
 				"title": "%rcp.cmd.loadPackages%",
 				"category": "R Commander",
@@ -3375,7 +3729,388 @@
 					"group": "01_rcp@1"
 				},
 				{
+					"command": "rcp.cmd.resumenVariablesCualitativas",
+					"when": "editorLangId == r",
+					"group": "01_rcp@2"
+				},
+				{
+					"command": "rcp.cmd.resumenNumericoVDiscreta",
+					"when": "editorLangId == r",
+					"group": "01_rcp@3"
+				},
+				{
+					"command": "rcp.cmd.resumenNumericoVContinua",
+					"when": "editorLangId == r",
+					"group": "01_rcp@4"
+				},
+				{
+					"command": "rcp.cmd.resumenNumericoPonderada",
+					"when": "editorLangId == r",
+					"group": "01_rcp@5"
+				},
+				{
+					"command": "rcp.cmd.resumenDatosTabulados",
+					"when": "editorLangId == r",
+					"group": "01_rcp@6"
+				},
+				{
 					"submenu": "rcp.tablesMenuES",
+					"when": "editorLangId == r",
+					"group": "01_rcp@7"
+				}
+			],
+			"rcp.normalMenuES": [
+				{
+					"command": "rcp.cmd.normalDistrQuantiles",
+					"when": "editorLangId == r",
+					"group": "01_rcp@1"
+				},
+				{
+					"command": "rcp.cmd.normalProbabilitiesInter",
+					"when": "editorLangId == r",
+					"group": "01_rcp@2"
+				},
+				{
+					"command": "rcp.cmd.normalDistrPlot",
+					"when": "editorLangId == r",
+					"group": "01_rcp@3"
+				},
+				{
+					"command": "rcp.cmd.normalDistrCharac",
+					"when": "editorLangId == r",
+					"group": "01_rcp@4"
+				},
+				{
+					"command": "rcp.cmd.normalDistrSamples",
+					"when": "editorLangId == r",
+					"group": "01_rcp@5"
+				}
+			],
+			"rcp.tMenuES": [
+				{
+					"command": "rcp.cmd.tDistrQuantiles",
+					"when": "editorLangId == r",
+					"group": "01_rcp@1"
+				},
+				{
+					"command": "rcp.cmd.tProbabilitiesInter",
+					"when": "editorLangId == r",
+					"group": "01_rcp@2"
+				},
+				{
+					"command": "rcp.cmd.tDistrPlot",
+					"when": "editorLangId == r",
+					"group": "01_rcp@3"
+				},
+				{
+					"command": "rcp.cmd.tDistrCharac",
+					"when": "editorLangId == r",
+					"group": "01_rcp@4"
+				},
+				{
+					"command": "rcp.cmd.tDistrSamples",
+					"when": "editorLangId == r",
+					"group": "01_rcp@5"
+				}
+			],
+			"rcp.chisqMenuES": [
+				{
+					"command": "rcp.cmd.chisqDistrQuantiles",
+					"when": "editorLangId == r",
+					"group": "01_rcp@1"
+				},
+				{
+					"command": "rcp.cmd.chisqProbabilitiesInter",
+					"when": "editorLangId == r",
+					"group": "01_rcp@2"
+				},
+				{
+					"command": "rcp.cmd.chisqDistrPlot",
+					"when": "editorLangId == r",
+					"group": "01_rcp@3"
+				},
+				{
+					"command": "rcp.cmd.chisqDistrCharac",
+					"when": "editorLangId == r",
+					"group": "01_rcp@4"
+				},
+				{
+					"command": "rcp.cmd.chisqDistrSamples",
+					"when": "editorLangId == r",
+					"group": "01_rcp@5"
+				}
+			],
+			"rcp.FMenuES": [
+				{
+					"command": "rcp.cmd.FDistrQuantiles",
+					"when": "editorLangId == r",
+					"group": "01_rcp@1"
+				},
+				{
+					"command": "rcp.cmd.FProbabilitiesInter",
+					"when": "editorLangId == r",
+					"group": "01_rcp@2"
+				},
+				{
+					"command": "rcp.cmd.FDistrPlot",
+					"when": "editorLangId == r",
+					"group": "01_rcp@3"
+				},
+				{
+					"command": "rcp.cmd.FDistrCharac",
+					"when": "editorLangId == r",
+					"group": "01_rcp@4"
+				},
+				{
+					"command": "rcp.cmd.FDistrSamples",
+					"when": "editorLangId == r",
+					"group": "01_rcp@5"
+				}
+			],
+			"rcp.exponentialMenuES": [
+				{
+					"command": "rcp.cmd.exponentialDistrQuantiles",
+					"when": "editorLangId == r",
+					"group": "01_rcp@1"
+				},
+				{
+					"command": "rcp.cmd.exponentialProbabilitiesInter",
+					"when": "editorLangId == r",
+					"group": "01_rcp@2"
+				},
+				{
+					"command": "rcp.cmd.exponentialDistrPlot",
+					"when": "editorLangId == r",
+					"group": "01_rcp@3"
+				},
+				{
+					"command": "rcp.cmd.exponentialDistrCharac",
+					"when": "editorLangId == r",
+					"group": "01_rcp@4"
+				},
+				{
+					"command": "rcp.cmd.exponentialDistrSamples",
+					"when": "editorLangId == r",
+					"group": "01_rcp@5"
+				}
+			],
+			"rcp.uniformMenuES": [
+				{
+					"command": "rcp.cmd.uniformDistrQuantiles",
+					"when": "editorLangId == r",
+					"group": "01_rcp@1"
+				},
+				{
+					"command": "rcp.cmd.uniformProbabilitiesInter",
+					"when": "editorLangId == r",
+					"group": "01_rcp@2"
+				},
+				{
+					"command": "rcp.cmd.uniformDistrPlot",
+					"when": "editorLangId == r",
+					"group": "01_rcp@3"
+				},
+				{
+					"command": "rcp.cmd.uniformDistrCharac",
+					"when": "editorLangId == r",
+					"group": "01_rcp@4"
+				},
+				{
+					"command": "rcp.cmd.uniformDistrSamples",
+					"when": "editorLangId == r",
+					"group": "01_rcp@5"
+				}
+			],
+			"rcp.continuasMenu": [
+				{
+					"submenu": "rcp.normalMenuES",
+					"when": "editorLangId == r",
+					"group": "01_rcp@1"
+				},
+				{
+					"submenu": "rcp.tMenuES",
+					"when": "editorLangId == r",
+					"group": "01_rcp@2"
+				},
+				{
+					"submenu": "rcp.chisqMenuES",
+					"when": "editorLangId == r",
+					"group": "01_rcp@3"
+				},
+				{
+					"submenu": "rcp.FMenuES",
+					"when": "editorLangId == r",
+					"group": "01_rcp@4"
+				},
+				{
+					"submenu": "rcp.exponentialMenuES",
+					"when": "editorLangId == r",
+					"group": "01_rcp@5"
+				},
+				{
+					"submenu": "rcp.uniformMenuES",
+					"when": "editorLangId == r",
+					"group": "01_rcp@6"
+				}
+			],
+			"rcp.binomialMenuES": [
+				{
+					"command": "rcp.cmd.binomialDistrQuantiles",
+					"when": "editorLangId == r",
+					"group": "01_rcp@1"
+				},
+				{
+					"command": "rcp.cmd.binomialProbabilitiesInter",
+					"when": "editorLangId == r",
+					"group": "01_rcp@2"
+				},
+				{
+					"command": "rcp.cmd.binomialDistrMass",
+					"when": "editorLangId == r",
+					"group": "01_rcp@3"
+				},
+				{
+					"command": "rcp.cmd.binomialDistrPlot",
+					"when": "editorLangId == r",
+					"group": "01_rcp@4"
+				},
+				{
+					"command": "rcp.cmd.binomialDistrCharac",
+					"when": "editorLangId == r",
+					"group": "01_rcp@5"
+				},
+				{
+					"command": "rcp.cmd.binomialDistrSamples",
+					"when": "editorLangId == r",
+					"group": "01_rcp@6"
+				}
+			],
+			"rcp.PoissonMenuES": [
+				{
+					"command": "rcp.cmd.PoissonDistrQuantiles",
+					"when": "editorLangId == r",
+					"group": "01_rcp@1"
+				},
+				{
+					"command": "rcp.cmd.PoissonProbabilitiesInter",
+					"when": "editorLangId == r",
+					"group": "01_rcp@2"
+				},
+				{
+					"command": "rcp.cmd.PoissonDistrMass",
+					"when": "editorLangId == r",
+					"group": "01_rcp@3"
+				},
+				{
+					"command": "rcp.cmd.PoissonDistrPlot",
+					"when": "editorLangId == r",
+					"group": "01_rcp@4"
+				},
+				{
+					"command": "rcp.cmd.PoissonDistrCharac",
+					"when": "editorLangId == r",
+					"group": "01_rcp@5"
+				},
+				{
+					"command": "rcp.cmd.PoissonDistrSamples",
+					"when": "editorLangId == r",
+					"group": "01_rcp@6"
+				}
+			],
+			"rcp.geometricMenuES": [
+				{
+					"command": "rcp.cmd.geomDistrQuantiles",
+					"when": "editorLangId == r",
+					"group": "01_rcp@1"
+				},
+				{
+					"command": "rcp.cmd.geomProbabilitiesInter",
+					"when": "editorLangId == r",
+					"group": "01_rcp@2"
+				},
+				{
+					"command": "rcp.cmd.geomDistrMass",
+					"when": "editorLangId == r",
+					"group": "01_rcp@3"
+				},
+				{
+					"command": "rcp.cmd.geomDistrPlot",
+					"when": "editorLangId == r",
+					"group": "01_rcp@4"
+				},
+				{
+					"command": "rcp.cmd.geomDistrCharac",
+					"when": "editorLangId == r",
+					"group": "01_rcp@5"
+				},
+				{
+					"command": "rcp.cmd.geomDistrSamples",
+					"when": "editorLangId == r",
+					"group": "01_rcp@6"
+				}
+			],
+			"rcp.negbinomialMenuES": [
+				{
+					"command": "rcp.cmd.negbinomialDistrQuantiles",
+					"when": "editorLangId == r",
+					"group": "01_rcp@1"
+				},
+				{
+					"command": "rcp.cmd.negbinomialProbabilitiesInter",
+					"when": "editorLangId == r",
+					"group": "01_rcp@2"
+				},
+				{
+					"command": "rcp.cmd.negbinomialDistrMass",
+					"when": "editorLangId == r",
+					"group": "01_rcp@3"
+				},
+				{
+					"command": "rcp.cmd.negbinomialDistrPlot",
+					"when": "editorLangId == r",
+					"group": "01_rcp@4"
+				},
+				{
+					"command": "rcp.cmd.negbinomialDistrCharac",
+					"when": "editorLangId == r",
+					"group": "01_rcp@5"
+				},
+				{
+					"command": "rcp.cmd.negbinomialDistrSamples",
+					"when": "editorLangId == r",
+					"group": "01_rcp@6"
+				}
+			],
+			"rcp.discretasMenu": [
+				{
+					"submenu": "rcp.binomialMenuES",
+					"when": "editorLangId == r",
+					"group": "01_rcp@1"
+				},
+				{
+					"submenu": "rcp.PoissonMenuES",
+					"when": "editorLangId == r",
+					"group": "01_rcp@2"
+				},
+				{
+					"submenu": "rcp.geometricMenuES",
+					"when": "editorLangId == r",
+					"group": "01_rcp@3"
+				},
+				{
+					"submenu": "rcp.negbinomialMenuES",
+					"when": "editorLangId == r",
+					"group": "01_rcp@4"
+				}
+			],
+			"rcp.VAleatoriaMenu": [
+				{
+					"submenu": "rcp.continuasMenu",
+					"when": "editorLangId == r",
+					"group": "01_rcp@1"
+				},
+				{
+					"submenu": "rcp.discretasMenu",
 					"when": "editorLangId == r",
 					"group": "01_rcp@2"
 				}
@@ -3390,6 +4125,11 @@
 					"submenu": "rcp.EDescriptivaMenu",
 					"when": "editorLangId == r",
 					"group": "01_rcp@2"
+				},
+				{
+					"submenu": "rcp.VAleatoriaMenu",
+					"when": "editorLangId == r",
+					"group": "01_rcp@3"
 				}
 			],
 			"rcp.toolsMenu": [
@@ -3827,6 +4567,58 @@
 			{
 				"id": "rcp.tablesMenuES",
 				"label": "%rcp.tablesMenuES%"
+			},
+			{
+				"id": "rcp.VAleatoriaMenu",
+				"label": "%rcp.VAleatoriaMenu%"
+			},
+			{
+				"id": "rcp.continuasMenu",
+				"label": "%rcp.continuasMenu%"
+			},
+			{
+				"id": "rcp.normalMenuES",
+				"label": "%rcp.normalMenuES%"
+			},
+			{
+				"id": "rcp.tMenuES",
+				"label": "%rcp.tMenuES%"
+			},
+			{
+				"id": "rcp.chisqMenuES",
+				"label": "%rcp.chisqMenuES%"
+			},
+			{
+				"id": "rcp.FMenuES",
+				"label": "%rcp.FMenuES%"
+			},
+			{
+				"id": "rcp.exponentialMenuES",
+				"label": "%rcp.exponentialMenuES%"
+			},
+			{
+				"id": "rcp.uniformMenuES",
+				"label": "%rcp.uniformMenuES%"
+			},
+			{
+				"id": "rcp.discretasMenu",
+				"label": "%rcp.discretasMenu%"
+			},
+			{
+				"id": "rcp.binomialMenuES",
+				"label": "%rcp.binomialMenuES%"
+			},
+			{
+				"id": "rcp.PoissonMenuES",
+				"label": "%rcp.PoissonMenuES%"
+			},
+			{
+				"id": "rcp.geometricMenuES",
+				"label": "%rcp.geometricMenuES%"
+			},
+			{
+				"id": "rcp.negbinomialMenuES",
+				"label": "%rcp.negbinomialMenuES%"
 			},
 			{
 				"id": "rcp.toolsMenu",

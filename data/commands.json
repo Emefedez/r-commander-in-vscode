@@ -721,6 +721,183 @@
 		"label": "Import data from text file, clipboard, or URL...",
 		"target": "readDataSet"
 	},
+	"resumenVariablesCualitativas": {
+		"label": "Frequency distributions for qualitative variables..."
+	},
+	"resumenNumericoVDiscreta": {
+		"label": "Numerical summaries - Discrete variables..."
+	},
+	"resumenNumericoVContinua": {
+		"label": "Numerical summaries..."
+	},
+	"resumenNumericoPonderada": {
+		"label": "Numerical summaries - Weighted variables..."
+	},
+	"resumenDatosTabulados": {
+		"label": "Numerical summaries - Tabulated data..."
+	},
+	"normalDistrQuantiles": {
+		"label": "Normal quantiles..."
+	},
+	"normalProbabilitiesInter": {
+		"label": "Normal probabilities..."
+	},
+	"normalDistrPlot": {
+		"label": "Plot normal distribution..."
+	},
+	"normalDistrCharac": {
+		"label": "Normal characteristics..."
+	},
+	"normalDistrSamples": {
+		"label": "Sample from normal distribution..."
+	},
+	"tDistrQuantiles": {
+		"label": "t quantiles..."
+	},
+	"tProbabilitiesInter": {
+		"label": "t probabilities..."
+	},
+	"tDistrPlot": {
+		"label": "Plot t distribution..."
+	},
+	"tDistrCharac": {
+		"label": "t characteristics..."
+	},
+	"tDistrSamples": {
+		"label": "Sample from t distribution..."
+	},
+	"chisqDistrQuantiles": {
+		"label": "Chi-squared quantiles..."
+	},
+	"chisqProbabilitiesInter": {
+		"label": "Chi-squared probabilities..."
+	},
+	"chisqDistrPlot": {
+		"label": "Plot chi-squared distribution..."
+	},
+	"chisqDistrCharac": {
+		"label": "ChiSquared characteristics..."
+	},
+	"chisqDistrSamples": {
+		"label": "Sample from chi-squared distribution..."
+	},
+	"FDistrQuantiles": {
+		"label": "F quantiles..."
+	},
+	"FProbabilitiesInter": {
+		"label": "F probabilities..."
+	},
+	"FDistrPlot": {
+		"label": "Plot F distribution..."
+	},
+	"FDistrCharac": {
+		"label": "F characteristics..."
+	},
+	"FDistrSamples": {
+		"label": "Sample from F distribution..."
+	},
+	"exponentialDistrQuantiles": {
+		"label": "Exponential quantiles..."
+	},
+	"exponentialProbabilitiesInter": {
+		"label": "Exponential probabilities..."
+	},
+	"exponentialDistrPlot": {
+		"label": "Plot exponential distribution..."
+	},
+	"exponentialDistrCharac": {
+		"label": "Exponential characteristics..."
+	},
+	"exponentialDistrSamples": {
+		"label": "Sample from exponential distribution..."
+	},
+	"uniformDistrQuantiles": {
+		"label": "Uniform quantiles..."
+	},
+	"uniformProbabilitiesInter": {
+		"label": "Uniform probabilities..."
+	},
+	"uniformDistrPlot": {
+		"label": "Plot uniform distribution..."
+	},
+	"uniformDistrCharac": {
+		"label": "Uniform characteristics..."
+	},
+	"uniformDistrSamples": {
+		"label": "Sample from uniform distribution..."
+	},
+	"binomialDistrQuantiles": {
+		"label": "Binomial quantiles..."
+	},
+	"binomialProbabilitiesInter": {
+		"label": "Binomial tail probabilities..."
+	},
+	"binomialDistrMass": {
+		"label": "Binomial probabilities..."
+	},
+	"binomialDistrPlot": {
+		"label": "Plot binomial distribution..."
+	},
+	"binomialDistrCharac": {
+		"label": "Binomial characteristics..."
+	},
+	"binomialDistrSamples": {
+		"label": "Sample from binomial distribution..."
+	},
+	"PoissonDistrQuantiles": {
+		"label": "Poisson quantiles..."
+	},
+	"PoissonProbabilitiesInter": {
+		"label": "Poisson tail probabilities..."
+	},
+	"PoissonDistrMass": {
+		"label": "Poisson probabilities..."
+	},
+	"PoissonDistrPlot": {
+		"label": "Plot Poisson distribution..."
+	},
+	"PoissonDistrCharac": {
+		"label": "Poisson characteristics..."
+	},
+	"PoissonDistrSamples": {
+		"label": "Sample from Poisson distribution..."
+	},
+	"geomDistrQuantiles": {
+		"label": "Geometric quantiles..."
+	},
+	"geomProbabilitiesInter": {
+		"label": "Geometric tail probabilities..."
+	},
+	"geomDistrMass": {
+		"label": "Geometric probabilities..."
+	},
+	"geomDistrPlot": {
+		"label": "Plot geometric distribution..."
+	},
+	"geomDistrCharac": {
+		"label": "Geometric characteristics..."
+	},
+	"geomDistrSamples": {
+		"label": "Sample from geometric distribution..."
+	},
+	"negbinomialDistrQuantiles": {
+		"label": "Negative binomial quantiles..."
+	},
+	"negbinomialProbabilitiesInter": {
+		"label": "Negative binomial tail probabilities..."
+	},
+	"negbinomialDistrMass": {
+		"label": "Negative binomial probabilities..."
+	},
+	"negbinomialDistrPlot": {
+		"label": "Plot negative binomial distribution..."
+	},
+	"negbinomialDistrCharac": {
+		"label": "NegativeBinomial characteristics..."
+	},
+	"negbinomialDistrSamples": {
+		"label": "Sample from negative binomial distribution..."
+	},
 	"loadPackages": {
 		"label": "Load package(s)..."
 	},

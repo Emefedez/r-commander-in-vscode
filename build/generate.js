@@ -25,7 +25,7 @@ function readPo(file) {
 }
 const po = readPo(path.join(__dirname, 'Rcmdr-es.po'));
 const poPlugin = readPo(path.join(__dirname, 'TeachStat-es.po'));
-const spanish = en => manual[en] || po[en] || undefined;
+const spanish = en => manual[en] || po[en] || poPlugin[en] || undefined;
 // Labels of the RcmdrPlugin.TeachStat menus use that plugin's translation first (its own wording).
 const spanishOf = item => (item.source === 'plugin' ? manual[item.label] || poPlugin[item.label] || po[item.label] || undefined : spanish(item.label));
 

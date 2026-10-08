@@ -2954,6 +2954,51 @@
 						}
 					},
 					{
+						"id": "resumenVariablesCualitativas",
+						"color": "terminal.ansiYellow",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Frequency distributions for qualitative variables...",
+							"es": "Distribuciones de frecuencia variables cualitativas..."
+						}
+					},
+					{
+						"id": "resumenNumericoVDiscreta",
+						"color": "terminal.ansiYellow",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Numerical summaries - Discrete variables...",
+							"es": "Resúmenes numéricos - Variables discretas..."
+						}
+					},
+					{
+						"id": "resumenNumericoVContinua",
+						"color": "terminal.ansiYellow",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Numerical summaries...",
+							"es": "Resúmenes numéricos..."
+						}
+					},
+					{
+						"id": "resumenNumericoPonderada",
+						"color": "terminal.ansiYellow",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Numerical summaries - Weighted variables...",
+							"es": "Resúmenes numéricos - Variables ponderadas..."
+						}
+					},
+					{
+						"id": "resumenDatosTabulados",
+						"color": "terminal.ansiYellow",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Numerical summaries - Tabulated data...",
+							"es": "Resúmenes numéricos - Datos tabulados..."
+						}
+					},
+					{
 						"label": {
 							"en": "Contingency tables",
 							"es": "Tablas de contingencia"
@@ -2987,6 +3032,622 @@
 									"en": "Enter and analyze two-way table...",
 									"es": "Introducir y analizar una tabla de doble entrada..."
 								}
+							}
+						]
+					}
+				]
+			},
+			{
+				"label": {
+					"en": "Random Variables",
+					"es": "Variables Aleatorias"
+				},
+				"color": "terminal.ansiYellow",
+				"icon": "folder",
+				"children": [
+					{
+						"label": {
+							"en": "Continuous distributions",
+							"es": "Distribuciones continuas"
+						},
+						"color": "terminal.ansiYellow",
+						"icon": "folder",
+						"children": [
+							{
+								"label": {
+									"en": "Normal distribution",
+									"es": "Distribución normal"
+								},
+								"color": "terminal.ansiYellow",
+								"icon": "folder",
+								"children": [
+									{
+										"id": "normalDistrQuantiles",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Normal quantiles...",
+											"es": "Cuantiles normales..."
+										}
+									},
+									{
+										"id": "normalProbabilitiesInter",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Normal probabilities...",
+											"es": "Probabilidades normales acumuladas..."
+										}
+									},
+									{
+										"id": "normalDistrPlot",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Plot normal distribution...",
+											"es": "Gráfica de la distribución normal..."
+										}
+									},
+									{
+										"id": "normalDistrCharac",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Normal characteristics...",
+											"es": "Características normales..."
+										}
+									},
+									{
+										"id": "normalDistrSamples",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Sample from normal distribution...",
+											"es": "Muestra de una distribución normal..."
+										}
+									}
+								]
+							},
+							{
+								"label": {
+									"en": "t distribution",
+									"es": "Distribución t"
+								},
+								"color": "terminal.ansiYellow",
+								"icon": "folder",
+								"children": [
+									{
+										"id": "tDistrQuantiles",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "t quantiles...",
+											"es": "Cuantiles t..."
+										}
+									},
+									{
+										"id": "tProbabilitiesInter",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "t probabilities...",
+											"es": "Probabilidades t acumuladas..."
+										}
+									},
+									{
+										"id": "tDistrPlot",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Plot t distribution...",
+											"es": "Gráfica de la distribución t..."
+										}
+									},
+									{
+										"id": "tDistrCharac",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "t characteristics...",
+											"es": "Características t..."
+										}
+									},
+									{
+										"id": "tDistrSamples",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Sample from t distribution...",
+											"es": "Muestra de una distribución t..."
+										}
+									}
+								]
+							},
+							{
+								"label": {
+									"en": "Chi-squared distribution",
+									"es": "Distribución Chi-cuadrado"
+								},
+								"color": "terminal.ansiYellow",
+								"icon": "folder",
+								"children": [
+									{
+										"id": "chisqDistrQuantiles",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Chi-squared quantiles...",
+											"es": "Cuantiles Chi-cuadrado..."
+										}
+									},
+									{
+										"id": "chisqProbabilitiesInter",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Chi-squared probabilities...",
+											"es": "Probabilidades Chi-cuadrado acumuladas..."
+										}
+									},
+									{
+										"id": "chisqDistrPlot",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Plot chi-squared distribution...",
+											"es": "Gráfica de la distribución Chi-cuadrado..."
+										}
+									},
+									{
+										"id": "chisqDistrCharac",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "ChiSquared characteristics...",
+											"es": "Características Chi-cuadrado..."
+										}
+									},
+									{
+										"id": "chisqDistrSamples",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Sample from chi-squared distribution...",
+											"es": "Muestra de una distribución Chi-cuadrado..."
+										}
+									}
+								]
+							},
+							{
+								"label": {
+									"en": "F distribution",
+									"es": "Distribución F"
+								},
+								"color": "terminal.ansiYellow",
+								"icon": "folder",
+								"children": [
+									{
+										"id": "FDistrQuantiles",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "F quantiles...",
+											"es": "Cuantiles F..."
+										}
+									},
+									{
+										"id": "FProbabilitiesInter",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "F probabilities...",
+											"es": "Probabilidades F acumuladas..."
+										}
+									},
+									{
+										"id": "FDistrPlot",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Plot F distribution...",
+											"es": "Gráfica de la distribución F..."
+										}
+									},
+									{
+										"id": "FDistrCharac",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "F characteristics...",
+											"es": "Características F..."
+										}
+									},
+									{
+										"id": "FDistrSamples",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Sample from F distribution...",
+											"es": "Muestra de una distribución F..."
+										}
+									}
+								]
+							},
+							{
+								"label": {
+									"en": "Exponential distribution",
+									"es": "Distribución exponencial"
+								},
+								"color": "terminal.ansiYellow",
+								"icon": "folder",
+								"children": [
+									{
+										"id": "exponentialDistrQuantiles",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Exponential quantiles...",
+											"es": "Cuantiles exponenciales..."
+										}
+									},
+									{
+										"id": "exponentialProbabilitiesInter",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Exponential probabilities...",
+											"es": "Probabilidades exponenciales acumuladas..."
+										}
+									},
+									{
+										"id": "exponentialDistrPlot",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Plot exponential distribution...",
+											"es": "Gráfica de la distribución exponencial..."
+										}
+									},
+									{
+										"id": "exponentialDistrCharac",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Exponential characteristics...",
+											"es": "Características exponenciales..."
+										}
+									},
+									{
+										"id": "exponentialDistrSamples",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Sample from exponential distribution...",
+											"es": "Muestra de una distribución exponencial..."
+										}
+									}
+								]
+							},
+							{
+								"label": {
+									"en": "Uniform distribution",
+									"es": "Distribución uniforme"
+								},
+								"color": "terminal.ansiYellow",
+								"icon": "folder",
+								"children": [
+									{
+										"id": "uniformDistrQuantiles",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Uniform quantiles...",
+											"es": "Cuantiles uniformes..."
+										}
+									},
+									{
+										"id": "uniformProbabilitiesInter",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Uniform probabilities...",
+											"es": "Probabilidades uniformes acumuladas..."
+										}
+									},
+									{
+										"id": "uniformDistrPlot",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Plot uniform distribution...",
+											"es": "Gráfica de la distribución uniforme..."
+										}
+									},
+									{
+										"id": "uniformDistrCharac",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Uniform characteristics...",
+											"es": "Características uniformes..."
+										}
+									},
+									{
+										"id": "uniformDistrSamples",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Sample from uniform distribution...",
+											"es": "Muestra de una distribución uniforme..."
+										}
+									}
+								]
+							}
+						]
+					},
+					{
+						"label": {
+							"en": "Discrete distributions",
+							"es": "Distribuciones discretas"
+						},
+						"color": "terminal.ansiYellow",
+						"icon": "folder",
+						"children": [
+							{
+								"label": {
+									"en": "Binomial distribution",
+									"es": "Distribución binomial"
+								},
+								"color": "terminal.ansiYellow",
+								"icon": "folder",
+								"children": [
+									{
+										"id": "binomialDistrQuantiles",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Binomial quantiles...",
+											"es": "Cuantiles binomiales..."
+										}
+									},
+									{
+										"id": "binomialProbabilitiesInter",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Binomial tail probabilities...",
+											"es": "Probabilidades binomiales acumuladas..."
+										}
+									},
+									{
+										"id": "binomialDistrMass",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Binomial probabilities...",
+											"es": "Probabilidades binomiales..."
+										}
+									},
+									{
+										"id": "binomialDistrPlot",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Plot binomial distribution...",
+											"es": "Gráfica de la distribución binomial..."
+										}
+									},
+									{
+										"id": "binomialDistrCharac",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Binomial characteristics...",
+											"es": "Características binomiales..."
+										}
+									},
+									{
+										"id": "binomialDistrSamples",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Sample from binomial distribution...",
+											"es": "Muestra de una distribución binomial..."
+										}
+									}
+								]
+							},
+							{
+								"label": {
+									"en": "Poisson distribution",
+									"es": "Distribución de Poisson"
+								},
+								"color": "terminal.ansiYellow",
+								"icon": "folder",
+								"children": [
+									{
+										"id": "PoissonDistrQuantiles",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Poisson quantiles...",
+											"es": "Cuantiles de Poisson..."
+										}
+									},
+									{
+										"id": "PoissonProbabilitiesInter",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Poisson tail probabilities...",
+											"es": "Probabilidades de Poisson acumuladas..."
+										}
+									},
+									{
+										"id": "PoissonDistrMass",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Poisson probabilities...",
+											"es": "Probabilidades de Poisson..."
+										}
+									},
+									{
+										"id": "PoissonDistrPlot",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Plot Poisson distribution...",
+											"es": "Gráfica de la distribución de Poisson..."
+										}
+									},
+									{
+										"id": "PoissonDistrCharac",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Poisson characteristics...",
+											"es": "Características de Poisson..."
+										}
+									},
+									{
+										"id": "PoissonDistrSamples",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Sample from Poisson distribution...",
+											"es": "Muestra de una distribución de Poisson..."
+										}
+									}
+								]
+							},
+							{
+								"label": {
+									"en": "Geometric distribution",
+									"es": "Distribución geométrica"
+								},
+								"color": "terminal.ansiYellow",
+								"icon": "folder",
+								"children": [
+									{
+										"id": "geomDistrQuantiles",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Geometric quantiles...",
+											"es": "Cuantiles geométricos..."
+										}
+									},
+									{
+										"id": "geomProbabilitiesInter",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Geometric tail probabilities...",
+											"es": "Probabilidades geométricas acumuladas..."
+										}
+									},
+									{
+										"id": "geomDistrMass",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Geometric probabilities...",
+											"es": "Probabilidades geométricas..."
+										}
+									},
+									{
+										"id": "geomDistrPlot",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Plot geometric distribution...",
+											"es": "Gráfica de la distribución geométrica..."
+										}
+									},
+									{
+										"id": "geomDistrCharac",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Geometric characteristics...",
+											"es": "Características geométricas..."
+										}
+									},
+									{
+										"id": "geomDistrSamples",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Sample from geometric distribution...",
+											"es": "Muestra de una distribución geométrica..."
+										}
+									}
+								]
+							},
+							{
+								"label": {
+									"en": "Negative binomial distribution",
+									"es": "Distribución binomial negativa"
+								},
+								"color": "terminal.ansiYellow",
+								"icon": "folder",
+								"children": [
+									{
+										"id": "negbinomialDistrQuantiles",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Negative binomial quantiles...",
+											"es": "Cuantiles binomiales negativos..."
+										}
+									},
+									{
+										"id": "negbinomialProbabilitiesInter",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Negative binomial tail probabilities...",
+											"es": "Probabilidades binomiales negativas acumuladas..."
+										}
+									},
+									{
+										"id": "negbinomialDistrMass",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Negative binomial probabilities...",
+											"es": "Probabilidades binomiales negativas..."
+										}
+									},
+									{
+										"id": "negbinomialDistrPlot",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Plot negative binomial distribution...",
+											"es": "Gráfica de la distribución binomial negativa..."
+										}
+									},
+									{
+										"id": "negbinomialDistrCharac",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "NegativeBinomial characteristics...",
+											"es": "Características binomiales negativas..."
+										}
+									},
+									{
+										"id": "negbinomialDistrSamples",
+										"color": "terminal.ansiYellow",
+										"icon": "circle-filled",
+										"label": {
+											"en": "Sample from negative binomial distribution...",
+											"es": "Muestra de una distribución binomial negativa..."
+										}
+									}
+								]
 							}
 						]
 					}
