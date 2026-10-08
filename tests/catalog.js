@@ -183,7 +183,8 @@ class FakeForm {
 
 (async () => {
   const only = process.env.ONLY ? new Set(process.env.ONLY.split(',')) : undefined;
-  const ids = Object.keys(require('../data/commands.json')).filter(id => !only || only.has(id));
+  const known = require('../data/commands.json');
+  const ids = Object.keys(known).filter(id => !known[id].target && (!only || only.has(id))); // aliases run the same command
   const failures = [];
   const scripts = [];
   for (const mode of ['steps', 'form']) for (const pass of ['A', 'B']) {

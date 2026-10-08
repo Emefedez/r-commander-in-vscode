@@ -876,6 +876,12 @@
 				"enablement": "isWorkspaceTrusted"
 			},
 			{
+				"command": "rcp.cmd.saveRglGraph@2",
+				"title": "%rcp.cmd.saveRglGraph@2%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
 				"command": "rcp.cmd.summarizeModel",
 				"title": "%rcp.cmd.summarizeModel%",
 				"category": "R Commander",
@@ -1502,6 +1508,12 @@
 			{
 				"command": "rcp.cmd.negbinomialDistributionSamples",
 				"title": "%rcp.cmd.negbinomialDistributionSamples%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.readDataSet@2",
+				"title": "%rcp.cmd.readDataSet@2%",
 				"category": "R Commander",
 				"enablement": "isWorkspaceTrusted"
 			},
@@ -2399,7 +2411,7 @@
 					"group": "01_rcp@2"
 				},
 				{
-					"command": "rcp.cmd.saveRglGraph",
+					"command": "rcp.cmd.saveRglGraph@2",
 					"when": "editorLangId == r",
 					"group": "01_rcp@3"
 				}
@@ -3201,6 +3213,185 @@
 					"group": "01_rcp@3"
 				}
 			],
+			"rcp.packagesMenu2": [
+				{
+					"command": "rcp.cmd.listDataSetsInPackages",
+					"when": "editorLangId == r",
+					"group": "01_rcp@1"
+				},
+				{
+					"command": "rcp.cmd.readDataFromPackage",
+					"when": "editorLangId == r",
+					"group": "01_rcp@2"
+				}
+			],
+			"rcp.activeMenu2": [
+				{
+					"command": "rcp.cmd.viewData",
+					"when": "editorLangId == r",
+					"group": "01_rcp@1"
+				},
+				{
+					"command": "rcp.cmd.selectActiveDataSet",
+					"when": "editorLangId == r",
+					"group": "01_rcp@2"
+				},
+				{
+					"command": "rcp.cmd.refreshActiveDataSet",
+					"when": "editorLangId == r",
+					"group": "01_rcp@3"
+				},
+				{
+					"command": "rcp.cmd.helpDataSet",
+					"when": "editorLangId == r",
+					"group": "01_rcp@4"
+				},
+				{
+					"command": "rcp.cmd.setCaseNames",
+					"when": "editorLangId == r",
+					"group": "01_rcp@5"
+				},
+				{
+					"command": "rcp.cmd.subsetDataSet",
+					"when": "editorLangId == r",
+					"group": "01_rcp@6"
+				},
+				{
+					"command": "rcp.cmd.sortDataSet",
+					"when": "editorLangId == r",
+					"group": "01_rcp@7"
+				},
+				{
+					"command": "rcp.cmd.RemoveRows",
+					"when": "editorLangId == r",
+					"group": "01_rcp@8"
+				},
+				{
+					"command": "rcp.cmd.filterNA",
+					"when": "editorLangId == r",
+					"group": "01_rcp@9"
+				},
+				{
+					"command": "rcp.cmd.saveDataSet",
+					"when": "editorLangId == r",
+					"group": "01_rcp@10"
+				},
+				{
+					"command": "rcp.cmd.exportDataSet",
+					"when": "editorLangId == r",
+					"group": "01_rcp@11"
+				}
+			],
+			"rcp.variablesMenu2": [
+				{
+					"command": "rcp.cmd.RecodeDialog",
+					"when": "editorLangId == r",
+					"group": "01_rcp@1"
+				},
+				{
+					"command": "rcp.cmd.Compute",
+					"when": "editorLangId == r",
+					"group": "01_rcp@2"
+				},
+				{
+					"command": "rcp.cmd.addObsNumbers",
+					"when": "editorLangId == r",
+					"group": "01_rcp@3"
+				},
+				{
+					"command": "rcp.cmd.standardize",
+					"when": "editorLangId == r",
+					"group": "01_rcp@4"
+				},
+				{
+					"command": "rcp.cmd.dropUnusedFactorLevels",
+					"when": "editorLangId == r",
+					"group": "01_rcp@5"
+				},
+				{
+					"command": "rcp.cmd.renameVariables",
+					"when": "editorLangId == r",
+					"group": "01_rcp@6"
+				},
+				{
+					"command": "rcp.cmd.deleteVariable",
+					"when": "editorLangId == r",
+					"group": "01_rcp@7"
+				}
+			],
+			"rcp.dataMenu2": [
+				{
+					"command": "rcp.cmd.loadDataSet",
+					"when": "editorLangId == r",
+					"group": "01_rcp@1"
+				},
+				{
+					"command": "rcp.cmd.mergeDataSets",
+					"when": "editorLangId == r",
+					"group": "01_rcp@2"
+				},
+				{
+					"command": "rcp.cmd.readDataSet@2",
+					"when": "editorLangId == r",
+					"group": "02_rcp@1"
+				},
+				{
+					"submenu": "rcp.packagesMenu2",
+					"when": "editorLangId == r",
+					"group": "02_rcp@2"
+				},
+				{
+					"submenu": "rcp.activeMenu2",
+					"when": "editorLangId == r",
+					"group": "02_rcp@3"
+				},
+				{
+					"submenu": "rcp.variablesMenu2",
+					"when": "editorLangId == r",
+					"group": "02_rcp@4"
+				}
+			],
+			"rcp.tablesMenuES": [
+				{
+					"command": "rcp.cmd.twoWayTable",
+					"when": "editorLangId == r",
+					"group": "01_rcp@1"
+				},
+				{
+					"command": "rcp.cmd.multiWayTable",
+					"when": "editorLangId == r",
+					"group": "01_rcp@2"
+				},
+				{
+					"command": "rcp.cmd.enterTable",
+					"when": "editorLangId == r",
+					"group": "01_rcp@3"
+				}
+			],
+			"rcp.EDescriptivaMenu": [
+				{
+					"command": "rcp.cmd.summarizeDataSet",
+					"when": "editorLangId == r",
+					"group": "01_rcp@1"
+				},
+				{
+					"submenu": "rcp.tablesMenuES",
+					"when": "editorLangId == r",
+					"group": "01_rcp@2"
+				}
+			],
+			"rcp.EstadisticaUvigoMenu": [
+				{
+					"submenu": "rcp.dataMenu2",
+					"when": "editorLangId == r",
+					"group": "01_rcp@1"
+				},
+				{
+					"submenu": "rcp.EDescriptivaMenu",
+					"when": "editorLangId == r",
+					"group": "01_rcp@2"
+				}
+			],
 			"rcp.toolsMenu": [
 				{
 					"command": "rcp.cmd.loadPackages",
@@ -3357,14 +3548,19 @@
 					"group": "02_rcp@7"
 				},
 				{
-					"submenu": "rcp.toolsMenu",
+					"submenu": "rcp.EstadisticaUvigoMenu",
 					"when": "editorLangId == r",
 					"group": "02_rcp@8"
 				},
 				{
-					"submenu": "rcp.helpMenu",
+					"submenu": "rcp.toolsMenu",
 					"when": "editorLangId == r",
 					"group": "02_rcp@9"
+				},
+				{
+					"submenu": "rcp.helpMenu",
+					"when": "editorLangId == r",
+					"group": "02_rcp@10"
 				}
 			],
 			"editor/title": [
@@ -3603,6 +3799,34 @@
 			{
 				"id": "rcp.negbinomialMenu",
 				"label": "%rcp.negbinomialMenu%"
+			},
+			{
+				"id": "rcp.EstadisticaUvigoMenu",
+				"label": "%rcp.EstadisticaUvigoMenu%"
+			},
+			{
+				"id": "rcp.dataMenu2",
+				"label": "%rcp.dataMenu2%"
+			},
+			{
+				"id": "rcp.packagesMenu2",
+				"label": "%rcp.packagesMenu2%"
+			},
+			{
+				"id": "rcp.activeMenu2",
+				"label": "%rcp.activeMenu2%"
+			},
+			{
+				"id": "rcp.variablesMenu2",
+				"label": "%rcp.variablesMenu2%"
+			},
+			{
+				"id": "rcp.EDescriptivaMenu",
+				"label": "%rcp.EDescriptivaMenu%"
+			},
+			{
+				"id": "rcp.tablesMenuES",
+				"label": "%rcp.tablesMenuES%"
 			},
 			{
 				"id": "rcp.toolsMenu",

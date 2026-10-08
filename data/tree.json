@@ -1451,12 +1451,13 @@
 						}
 					},
 					{
-						"id": "saveRglGraph",
+						"id": "saveRglGraph@2",
+						"target": "saveRglGraph",
 						"color": "charts.orange",
 						"icon": "circle-filled",
 						"label": {
-							"en": "Save graph to file",
-							"es": "Guardar gráfico en archivo"
+							"en": "3D RGL graph...",
+							"es": "Gráfica 3D RGL..."
 						}
 					}
 				]
@@ -2668,6 +2669,323 @@
 								"label": {
 									"en": "Sample from negative binomial distribution...",
 									"es": "Muestra de una distribución binomial negativa..."
+								}
+							}
+						]
+					}
+				]
+			}
+		]
+	},
+	{
+		"label": {
+			"en": "Basic Statistics",
+			"es": "Estadística Básica"
+		},
+		"color": "terminal.ansiYellow",
+		"icon": "book",
+		"children": [
+			{
+				"label": {
+					"en": "Data",
+					"es": "Datos"
+				},
+				"color": "terminal.ansiYellow",
+				"icon": "folder",
+				"children": [
+					{
+						"id": "loadDataSet",
+						"color": "terminal.ansiYellow",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Load data set...",
+							"es": "Cargar conjunto de datos..."
+						}
+					},
+					{
+						"id": "mergeDataSets",
+						"color": "terminal.ansiYellow",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Merge data sets...",
+							"es": "Fusionar conjuntos de datos..."
+						}
+					},
+					{
+						"sep": true
+					},
+					{
+						"id": "readDataSet@2",
+						"target": "readDataSet",
+						"color": "terminal.ansiYellow",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Import data from text file, clipboard, or URL...",
+							"es": "Importar datos desde archivo de texto, portapapeles o URL..."
+						}
+					},
+					{
+						"label": {
+							"en": "Data in packages",
+							"es": "Conjunto de datos en paquetes"
+						},
+						"color": "terminal.ansiYellow",
+						"icon": "folder",
+						"children": [
+							{
+								"id": "listDataSetsInPackages",
+								"color": "terminal.ansiYellow",
+								"icon": "circle-filled",
+								"label": {
+									"en": "List data sets in packages",
+									"es": "Lista de conjuntos de datos en paquetes"
+								}
+							},
+							{
+								"id": "readDataFromPackage",
+								"color": "terminal.ansiYellow",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Read data set from an attached package...",
+									"es": "Leer conjunto de datos desde paquete adjunto..."
+								}
+							}
+						]
+					},
+					{
+						"label": {
+							"en": "Active data set",
+							"es": "Conjunto de datos activo"
+						},
+						"color": "terminal.ansiYellow",
+						"icon": "folder",
+						"children": [
+							{
+								"id": "viewData",
+								"color": "terminal.ansiYellow",
+								"icon": "circle-filled",
+								"label": {
+									"en": "View data...",
+									"es": "Visualizar datos..."
+								}
+							},
+							{
+								"id": "selectActiveDataSet",
+								"color": "terminal.ansiYellow",
+								"icon": "database",
+								"label": {
+									"en": "Select active data set...",
+									"es": "Seleccionar conjunto de datos activo..."
+								}
+							},
+							{
+								"id": "refreshActiveDataSet",
+								"color": "terminal.ansiYellow",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Refresh active data set",
+									"es": "Actualizar conjunto de datos activo"
+								}
+							},
+							{
+								"id": "helpDataSet",
+								"color": "terminal.ansiYellow",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Help on active data set (if available)",
+									"es": "Ayuda sobre el conjunto de datos activo (si es posible)"
+								}
+							},
+							{
+								"id": "setCaseNames",
+								"color": "terminal.ansiYellow",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Set case names...",
+									"es": "Establecer nombres de casos..."
+								}
+							},
+							{
+								"id": "subsetDataSet",
+								"color": "terminal.ansiYellow",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Subset active data set...",
+									"es": "Filtrar el conjunto de datos activo..."
+								}
+							},
+							{
+								"id": "sortDataSet",
+								"color": "terminal.ansiYellow",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Sort active data set...",
+									"es": "Ordenar el conjunto de datos activo..."
+								}
+							},
+							{
+								"id": "RemoveRows",
+								"color": "terminal.ansiYellow",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Remove row(s) from active data set...",
+									"es": "Borrar fila(s) del conjunto de datos activo..."
+								}
+							},
+							{
+								"id": "filterNA",
+								"color": "terminal.ansiYellow",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Remove cases with missing data...",
+									"es": "Eliminar los casos con valores omitidos..."
+								}
+							},
+							{
+								"id": "saveDataSet",
+								"color": "terminal.ansiYellow",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Save active data set...",
+									"es": "Guardar el conjunto de datos activos..."
+								}
+							},
+							{
+								"id": "exportDataSet",
+								"color": "terminal.ansiYellow",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Export active data set...",
+									"es": "Exportar el conjunto de datos activo..."
+								}
+							}
+						]
+					},
+					{
+						"label": {
+							"en": "Manage variables in active data set",
+							"es": "Modificar variables del conjunto de datos activo"
+						},
+						"color": "terminal.ansiYellow",
+						"icon": "folder",
+						"children": [
+							{
+								"id": "RecodeDialog",
+								"color": "terminal.ansiYellow",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Recode variables...",
+									"es": "Recodificar variables..."
+								}
+							},
+							{
+								"id": "Compute",
+								"color": "terminal.ansiYellow",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Compute new variable...",
+									"es": "Calcular una nueva variable..."
+								}
+							},
+							{
+								"id": "addObsNumbers",
+								"color": "terminal.ansiYellow",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Add observation numbers to data set",
+									"es": "Añadir números de observaciones al conjunto de datos"
+								}
+							},
+							{
+								"id": "standardize",
+								"color": "terminal.ansiYellow",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Standardize variables...",
+									"es": "Tipificar variables..."
+								}
+							},
+							{
+								"id": "dropUnusedFactorLevels",
+								"color": "terminal.ansiYellow",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Drop unused factor levels...",
+									"es": "Descartar niveles sin uso..."
+								}
+							},
+							{
+								"id": "renameVariables",
+								"color": "terminal.ansiYellow",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Rename variables...",
+									"es": "Renombrar variables..."
+								}
+							},
+							{
+								"id": "deleteVariable",
+								"color": "terminal.ansiYellow",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Delete variables from data set ...",
+									"es": "Eliminar variables del conjunto de datos..."
+								}
+							}
+						]
+					}
+				]
+			},
+			{
+				"label": {
+					"en": "Descriptive Statistics",
+					"es": "Estadística Descriptiva"
+				},
+				"color": "terminal.ansiYellow",
+				"icon": "folder",
+				"children": [
+					{
+						"id": "summarizeDataSet",
+						"color": "terminal.ansiYellow",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Active data set",
+							"es": "Conjunto de datos activo"
+						}
+					},
+					{
+						"label": {
+							"en": "Contingency tables",
+							"es": "Tablas de contingencia"
+						},
+						"color": "terminal.ansiYellow",
+						"icon": "folder",
+						"children": [
+							{
+								"id": "twoWayTable",
+								"color": "terminal.ansiYellow",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Two-way table...",
+									"es": "Tabla de doble entrada..."
+								}
+							},
+							{
+								"id": "multiWayTable",
+								"color": "terminal.ansiYellow",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Multi-way table...",
+									"es": "Tabla de entradas múltiples..."
+								}
+							},
+							{
+								"id": "enterTable",
+								"color": "terminal.ansiYellow",
+								"icon": "circle-filled",
+								"label": {
+									"en": "Enter and analyze two-way table...",
+									"es": "Introducir y analizar una tabla de doble entrada..."
 								}
 							}
 						]

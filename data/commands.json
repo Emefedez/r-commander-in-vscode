@@ -398,6 +398,10 @@
 	"savePDF": {
 		"label": "as PDF/Postscript/EPS..."
 	},
+	"saveRglGraph@2": {
+		"label": "3D RGL graph...",
+		"target": "saveRglGraph"
+	},
 	"summarizeModel": {
 		"label": "Summarize model"
 	},
@@ -712,6 +716,10 @@
 	},
 	"negbinomialDistributionSamples": {
 		"label": "Sample from negative binomial distribution..."
+	},
+	"readDataSet@2": {
+		"label": "Import data from text file, clipboard, or URL...",
+		"target": "readDataSet"
 	},
 	"loadPackages": {
 		"label": "Load package(s)..."

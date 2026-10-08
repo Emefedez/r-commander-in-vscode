@@ -24,21 +24,35 @@ function readPo(file) {
   return entries;
 }
 const po = readPo(path.join(__dirname, 'Rcmdr-es.po'));
+const poPlugin = readPo(path.join(__dirname, 'TeachStat-es.po'));
 const spanish = en => manual[en] || po[en] || undefined;
+// Labels of the RcmdrPlugin.TeachStat menus use that plugin's translation first (its own wording).
+const spanishOf = item => (item.source === 'plugin' ? manual[item.label] || poPlugin[item.label] || po[item.label] || undefined : spanish(item.label));
 
 // --- Rcmdr menu definition ----------------------------------------------------
 const menus = {};      // menu name -> ordered items
 const tokens = line => [...line.matchAll(/"([^"]*)"|(\S+)/g)].map(m => m[1] ?? m[2]);
-for (const raw of fs.readFileSync(path.join(__dirname, 'Rcmdr-menus.txt'), 'utf8').split('\n')) {
-  if (!raw.trim() || raw.trim().startsWith('#')) continue;
-  const [type, name, op, label, target] = tokens(raw);
-  if (type === 'menu') menus[name] = menus[name] || [];
-  else if (type === 'item') {
-    menus[name] = menus[name] || [];
-    if (op === 'command') menus[name].push({ kind: 'command', id: target, label });
-    else if (op === 'cascade') menus[name].push({ kind: 'submenu', menu: target, label });
-    else if (op === 'separator') menus[name].push({ kind: 'sep' });
+// Rcmdr's own menus, then the ones the RcmdrPlugin.TeachStat plug-in adds (as in the user's R Commander).
+for (const [file, source] of [['Rcmdr-menus.txt', 'rcmdr'], ['TeachStat-menus.txt', 'plugin']]) {
+  for (const raw of fs.readFileSync(path.join(__dirname, file), 'utf8').split('\n')) {
+    if (!raw.trim() || raw.trim().startsWith('#')) continue;
+    const [type, name, op, label, target] = tokens(raw);
+    if (type === 'menu') menus[name] = menus[name] || [];
+    else if (type === 'item') {
+      menus[name] = menus[name] || [];
+      if (op === 'command') menus[name].push({ kind: 'command', id: target, label, source });
+      else if (op === 'cascade') menus[name].push({ kind: 'submenu', menu: target, label, source });
+      else if (op === 'separator') menus[name].push({ kind: 'sep', source });
+    }
   }
+}
+// The plug-in's top-level menus sit before Tools, as in the menu bar of R Commander.
+{
+  const top = menus.topMenu;
+  const plugin = top.filter(i => i.source === 'plugin');
+  const rest = top.filter(i => i.source !== 'plugin');
+  const at = rest.findIndex(i => i.kind === 'submenu' && i.menu === 'toolsMenu');
+  menus.topMenu = [...rest.slice(0, at), ...plugin, ...rest.slice(at)];
 }
 
 // Items that Rcmdr does not have or that make no sense outside its window.
@@ -50,14 +64,25 @@ const skipped = new Set();
 
 const labels = {};        // id -> English label
 const spanishLabels = {};
-const commandLabel = item => { labels[item.id] = labels[item.id] || item.label; spanishLabels[item.id] = spanishLabels[item.id] || item.es || spanish(item.label); };
+const targets = {};       // alias command id -> the command it runs
+const firstLabel = {}, aliasCount = {};
+// A command that appears in two menus under different names (the plug-in renames some) gets an alias per name,
+// so each menu entry can have its own label; the alias runs the same command.
+const occurrence = item => {
+  if (firstLabel[item.id] === undefined) { firstLabel[item.id] = item.label; return item.id; }
+  if (firstLabel[item.id] === item.label) return item.id;
+  const alias = `${item.id}@${(aliasCount[item.id] = (aliasCount[item.id] || 0) + 1) + 1}`;
+  targets[alias] = item.id;
+  return alias;
+};
+const commandLabel = item => { const key = item.occ || item.id; labels[key] = labels[key] || item.label; spanishLabels[key] = spanishLabels[key] || item.es || spanishOf(item); };
 
 // Keeps implemented commands only; drops submenus left empty.
 function prune(name, seen = new Set()) {
   const out = [];
   for (const item of menus[name] || []) {
     if (item.kind === 'command') {
-      if (catalog[item.id]) { out.push(item); commandLabel(item); } else skipped.add(`${item.id} (${item.label})`);
+      if (catalog[item.id]) { const entry = { ...item, occ: occurrence(item) }; out.push(entry); commandLabel(entry); } else skipped.add(`${item.id} (${item.label})`);
     } else if (item.kind === 'submenu') {
       if (seen.has(item.menu)) continue;
       const children = prune(item.menu, new Set([...seen, name]));
@@ -80,13 +105,14 @@ function emit(menuId, items) {
     if (item.kind === 'sep') { group++; index = 0; continue; }
     const g = `${String(group).padStart(2, '0')}_rcp@${++index}`;
     if (item.kind === 'command') {
-      ids.add(item.id);
-      entries.push({ command: `rcp.cmd.${item.id}`, when: 'editorLangId == r', group: g });
+      const occ = item.occ || item.id;
+      ids.add(occ);
+      entries.push({ command: `rcp.cmd.${occ}`, when: 'editorLangId == r', group: g });
     } else {
       const sub = `rcp.${item.menu}`;
       submenus.push({ id: sub, label: `%${sub}%` });
       nls.en[sub] = item.label;
-      nls.es[sub] = spanish(item.label) || item.label;
+      nls.es[sub] = spanishOf(item) || item.label;
       entries.push({ submenu: sub, when: 'editorLangId == r', group: g });
       emit(sub, item.children);
     }
@@ -101,7 +127,7 @@ function emit(menuId, items) {
 const MENU_STYLE = {
   fileMenu: ['file', 'charts.blue'], editMenu: ['edit', 'charts.yellow'], dataMenu: ['database', 'charts.green'],
   statisticsMenu: ['graph', 'charts.purple'], graphsMenu: ['graph-line', 'charts.orange'], modelsMenu: ['beaker', 'charts.red'],
-  distributionsMenu: ['pulse', 'terminal.ansiCyan'], toolsMenu: ['tools', 'terminal.ansiMagenta'], helpMenu: ['question', 'terminal.ansiBlue']
+  distributionsMenu: ['pulse', 'terminal.ansiCyan'], EstadisticaUvigoMenu: ['book', 'terminal.ansiYellow'], toolsMenu: ['tools', 'terminal.ansiMagenta'], helpMenu: ['question', 'terminal.ansiBlue']
 };
 const TOOLBAR_STYLE = { selectActiveDataSet: 'database', editDataSet: 'edit', viewDataSet: 'eye', selectActiveModel: 'beaker' };
 const label2 = (en, es) => ({ en, es: es || en });
@@ -109,10 +135,11 @@ function treeNode(item, color, depth) {
   if (item.kind === 'sep') return { sep: true };
   const [icon, own] = depth === 0 && MENU_STYLE[item.menu] ? MENU_STYLE[item.menu] : [undefined, color];
   if (item.kind === 'command') {
-    return { id: item.id, color: item.id === 'selectActiveModel' ? 'charts.red' : own || 'charts.green', icon: TOOLBAR_STYLE[item.id] || 'circle-filled',
-      label: label2(labels[item.id] || item.label, spanishLabels[item.id] || item.es || spanish(item.label) || item.label) };
+    const occ = item.occ || item.id;
+    return { id: occ, ...(occ !== item.id && { target: item.id }), color: item.id === 'selectActiveModel' ? 'charts.red' : own || 'charts.green', icon: TOOLBAR_STYLE[item.id] || 'circle-filled',
+      label: label2(labels[occ] || item.label, spanishLabels[occ] || item.es || spanishOf(item) || item.label) };
   }
-  return { label: label2(item.label, spanish(item.label) || item.label), color: own, icon: icon || 'folder',
+  return { label: label2(item.label, spanishOf(item) || item.label), color: own, icon: icon || 'folder',
     children: treeOf(item.children, own, depth + 1) };
 }
 // Separators of the Rcmdr menus become a thin gap between groups.
@@ -234,8 +261,8 @@ write('i18n/es.json', es);
 write('i18n/nls.en.json', nls.en);
 write('i18n/nls.es.json', nls.es);
 write('data/tree.json', tree);
-write('data/functions.json', collect([...ids]));
-write('data/commands.json', Object.fromEntries([...ids].map(id => [id, { label: labels[id] }])));
+write('data/functions.json', collect([...ids].filter(id => catalog[id])));
+write('data/commands.json', Object.fromEntries([...ids].map(id => [id, { label: labels[id], ...(targets[id] && { target: targets[id] }) }])));
 console.log(`commands: ${ids.size}, submenus: ${submenus.length}, runtime strings: ${strings.size}`);
 console.log(`not implemented (${skipped.size}):\n  ${[...skipped].join('\n  ')}`);
 if (missing.length) fs.writeFileSync(path.join(__dirname, 'missing-es.txt'), missing.join('\n') + '\n');
