@@ -90,3 +90,22 @@ curried_output <- capture.output(runner$run_code(paste(
 stopifnot(any(grepl("^\\[1\\] 5$", curried_output)), any(grepl("^\\[1\\] 7$", curried_output)),
           any(grepl("^> make_adder\\(2\\)\\(3\\)$", curried_output)))
 cat("Curried calls run.\n")
+
+# Syntax color never changes the echoed source or the values printed by R.
+color_code <- paste(c('# comentario con ñ', '\tcolor_á <- "sí # texto"',
+  'color_raw <- r"(primera', 'segunda)"',
+  'if (TRUE) {', '  print(12.5)', '}', '?sample', '# comentario final'), collapse = "\n")
+plain <- capture.output(runner$run_code(color_code, quiet = TRUE))
+colored <- capture.output(runner$run_code(color_code, quiet = TRUE, syntax_colors = TRUE))
+stopifnot(identical(gsub("\033\\[[0-9;]*m", "", colored), plain),
+          any(grepl("\033[90m# comentario", colored, fixed = TRUE)),
+          any(grepl("\033[32m\"sí # texto\"\033[0m", colored, fixed = TRUE)),
+          any(grepl("\033[35mif\033[0m", colored, fixed = TRUE)),
+          any(grepl("\033[36m12.5\033[0m", colored, fixed = TRUE)),
+          '[1] 12.5' %in% colored,
+          !any(grepl("sample", colored)), identical(color_á, "sí # texto"),
+          identical(color_raw, "primera\nsegunda"))
+failed_color <- capture.output(tryCatch(runner$run_code('stop("boom")\nprint(99)',
+  quiet = TRUE, syntax_colors = TRUE), error = function(e) NULL))
+stopifnot(!any(grepl('99', failed_color)))
+cat("Syntax colors preserve source, Unicode, tabs, multiline strings and printed results.\n")

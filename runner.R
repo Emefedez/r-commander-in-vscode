@@ -1,6 +1,6 @@
 run_code <- function(code, skip_help = TRUE, skip_commands = character(),
                      limit_output = TRUE, max_output_items = 24L, require = character(),
-                     quiet = FALSE) {
+                     quiet = FALSE, syntax_colors = FALSE) {
   try(patch_view(), silent = TRUE)
   for (pkg in require) {
     if (!requireNamespace(pkg, quietly = TRUE)) {
@@ -27,6 +27,8 @@ run_code <- function(code, skip_help = TRUE, skip_commands = character(),
   expressions <- parse(text = code, keep.source = TRUE)
   srcfile <- attr(expressions, "srcfile")
   srcrefs <- attr(expressions, "srcref")
+  display_lines <- sub("[ \t\r]+$", "", srcfile$lines)
+  if (isTRUE(syntax_colors)) display_lines <- color_source(expressions, display_lines)
 
   command_name <- function(expression) {
     if (!is.call(expression)) return("")
@@ -52,7 +54,7 @@ run_code <- function(code, skip_help = TRUE, skip_commands = character(),
   if (all(skip)) return(invisible(NULL))
 
   source_lines <- function(first, last) {
-    if (last < first) character() else getSrcLines(srcfile, first, last)
+    if (last < first) character() else display_lines[seq.int(first, last)]
   }
   # Comment lines get their own prompt; the expression gets "> " and then "+ " as R does.
   echo <- function(lines, expression_lines) {
@@ -85,6 +87,44 @@ run_code <- function(code, skip_help = TRUE, skip_commands = character(),
   trailing <- sub("[ \t\r]+$", "", trailing[nzchar(trimws(trailing))])
   if (length(trailing)) cat(paste0("> ", trailing), sep = "\n")
   invisible(NULL)
+}
+
+# Color the parsed source rather than guessing tokens with regexes. Results keep
+# their own print methods, and every colored span resets the terminal palette.
+color_source <- function(expressions, lines) {
+  tokens <- utils::getParseData(expressions)
+  if (is.null(tokens)) return(lines)
+  colors <- c(COMMENT = "90", STR_CONST = "32", NUM_CONST = "36",
+              SYMBOL_FUNCTION_CALL = "34", SYMBOL_PACKAGE = "34",
+              FUNCTION = "35", IF = "35", ELSE = "35", FOR = "35",
+              WHILE = "35", REPEAT = "35", IN = "35", NEXT = "35", BREAK = "35",
+              LEFT_ASSIGN = "33", RIGHT_ASSIGN = "33", EQ_ASSIGN = "33",
+              SPECIAL = "33", PIPE = "33")
+  tokens <- tokens[tokens$terminal & tokens$token %in% names(colors), ]
+  for (line in seq_along(lines)) {
+    chars <- strsplit(lines[[line]], "", fixed = TRUE)[[1L]]
+    if (!length(chars)) next
+    # R's parser expands tabs to eight-column stops; Unicode uses character columns.
+    columns <- integer(length(chars)); column <- 1L
+    for (i in seq_along(chars)) {
+      columns[[i]] <- column
+      column <- if (chars[[i]] == "\t") column + 8L - (column - 1L) %% 8L else column + 1L
+    }
+    styles <- rep("", length(chars))
+    spans <- tokens[tokens$line1 <= line & tokens$line2 >= line, ]
+    for (i in seq_len(nrow(spans))) {
+      span <- spans[i, ]
+      first <- if (span$line1 == line) span$col1 else 1L
+      last <- if (span$line2 == line) span$col2 else Inf
+      styles[columns >= first & columns <= last] <- colors[[span$token]]
+    }
+    runs <- rle(styles); end <- cumsum(runs$lengths); start <- end - runs$lengths + 1L
+    lines[[line]] <- paste0(vapply(seq_along(start), function(i) {
+      text <- paste0(chars[seq.int(start[[i]], end[[i]])], collapse = "")
+      if (nzchar(runs$values[[i]])) paste0("\033[", runs$values[[i]], "m", text, "\033[0m") else text
+    }, character(1)), collapse = "")
+  }
+  lines
 }
 
 

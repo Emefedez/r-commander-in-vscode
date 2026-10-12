@@ -88,6 +88,8 @@ de REditorSupport o las ventanas de R.
 | `rCommanderPlay.rcmdrPlugins` | `[]` | Complementos a cargar; vacío = todos los `RcmdrPlugin.*` instalados. |
 | `rCommanderPlay.skipHelp`, `skipCommands` | `true`, `[]` | Qué omite el botón verde (ver más abajo). |
 | `rCommanderPlay.limitOutput`, `maxOutputItems` | `true`, `24` | Vista previa de resultados largos. |
+| `rCommanderPlay.syntaxColors` | `false` | Colores de sintaxis en el código R que aparece en el terminal. |
+| `rCommanderPlay.closeMenusAfterChoice` | `false` | Pliega los menús del árbol al elegir una opción, como los menús desplegables de R Commander. |
 
 ## El botón verde
 
@@ -100,7 +102,25 @@ siempre; `Ctrl+Enter` conserva su comportamiento.
   conserva. Los comandos de los menús ignoran esta opción.
 - **Limitar salidas largas**: muestra una vista previa de vectores, matrices y data frames (24 entradas por
   defecto) usando `max.print` y lo restablece después de cada ejecución.
+- **Colorear sintaxis en el terminal**: interruptor en *Configurar el botón verde*, en la paleta de comandos y
+  en el menú del editor. Colorea comentarios, cadenas, números, funciones y palabras clave usando la paleta
+  del terminal. Se aplica en la siguiente ejecución del botón verde o de un menú de R Commander. Los resultados
+  impresos conservan su formato habitual. No requiere paquetes de R adicionales.
 - La barra de estado muestra el estado de estas opciones; al pulsarla se abre *Configurar el botón verde*.
+
+## Buscar en los menús
+
+Pulsa la lupa de la cabecera del árbol **R Commander**. La caja de búsqueda filtra el árbol mientras escribes;
+puedes buscar por nombre, ruta del menú o identificador del comando, en español o inglés, con o sin tildes.
+Selecciona un resultado para abrir su formulario. Al cerrar la caja, el filtro se conserva; pulsa
+**Quitar filtro de búsqueda** en la cabecera para volver a ver todos los menús.
+
+## Cerrar los menús al elegir una opción
+
+En R Commander, un menú desplegable se cierra al elegir una opción. Para que el árbol haga lo mismo, marca
+**⋯ ▸ Cerrar los menús al elegir una opción** en la cabecera del árbol **R Commander** (o activa
+`rCommanderPlay.closeMenusAfterChoice`). Al elegir un comando, todos los menús se pliegan antes de abrir su
+formulario. Los resultados de una búsqueda no se pliegan: los desplegó la búsqueda, no tú.
 
 ## Estructura del repositorio
 

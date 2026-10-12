@@ -78,6 +78,30 @@
 				"enablement": "editorLangId == r"
 			},
 			{
+				"command": "rCommanderPlay.toggleSyntaxColors",
+				"title": "%rCommanderPlay.toggleSyntaxColors%",
+				"category": "R",
+				"toggled": "config.rCommanderPlay.syntaxColors"
+			},
+			{
+				"command": "rCommanderPlay.toggleCloseMenus",
+				"title": "%rCommanderPlay.toggleCloseMenus%",
+				"category": "R Commander",
+				"toggled": "config.rCommanderPlay.closeMenusAfterChoice"
+			},
+			{
+				"command": "rCommanderPlay.searchMenus",
+				"title": "%rCommanderPlay.searchMenus%",
+				"category": "R Commander",
+				"icon": "$(search)"
+			},
+			{
+				"command": "rCommanderPlay.clearMenuSearch",
+				"title": "%rCommanderPlay.clearMenuSearch%",
+				"category": "R Commander",
+				"icon": "$(clear-all)"
+			},
+			{
 				"command": "rcp.cmd.selectActiveDataSet",
 				"title": "%rcp.cmd.selectActiveDataSet%",
 				"category": "R Commander",
@@ -2264,6 +2288,18 @@
 					"maximum": 1000000,
 					"scope": "resource",
 					"description": "Maximum printed entries per result when Limit Long Output is enabled. R reports the omitted entries or rows. Applies to print methods that respect max.print."
+				},
+				"rCommanderPlay.syntaxColors": {
+					"type": "boolean",
+					"default": false,
+					"scope": "resource",
+					"description": "%rCommanderPlay.syntaxColors.description%"
+				},
+				"rCommanderPlay.closeMenusAfterChoice": {
+					"type": "boolean",
+					"default": false,
+					"scope": "window",
+					"description": "%rCommanderPlay.closeMenusAfterChoice.description%"
 				},
 				"rCommanderPlay.language": {
 					"type": "string",
@@ -4859,6 +4895,11 @@
 					"command": "rCommanderPlay.configureOutputLimit",
 					"when": "editorLangId == r",
 					"group": "3_rCommanderPlayOutput@2"
+				},
+				{
+					"command": "rCommanderPlay.toggleSyntaxColors",
+					"when": "editorLangId == r",
+					"group": "3_rCommanderPlayOutput@3"
 				}
 			],
 			"view/title": [
@@ -4871,6 +4912,21 @@
 					"command": "rcp.cmd.installPackages",
 					"when": "view == rCommanderMenu",
 					"group": "navigation@2"
+				},
+				{
+					"command": "rCommanderPlay.searchMenus",
+					"when": "view == rCommanderMenu",
+					"group": "navigation@3"
+				},
+				{
+					"command": "rCommanderPlay.clearMenuSearch",
+					"when": "view == rCommanderMenu",
+					"group": "navigation@4"
+				},
+				{
+					"command": "rCommanderPlay.toggleCloseMenus",
+					"when": "view == rCommanderMenu",
+					"group": "1_menus@1"
 				}
 			]
 		},

@@ -7,6 +7,7 @@ const settings = { loadRcmdrFunctions: false, skipHelp: true, skipCommands: [], 
 const handlers = {}, sent = [], notifications = [], treeViews = {}, editorListeners = [];
 let hoverRegistrations = 0, hoverDisposals = 0;
 let input, onConfigurationChange;
+let searchPicker;
 const document = {
   languageId: 'r', uri, save: async () => true,
   getText: () => '?sample\nplay_value <- rep(TRUE,200)\nplay_value'
@@ -31,7 +32,7 @@ const mock = {
       return {
         get: (key, fallback) => settings[key] ?? fallback,
         update: async (key, value, target) => {
-          assert.equal(target, 3);
+          assert.equal(target, key === 'closeMenusAfterChoice' ? 1 : 3, `${key} is saved where expected`);
           settings[key] = value;
           onConfigurationChange({ affectsConfiguration: () => true });
         }
@@ -45,7 +46,17 @@ const mock = {
     onDidChangeActiveTextEditor: callback => { editorListeners.push(callback); return {}; },
     showInformationMessage: async message => notifications.push(message),
     showErrorMessage: async message => { throw Error(message); },
-    showInputBox: async () => input
+    showInputBox: async () => input,
+    createQuickPick: () => {
+      searchPicker = {
+        selectedItems: [],
+        onDidChangeValue(cb) { this.change = cb; return { dispose() {} }; },
+        onDidAccept(cb) { this.accept = cb; return { dispose() {} }; },
+        onDidHide(cb) { this.close = cb; return { dispose() {} }; },
+        show() {}, hide() { this.close(); }, dispose() { this.disposed = true; }
+      };
+      return searchPicker;
+    }
   },
   commands: {
     registerCommand: (name, handler) => { handlers[name] = handler; return {}; },
@@ -91,7 +102,11 @@ assert.equal(typeof handlers['rCommanderPlay.clearTerminal'], 'function');
   assert.equal(new Set(colored.map(icon => icon.color.id)).size >= 6, true, 'menus use different colours');
   assert.equal(provider.getTreeItem({ sep: true }).command, undefined, 'a separator runs nothing');
   assert.ok(leaves.length >= 240);
-  for (const leaf of leaves) assert.ok(handlers[provider.getTreeItem(leaf).command.command], leaf.id);
+  for (const leaf of leaves) {
+    const { command, arguments: [id] } = provider.getTreeItem(leaf).command;
+    assert.equal(command, 'rCommanderPlay.chooseMenuItem');
+    assert.ok(handlers[`rcp.cmd.${id}`], leaf.id);
+  }
 }
 
 async function runAndRead() {
@@ -102,6 +117,50 @@ async function runAndRead() {
 }
 
 (async () => {
+  // Search updates the sidebar live, survives closing, and opens the selected menu command.
+  {
+    handlers['rCommanderPlay.searchMenus']();
+    searchPicker.change('regresion lineal');
+    assert.ok(treeViews.rCommanderMenu.searchItems().some(item => item.command === 'rcp.cmd.linearRegressionModel'));
+    searchPicker.hide();
+    assert.equal(searchPicker.disposed, true);
+    handlers['rCommanderPlay.searchMenus']();
+    assert.equal(searchPicker.value, 'regresion lineal');
+    const chosen = searchPicker.items.find(item => item.command === 'rcp.cmd.linearRegressionModel');
+    const originalHandler = handlers[chosen.command];
+    let opened = false;
+    handlers[chosen.command] = () => { opened = true; };
+    searchPicker.selectedItems = [chosen];
+    searchPicker.accept();
+    assert.equal(opened, true);
+    handlers[chosen.command] = originalHandler;
+    handlers['rCommanderPlay.clearMenuSearch']();
+    assert.equal(treeViews.rCommanderMenu.query, '');
+    assert.ok(treeViews.rCommanderMenu.searchItems().length > 350);
+  }
+  // Choosing a leaf opens its command; the menus close only with the toggle on.
+  {
+    const provider = treeViews.rCommanderMenu;
+    const firstId = () => provider.getTreeItem(provider.getChildren()[0]).id;
+    const originalHandler = handlers['rcp.cmd.linearRegressionModel'];
+    let opened = 0;
+    handlers['rcp.cmd.linearRegressionModel'] = () => { opened++; };
+    const before = firstId();
+    await handlers['rCommanderPlay.chooseMenuItem']('linearRegressionModel');
+    assert.equal(opened, 1);
+    assert.equal(firstId(), before, 'off by default: the menus stay open');
+    await handlers['rCommanderPlay.toggleCloseMenus']();
+    assert.equal(settings.closeMenusAfterChoice, true);
+    assert.match(notifications.at(-1), /se cerrarán/);
+    const enabled = firstId();
+    await handlers['rCommanderPlay.chooseMenuItem']('linearRegressionModel');
+    assert.equal(opened, 2);
+    assert.notEqual(firstId(), enabled, 'the menus are closed');
+    await handlers['rCommanderPlay.toggleCloseMenus']();
+    assert.equal(settings.closeMenusAfterChoice, false);
+    assert.match(notifications.at(-1), /seguirán abiertos/);
+    handlers['rcp.cmd.linearRegressionModel'] = originalHandler;
+  }
   // Interrupt R sends Ctrl+C to the R terminal and to no other terminal.
   {
     const typed = [];
@@ -127,6 +186,16 @@ async function runAndRead() {
   assert.doesNotMatch((await runAndRead()).stdout, /omitted/);
   await handlers['rCommanderPlay.toggleLimitOutput'](uri);
   assert.match((await runAndRead()).stdout, /omitted 188 entries/);
+
+  // The toggle reaches the real runner even while the terminal has focus.
+  await handlers['rCommanderPlay.toggleSyntaxColors'](uri);
+  assert.equal(settings.syntaxColors, true);
+  const colored = (await runAndRead()).stdout;
+  assert.match(colored, /\x1b\[36m200\x1b\[0m/);
+  assert.match(colored, /omitted 188 entries/);
+  await handlers['rCommanderPlay.toggleSyntaxColors'](uri);
+  assert.equal(settings.syntaxColors, false);
+  assert.doesNotMatch((await runAndRead()).stdout, /\x1b\[/);
 
   // The latest skip options are used on every run.
   await handlers['rCommanderPlay.toggleSkipHelp'](uri);

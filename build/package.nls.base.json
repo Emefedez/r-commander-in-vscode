@@ -7,7 +7,13 @@
 		"rCommanderPlay.configureOutputLimit": "Configure Output Preview Size",
 		"rCommanderPlay.showSettings": "Configure Green Play Button",
 		"rCommanderPlay.clearTerminal": "Clear R Terminal",
-		"rCommanderPlay.interruptR": "Interrupt R"
+		"rCommanderPlay.interruptR": "Interrupt R",
+		"rCommanderPlay.toggleSyntaxColors": "Syntax Colors in Terminal",
+		"rCommanderPlay.searchMenus": "Search Menus",
+		"rCommanderPlay.clearMenuSearch": "Clear Menu Search",
+		"rCommanderPlay.syntaxColors.description": "Color the R code echoed in the terminal by the green play button and R Commander menus. Uses the terminal palette; printed results keep their normal formatting.",
+		"rCommanderPlay.toggleCloseMenus": "Close Menus After Choosing an Option",
+		"rCommanderPlay.closeMenusAfterChoice.description": "Collapse the menus of the R Commander sidebar after choosing an option, like the drop-down menus of R Commander. Search results stay expanded."
 	},
 	"es": {
 		"rCommanderPlay.run": "Ejecutar selección o archivo con salida",
@@ -17,6 +23,12 @@
 		"rCommanderPlay.configureOutputLimit": "Configurar tamaño de la vista previa",
 		"rCommanderPlay.showSettings": "Configurar el botón verde",
 		"rCommanderPlay.clearTerminal": "Limpiar el terminal de R",
-		"rCommanderPlay.interruptR": "Interrumpir R"
+		"rCommanderPlay.interruptR": "Interrumpir R",
+		"rCommanderPlay.toggleSyntaxColors": "Colorear sintaxis en el terminal",
+		"rCommanderPlay.searchMenus": "Buscar en los menús",
+		"rCommanderPlay.clearMenuSearch": "Quitar filtro de búsqueda",
+		"rCommanderPlay.syntaxColors.description": "Colorea el código R que muestran en el terminal el botón verde y los menús de R Commander. Usa la paleta del terminal; los resultados conservan su formato habitual.",
+		"rCommanderPlay.toggleCloseMenus": "Cerrar los menús al elegir una opción",
+		"rCommanderPlay.closeMenusAfterChoice.description": "Pliega los menús de la barra lateral de R Commander después de elegir una opción, como los menús desplegables de R Commander. Los resultados de una búsqueda siguen desplegados."
 	}
 }

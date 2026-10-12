@@ -444,5 +444,11 @@
 	"rCommanderPlay.configureOutputLimit": "Configure Output Preview Size",
 	"rCommanderPlay.showSettings": "Configure Green Play Button",
 	"rCommanderPlay.clearTerminal": "Clear R Terminal",
-	"rCommanderPlay.interruptR": "Interrupt R"
+	"rCommanderPlay.interruptR": "Interrupt R",
+	"rCommanderPlay.toggleSyntaxColors": "Syntax Colors in Terminal",
+	"rCommanderPlay.searchMenus": "Search Menus",
+	"rCommanderPlay.clearMenuSearch": "Clear Menu Search",
+	"rCommanderPlay.syntaxColors.description": "Color the R code echoed in the terminal by the green play button and R Commander menus. Uses the terminal palette; printed results keep their normal formatting.",
+	"rCommanderPlay.toggleCloseMenus": "Close Menus After Choosing an Option",
+	"rCommanderPlay.closeMenusAfterChoice.description": "Collapse the menus of the R Commander sidebar after choosing an option, like the drop-down menus of R Commander. Search results stay expanded."
 }

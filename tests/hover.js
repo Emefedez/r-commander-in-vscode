@@ -24,18 +24,18 @@ const hover = (line, at) => new MenuHover(vscode).provideHover(documentWith(line
 setLanguage('es');
 let h = hover('t.test(x, mu = 0)', 't.test');
 assert.ok(h, 'hover for t.test');
-assert.match(h.contents.value, /Estadísticos ▸ Medias ▸ Test t para una muestra/);
+assert.match(h.contents.value, /Estadística ▸ Medias ▸ Prueba t para una muestra/);
 assert.match(h.contents.value, /command:rcp\.cmd\.singleSampleTTest/);
 assert.ok(h.contents.isTrusted.enabledCommands.every(c => c.startsWith('rcp.cmd.')), 'only our own commands are trusted');
 
 h = hover('Hist(iris$Sepal.Length)', 'Hist');
-assert.match(h.contents.value, /Gráficas ▸ Histograma/);
+assert.match(h.contents.value, /Gráficos ▸ Histograma/);
 h = hover('RcmdrMisc::Hist(x)', 'Hist');
-assert.match(h.contents.value, /Gráficas ▸ Histograma/, 'namespaced calls work');
+assert.match(h.contents.value, /Gráficos ▸ Histograma/, 'namespaced calls work');
 h = hover('hist(x)', 'hist');
 assert.match(h.contents.value, /Histograma/, 'plain hist() points to the Histogram dialog');
 h = hover('pie(table(x))', 'pie');
-assert.match(h.contents.value, /Gráficas ▸ Gráfica de sectores/);
+assert.match(h.contents.value, /Gráficos ▸ Gráfica de sectores/);
 
 assert.equal(hover('summary <- 3', 'summary'), undefined, 'a variable called like a function gets no hover');
 assert.equal(hover('mi_funcion(x)', 'mi_funcion'), undefined, 'unknown functions get no hover');

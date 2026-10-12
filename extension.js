@@ -100,6 +100,7 @@ function activate(context) {
         await session.run(code, { settings: {
           skipHelp: config.get('skipHelp', true), skipCommands: config.get('skipCommands', []),
           limitOutput: config.get('limitOutput', true),
+          syntaxColors: config.get('syntaxColors', false),
           maxOutputItems: Number.isInteger(configuredMax) && configuredMax >= 1 && configuredMax <= 1000000 ? configuredMax : 24,
           loadRcmdrFunctions: config.get('loadRcmdrFunctions', true), rcmdrPlugins: config.get('rcmdrPlugins', [])
         } });
@@ -114,6 +115,10 @@ function activate(context) {
     vscode.commands.registerCommand('rCommanderPlay.toggleLimitOutput', async resource => {
       const enabled = !configuration(resource).get('limitOutput', true);
       await update(resource, 'limitOutput', enabled, `Output preview ${enabled ? 'enabled' : 'disabled'}.`);
+    }),
+    vscode.commands.registerCommand('rCommanderPlay.toggleSyntaxColors', async resource => {
+      const enabled = !configuration(resource).get('syntaxColors', false);
+      await update(resource, 'syntaxColors', enabled, enabled ? t('Syntax colors enabled.') : t('Syntax colors disabled.'));
     }),
     vscode.commands.registerCommand('rCommanderPlay.configureOutputLimit', async resource => {
       const uri = resourceFor(resource);
@@ -145,6 +150,7 @@ function activate(context) {
       const uri = resourceFor(resource);
       const config = configuration(uri);
       const chosen = await vscode.window.showQuickPick([
+        { label: t('Syntax colors: {0}', config.get('syntaxColors', false) ? 'ON' : 'OFF'), description: t('Color the R code echoed in the terminal'), command: 'rCommanderPlay.toggleSyntaxColors' },
         { label: `Output preview: ${config.get('limitOutput', true) ? 'ON' : 'OFF'}`, description: 'Toggle short previews of long results', command: 'rCommanderPlay.toggleLimitOutput' },
         { label: `Preview size: ${config.get('maxOutputItems', 24)} entries`, description: 'Choose a size and enable previews', command: 'rCommanderPlay.configureOutputLimit' },
         { label: `Skip help: ${config.get('skipHelp', true) ? 'ON' : 'OFF'}`, description: 'Toggle skipping ?topic, ??topic and help()', command: 'rCommanderPlay.toggleSkipHelp' },
@@ -167,6 +173,7 @@ function registerMenus(context, resourceFor, configuration, refreshPlayStatus, s
       const config = configuration();
       return {
         limitOutput: config.get('limitOutput', true), maxOutputItems: Number(config.get('maxOutputItems', 24)),
+        syntaxColors: config.get('syntaxColors', false),
         menuAction: config.get('menuAction', 'run'), dialogStyle: config.get('dialogStyle', 'form'),
         cranMirror: config.get('cranMirror', 'https://cloud.r-project.org'),
         packageDownloads: config.get('packageDownloads', '~/.cache/r-commander-play/packages'),
@@ -189,7 +196,45 @@ function registerMenus(context, resourceFor, configuration, refreshPlayStatus, s
   show();
 
   const menuTree = new MenuTree(vscode);
-  context.subscriptions.push(vscode.window.createTreeView('rCommanderMenu', { treeDataProvider: menuTree }));
+  const menuView = vscode.window.createTreeView('rCommanderMenu', { treeDataProvider: menuTree });
+  const filterMenus = query => {
+    menuTree.setFilter(query);
+    menuView.description = query.trim() || undefined;
+    menuView.message = query.trim() && !menuTree.getChildren().length ? t('No matching menu items.') : undefined;
+  };
+  context.subscriptions.push(menuTree, menuView,
+    vscode.commands.registerCommand('rCommanderPlay.searchMenus', () => {
+      const picker = vscode.window.createQuickPick();
+      picker.title = t('Search R Commander menus');
+      picker.placeholder = t('Type to filter menus; select an item to open it');
+      picker.matchOnDescription = true;
+      picker.matchOnDetail = true;
+      picker.value = menuTree.query;
+      picker.items = menuTree.searchItems();
+      const listeners = [
+        picker.onDidChangeValue(value => { filterMenus(value); picker.items = menuTree.searchItems(); }),
+        picker.onDidAccept(() => {
+          const chosen = picker.selectedItems[0];
+          if (chosen) { picker.hide(); vscode.commands.executeCommand(chosen.command); }
+        }),
+        picker.onDidHide(() => { listeners.forEach(listener => listener.dispose()); picker.dispose(); })
+      ];
+      picker.show();
+    }),
+    vscode.commands.registerCommand('rCommanderPlay.clearMenuSearch', () => filterMenus('')),
+    // A leaf of the sidebar tree: optionally close the menus first, as R Commander's
+    // drop-down menus do, then open the command.
+    vscode.commands.registerCommand('rCommanderPlay.chooseMenuItem', id => {
+      if (configuration().get('closeMenusAfterChoice', false)) menuTree.closeMenus();
+      return vscode.commands.executeCommand(`rcp.cmd.${id}`);
+    }),
+    vscode.commands.registerCommand('rCommanderPlay.toggleCloseMenus', async () => {
+      const enabled = !configuration().get('closeMenusAfterChoice', false);
+      await configuration().update('closeMenusAfterChoice', enabled, vscode.ConfigurationTarget.Global);
+      if (enabled) menuTree.closeMenus();
+      await vscode.window.showInformationMessage(enabled
+        ? t('The menus will close after choosing an option.') : t('The menus will stay open after choosing an option.'));
+    }));
 
   // VS Code puts the hover of the provider registered last on top, and the R language
   // server registers its own after it starts. So register ours again once it is up, and

@@ -191,7 +191,11 @@ pkg.contributes.menus = {
   // The two side-by-side buttons in the R Commander sidebar header (keeps the editor toolbar short).
   'view/title': [
     { command: 'rCommanderPlay.interruptR', when: 'view == rCommanderMenu', group: 'navigation@1' },
-    { command: 'rcp.cmd.installPackages', when: 'view == rCommanderMenu', group: 'navigation@2' }]
+    { command: 'rcp.cmd.installPackages', when: 'view == rCommanderMenu', group: 'navigation@2' },
+    { command: 'rCommanderPlay.searchMenus', when: 'view == rCommanderMenu', group: 'navigation@3' },
+    { command: 'rCommanderPlay.clearMenuSearch', when: 'view == rCommanderMenu', group: 'navigation@4' },
+    // In the header's "..." menu, with a check mark while enabled.
+    { command: 'rCommanderPlay.toggleCloseMenus', when: 'view == rCommanderMenu', group: '1_menus@1' }]
 };
 pkg.contributes.configuration.properties['rCommanderPlay.language'] = {
   type: 'string', enum: ['es', 'en', 'auto'], default: 'es', scope: 'window',
