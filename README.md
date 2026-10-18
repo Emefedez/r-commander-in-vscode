@@ -163,14 +163,28 @@ singleSampleTTest: {
 }
 ```
 
-- Tipos de campo: `var` (una o varias variables, filtradas por `kind`), `dataset`, `model`, `models`, `hclust`,
-  `choice`, `flags`, `num`, `numlist`, `text`, `name`, `file`, `dir`, `installed`, `rlist` (lista que sale de una
-  consulta a R), `levelorder`, `renames` y `matrix` (tablas).
+- Cada diálogo copia el de Rcmdr (o TeachStat): mismos campos, etiquetas (las cadenas exactas de Rcmdr, para que
+  salga su traducción), valores por defecto, orden y código R. Lo que Rcmdr pregunta en una ventana después de
+  Aceptar (el archivo, los nombres de niveles...) va en `after`.
+- Tipos de campo: `var` (una o varias variables, filtradas por `kind`: `numeric`, `factor`, `twolevel`,
+  `discrete`, `character`, `realfactor`, `nominal`, `ordinal`, `other`, `any`), `dataset`, `model`, `models`,
+  `hclust`, `choice`, `flags`, `num`, `numlist`, `text`, `name`, `file`, `dir`, `installed`, `rlist` (lista que
+  sale de una consulta a R), `levelorder`, `renames`, `matrix`, `formula` (el `modelFormula()` de Rcmdr: variables,
+  botones de operadores y splines, `lhs ~ rhs`; `hasLhs: false` para fórmulas de un lado), `table` (tabla de
+  números con filas/columnas de otros campos o columnas de R con `colsExpr`, y `rhsLabel`), `note` (texto entre
+  campos, como el «O» rojo; `heading: true` para títulos de sección) y `hidden` (un valor del contexto, p. ej. la
+  clase del modelo activo, que otros campos usan en `when`).
 - `when: v => ...` muestra el campo solo en cierto caso; `exclude` evita repetir variables; `optional`, `def`,
-  `min`, `max`, `pattern` validan.
+  `min`, `max`, `pattern` validan. `label: ''` es un campo sin título (una casilla suelta); entonces `prompt` es el
+  texto que se usa en el estilo de pasos. `compact: true` lo hace estrecho (desplegables, rejillas). En `choice`,
+  `def` puede ser el valor y `defFor: v => ...` lo calcula a partir de otros campos.
 - Otras claves: `ds: false` (no necesita conjunto de datos), `needsModel`, `activeDataset`/`activeModel` (qué
-  queda activo), `after` (preguntas extra), `vscode` y `url` (acciones que no generan código R).
+  queda activo), `after` (preguntas extra), `check` (reglas entre campos), `noForm: ctx => ...` (sin formulario en
+  ese caso), `vscode` y `url` (acciones que no generan código R).
 - Las cadenas de interfaz van en inglés; el español sale de la traducción de Rcmdr o de `i18n/es.manual.json`.
+  Los títulos de los menús son siempre los de R Commander (con TeachStat), y lo que Rcmdr deja en inglés queda en
+  inglés. `es.manual.json` solo traduce lo propio de la extensión y corrige las traducciones de Rcmdr que no se
+  entienden; si la de Rcmdr está bien, no se toca.
   `build/generate.js` avisa en `build/missing-es.txt` de lo que no tiene traducción.
 
 ## Pruebas

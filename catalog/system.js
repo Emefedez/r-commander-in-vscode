@@ -36,7 +36,7 @@ const keepIndex = v => (v.flags.keep ? ['  try(tools::write_PACKAGES(contrib, ty
 
 module.exports = {
   Setwd: { ds: false, fields: [{ k: 'dir', type: 'dir', label: 'Select the working directory' }],
-    code: v => `setwd(${rs(v.dir)})\ngetwd()` },
+    code: v => `setwd(${rs(v.dir)})` },
   loadLog: editor('workbench.action.files.openFile'),
   saveLog: editor('workbench.action.files.save'),
   saveLogAs: editor('workbench.action.files.saveAs'),
@@ -61,11 +61,11 @@ module.exports = {
   onClear: editor('rCommanderPlay.clearTerminal'),
 
   loadPackages: { ds: false,
-    fields: [{ k: 'pkgs', type: 'installed', label: 'Packages to load (pick one or more)' }],
+    fields: [{ k: 'pkgs', type: 'installed', label: 'Packages (pick one or more)' }],
     code: v => v.pkgs.map(p => `library(${p.match(/^[A-Za-z][A-Za-z0-9.]*$/) ? p : '`' + p + '`'})`).join('\n') },
   loadPlugins: { ds: false,
-    fields: [{ k: 'pkgs', type: 'installed', filter: '^RcmdrPlugin', label: 'Rcmdr plug-ins to load' }],
-    code: v => v.pkgs.map(p => `library(${p})`).join('\n') },
+    fields: [{ k: 'pkgs', type: 'installed', filter: '^RcmdrPlugin', label: 'Plug-ins (pick one or more)' }],
+    code: v => v.pkgs.map(p => `library("${p}", character.only=TRUE)`).join('\n') },
   Options: { vscode: 'workbench.action.openSettings', args: ['rCommanderPlay'] },
   // ---- R package installer (what RGui's "Packages" menu offers) ------------------------------
   // Only what is missing is downloaded. A terminal R without a configured repository waits for a

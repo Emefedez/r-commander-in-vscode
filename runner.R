@@ -153,7 +153,7 @@ session_info <- function() {
       out <- c(out, paste("D", n, nrow(o), ncol(o), sep = "\t"))
       for (v in names(o)) {
         x <- o[[v]]
-        kind <- if (is.factor(x)) "factor" else if (is.logical(x)) "logical"
+        kind <- if (is.ordered(x)) "ordered" else if (is.factor(x)) "factor" else if (is.logical(x)) "logical"
                 else if (is.numeric(x)) "numeric" else if (is.character(x)) "character"
                 else "other"
         nlev <- if (is.factor(x)) nlevels(x) else if (is.character(x) || is.logical(x))
@@ -180,7 +180,13 @@ session_info <- function() {
 # Rcmdr and its dependencies takes a few hundred MB, so plain R scripts should not pay for it).
 attach_rcmdr_if_used <- function(code, names_file, plugins = character()) {
   if ("Rcmdr functions" %in% search() || !file.exists(names_file)) return(invisible(FALSE))
-  used <- tryCatch(all.names(parse(text = code, keep.source = FALSE)), error = function(e) NULL)
+  used <- tryCatch({
+    parsed <- parse(text = code, keep.source = TRUE)
+    # Names in strings count too, e.g. contrasts(x) <- "contr.Treatment" needs car.
+    tokens <- utils::getParseData(parsed)
+    strings <- gsub("^[\"']|[\"']$", "", tokens$text[tokens$token == "STR_CONST"])
+    c(all.names(parsed), strings)
+  }, error = function(e) NULL)
   if (is.null(used)) return(invisible(FALSE))   # unparsable: run_code reports the syntax error
   used <- unique(used)
   used <- used[used %in% readLines(names_file, encoding = "UTF-8")]

@@ -2,6 +2,9 @@
 	"AbscontDistribution": [
 		"genericDistrDefine"
 	],
+	"addmargins": [
+		"twoWayTableFromCounts"
+	],
 	"aggregate": [
 		"Aggregate"
 	],
@@ -30,6 +33,7 @@
 		"oneWayAnovaRE"
 	],
 	"apply": [
+		"FriedmanTest",
 		"normalDistributionSamples",
 		"tDistributionSamples",
 		"chisqDistributionSamples",
@@ -61,17 +65,8 @@
 		"geomDistrSamples",
 		"negbinomialDistrSamples"
 	],
-	"as_factor": [
-		"importSPSS",
-		"importSTATA"
-	],
 	"as.data.frame": [
-		"importSPSS",
-		"importSAS",
-		"importSASb7dat",
 		"importMinitab",
-		"importSTATA",
-		"importExcel",
 		"CFA",
 		"normalDistributionSamples",
 		"tDistributionSamples",
@@ -107,20 +102,16 @@
 	],
 	"as.factor": [
 		"numericToFactor",
-		"characterToFactor",
-		"dropUnusedFactorLevels",
-		"setContrasts",
-		"stemAndLeaf",
-		"ConvertVariables",
-		"numericToFactor2"
+		"hclustSummary",
+		"ConvertVariables"
 	],
 	"as.matrix": [
-		"FriedmanTest",
 		"Sindexnumbers",
 		"BCindexnumbers",
 		"Deflation"
 	],
 	"as.ordered": [
+		"numericToFactor2",
 		"binVariable2"
 	],
 	"as.vector": [
@@ -133,7 +124,8 @@
 		"intervaloConfianzaDiferenciaProporciones"
 	],
 	"assignCluster": [
-		"kmeansClustering"
+		"kmeansClustering",
+		"appendHclustGroup"
 	],
 	"avPlots": [
 		"AVPlots"
@@ -146,9 +138,6 @@
 	],
 	"bartlett.test": [
 		"BartlettTest"
-	],
-	"bcPower": [
-		"transformVariables"
 	],
 	"BIC": [
 		"bic"
@@ -164,22 +153,16 @@
 	"binom.test": [
 		"singleProportionTest"
 	],
-	"binomial": [
-		"generalizedLinearModel",
-		"generalizedLinearMixedModel"
-	],
 	"binVariable": [
 		"binVariable",
 		"binVariable2"
 	],
 	"biplot": [
-		"kmeansClustering"
+		"kmeansClustering",
+		"hclustSummary"
 	],
 	"Boot": [
 		"Bootstrap"
-	],
-	"boxplot": [
-		"boxPlot"
 	],
 	"Boxplot": [
 		"boxPlot"
@@ -189,6 +172,9 @@
 	],
 	"browseURL": [
 		"browseRcmdrHexSticker"
+	],
+	"by": [
+		"hclustSummary"
 	],
 	"calcular_frecuencia": [
 		"resumenVariablesCualitativas"
@@ -201,9 +187,6 @@
 	],
 	"calcularResumenVariablesDiscretas": [
 		"resumenNumericoVDiscreta"
-	],
-	"carPalette": [
-		"Scatter3D"
 	],
 	"cfa": [
 		"CFA"
@@ -230,16 +213,9 @@
 		"chisqDistrSamples"
 	],
 	"chisq.test": [
-		"frequencyDistribution",
 		"twoWayTable",
-		"twoWayTableFromCounts"
-	],
-	"coeftest": [
-		"summarizeModel"
-	],
-	"colMeans": [
-		"oneWayRepeatedMeasures",
-		"twoWayRepeatedMeasures"
+		"twoWayTableFromCounts",
+		"enterTable"
 	],
 	"colorRamp": [
 		"genericProbabilitiesInter",
@@ -276,14 +252,10 @@
 		"Cindexnumbers"
 	],
 	"confint": [
-		"confidenceIntervals",
 		"Bootstrap"
 	],
-	"confint.default": [
+	"Confint": [
 		"confidenceIntervals"
-	],
-	"contr.Sum": [
-		"multiWayAnova"
 	],
 	"contrasts": [
 		"setContrasts"
@@ -351,7 +323,7 @@
 	"Deflat": [
 		"Deflation"
 	],
-	"deltaMethod": [
+	"DeltaMethod": [
 		"DeltaMethodConfInt"
 	],
 	"density": [
@@ -387,6 +359,9 @@
 	"dhyper": [
 		"hyperMass",
 		"hyperDistributionPlot"
+	],
+	"dimnames": [
+		"enterTable"
 	],
 	"dir.create": [
 		"installPackages",
@@ -444,6 +419,9 @@
 	"edit": [
 		"editDataSet"
 	],
+	"Effect": [
+		"effectPlots"
+	],
 	"eval": [
 		"genericDistrDefine"
 	],
@@ -477,10 +455,13 @@
 	],
 	"fisher.test": [
 		"twoWayTable",
-		"twoWayTableFromCounts"
+		"twoWayTableFromCounts",
+		"enterTable"
+	],
+	"fitted": [
+		"addObservationStatistics"
 	],
 	"fitted.values": [
-		"addObservationStatistics",
 		"BreuschPaganTest"
 	],
 	"format.pval": [
@@ -492,14 +473,8 @@
 		"contrasteHipotesis2Varianzas",
 		"contrasteHipotesisDiferenciaProporciones"
 	],
-	"formula": [
-		"subsetRegression"
-	],
 	"friedman.test": [
 		"FriedmanTest"
-	],
-	"gaussian": [
-		"generalizedLinearMixedModel"
 	],
 	"Geom": [
 		"geomDistrQuantiles",
@@ -514,48 +489,24 @@
 		"updatePackages",
 		"setCranMirror"
 	],
-	"getwd": [
-		"Setwd"
-	],
 	"glm": [
 		"generalizedLinearModel"
 	],
 	"glmer": [
 		"generalizedLinearMixedModel"
 	],
-	"gray.colors": [
-		"pieChart"
-	],
 	"grepl": [
 		"installPackages",
 		"updatePackages"
+	],
+	"gsub": [
+		"binVariable2"
 	],
 	"hatvalues": [
 		"addObservationStatistics"
 	],
 	"hclust": [
 		"hierarchicalCluster"
-	],
-	"head": [
-		"loadDataSet",
-		"normalDistributionSamples",
-		"tDistributionSamples",
-		"chisqDistributionSamples",
-		"FDistributionSamples",
-		"exponentialDistributionSamples",
-		"uniformDistributionSamples",
-		"betaDistributionSamples",
-		"CauchyDistributionSamples",
-		"logisticDistributionSamples",
-		"lognormalDistributionSamples",
-		"gammaDistributionSamples",
-		"WeibullDistributionSamples",
-		"GumbelDistributionSamples",
-		"binomialDistributionSamples",
-		"PoissonDistributionSamples",
-		"geomDistributionSamples",
-		"hyperDistributionSamples",
-		"negbinomialDistributionSamples"
 	],
 	"help": [
 		"helpDataSet",
@@ -587,8 +538,14 @@
 	"installed.packages": [
 		"listInstalledPackages"
 	],
+	"interaction": [
+		"BartlettTest"
+	],
 	"IQR": [
 		"numericalSummaries"
+	],
+	"is.factor": [
+		"binVariable2"
 	],
 	"is.null": [
 		"installPackages",
@@ -604,7 +561,19 @@
 		"LeveneTest"
 	],
 	"library": [
-		"Bootstrap",
+		"CFA",
+		"multinomialLogitModel",
+		"ordinalRegressionModel",
+		"linearMixedModel",
+		"generalizedLinearMixedModel",
+		"stemAndLeaf",
+		"Xyplot",
+		"Scatter3D",
+		"saveRglGraph",
+		"subsetRegression",
+		"BreuschPaganTest",
+		"DurbinWatsonTest",
+		"RESETtest",
 		"genericDistrDefine",
 		"genericDistrQuantiles",
 		"genericProbabilitiesInter",
@@ -675,8 +644,8 @@
 		"loadPackages",
 		"loadPlugins"
 	],
-	"linearHypothesis": [
-		"testLinearHypothesis"
+	"lineplot": [
+		"linePlot"
 	],
 	"listTypesVariables": [
 		"variablesandtypesDataSet"
@@ -691,33 +660,32 @@
 	"lmer": [
 		"linearMixedModel"
 	],
+	"load": [
+		"loadDataSet"
+	],
 	"loadings": [
 		"principalComponents"
 	],
-	"match": [
-		"renameVariables"
-	],
-	"matplot": [
-		"linePlot"
-	],
 	"mean": [
+		"onesampleWilcoxonTest",
 		"numericalSummaries",
 		"statisticsTable"
 	],
 	"median": [
+		"onesampleWilcoxonTest",
+		"pairedWilcoxonTest",
 		"randomnessNTest",
 		"numericalSummaries",
 		"statisticsTable"
 	],
+	"merge": [
+		"mergeDataSets"
+	],
+	"mergeRows": [
+		"mergeDataSets"
+	],
 	"message": [
 		"installPackages"
-	],
-	"MKV.test": [
-		"intervaloConfianzaMedia",
-		"contrasteHipotesisMedia"
-	],
-	"model.frame": [
-		"subsetRegression"
 	],
 	"model.matrix": [
 		"kmeansClustering",
@@ -727,7 +695,8 @@
 		"multinomialLogitModel"
 	],
 	"na.omit": [
-		"filterNA"
+		"filterNA",
+		"FriedmanTest"
 	],
 	"Nbinom": [
 		"negbinomialDistrQuantiles",
@@ -756,13 +725,11 @@
 	],
 	"numSummary": [
 		"numericalSummaries",
+		"oneWayAnova",
 		"oneWayAnovaRE"
 	],
 	"nzchar": [
 		"installPackages"
-	],
-	"oneway.test": [
-		"oneWayAnova"
 	],
 	"options": [
 		"installPackages",
@@ -790,7 +757,9 @@
 		"helpAboutCommander"
 	],
 	"palette": [
-		"setPalette"
+		"setPalette",
+		"barGraph",
+		"pieChart"
 	],
 	"partial.cor": [
 		"correlationMatrix"
@@ -839,7 +808,7 @@
 		"hyperProbabilities",
 		"hyperDistributionPlot"
 	],
-	"pie": [
+	"piechart": [
 		"pieChart"
 	],
 	"plnorm": [
@@ -849,6 +818,29 @@
 	"plogis": [
 		"logisticProbabilities",
 		"logisticDistributionPlot"
+	],
+	"plotBoot": [
+		"Bootstrap"
+	],
+	"plotDistr": [
+		"normalDistributionPlot",
+		"tDistributionPlot",
+		"chisqDistributionPlot",
+		"FDistributionPlot",
+		"exponentialDistributionPlot",
+		"uniformDistributionPlot",
+		"betaDistributionPlot",
+		"CauchyDistributionPlot",
+		"logisticDistributionPlot",
+		"lognormalDistributionPlot",
+		"gammaDistributionPlot",
+		"WeibullDistributionPlot",
+		"GumbelDistributionPlot",
+		"binomialDistributionPlot",
+		"PoissonDistributionPlot",
+		"geomDistributionPlot",
+		"hyperDistributionPlot",
+		"negbinomialDistributionPlot"
 	],
 	"plotMeans": [
 		"PlotMeans"
@@ -911,7 +903,8 @@
 	],
 	"princomp": [
 		"principalComponents",
-		"kmeansClustering"
+		"kmeansClustering",
+		"hclustSummary"
 	],
 	"prop.test": [
 		"singleProportionTest",
@@ -956,65 +949,49 @@
 		"negbinomialDistrPlot"
 	],
 	"qbeta": [
-		"betaQuantiles",
-		"betaDistributionPlot"
+		"betaQuantiles"
 	],
 	"qbinom": [
 		"binomialQuantiles"
 	],
 	"qcauchy": [
-		"CauchyQuantiles",
-		"CauchyDistributionPlot"
+		"CauchyQuantiles"
 	],
 	"qchisq": [
-		"chisqQuantiles",
-		"chisqDistributionPlot"
+		"chisqQuantiles"
 	],
 	"qexp": [
-		"exponentialQuantiles",
-		"exponentialDistributionPlot"
+		"exponentialQuantiles"
 	],
 	"qf": [
-		"FQuantiles",
-		"FDistributionPlot"
+		"FQuantiles"
 	],
 	"qgamma": [
-		"gammaQuantiles",
-		"gammaDistributionPlot"
+		"gammaQuantiles"
 	],
 	"qgeom": [
-		"geomQuantiles",
-		"geomMass",
-		"geomDistributionPlot"
+		"geomQuantiles"
 	],
 	"qgumbel": [
-		"GumbelQuantiles",
-		"GumbelDistributionPlot"
+		"GumbelQuantiles"
 	],
 	"qhyper": [
 		"hyperQuantiles"
 	],
 	"qlnorm": [
-		"lognormalQuantiles",
-		"lognormalDistributionPlot"
+		"lognormalQuantiles"
 	],
 	"qlogis": [
-		"logisticQuantiles",
-		"logisticDistributionPlot"
+		"logisticQuantiles"
 	],
 	"qnbinom": [
-		"negbinomialQuantiles",
-		"negbinomialMass",
-		"negbinomialDistributionPlot"
+		"negbinomialQuantiles"
 	],
 	"qnorm": [
-		"normalQuantiles",
-		"normalDistributionPlot"
+		"normalQuantiles"
 	],
 	"qpois": [
-		"PoissonQuantiles",
-		"PoissonMass",
-		"PoissonDistributionPlot"
+		"PoissonQuantiles"
 	],
 	"qqline": [
 		"QQPlot"
@@ -1027,26 +1004,23 @@
 		"residualQQPlot"
 	],
 	"qt": [
-		"tQuantiles",
-		"tDistributionPlot"
+		"tQuantiles"
 	],
 	"quantile": [
-		"Aggregate",
 		"numericalSummaries"
 	],
 	"quasipoisson": [
-		"generalizedLinearModel"
+		"generalizedLinearModel",
+		"generalizedLinearMixedModel"
 	],
 	"quit": [
 		"closeCommanderAndR"
 	],
 	"qunif": [
-		"uniformQuantiles",
-		"uniformDistributionPlot"
+		"uniformQuantiles"
 	],
 	"qweibull": [
-		"WeibullQuantiles",
-		"WeibullDistributionPlot"
+		"WeibullQuantiles"
 	],
 	"r": [
 		"genericDistrSamples",
@@ -1077,45 +1051,27 @@
 	"rchisq": [
 		"chisqDistributionSamples"
 	],
-	"rcorr.adjust": [
-		"correlationMatrix"
-	],
-	"read_dta": [
-		"importSTATA"
-	],
-	"read_excel": [
-		"importExcel"
-	],
-	"read_sas": [
-		"importSASb7dat"
-	],
-	"read_sav": [
-		"importSPSS"
-	],
-	"read_xpt": [
-		"importSAS"
-	],
-	"read.dta": [
-		"importSTATA"
-	],
 	"read.mtp": [
 		"importMinitab"
 	],
-	"read.spss": [
+	"read.table": [
+		"readDataSet",
+		"binVariable2"
+	],
+	"readSAS": [
+		"importSASb7dat"
+	],
+	"readSPSS": [
 		"importSPSS"
 	],
-	"read.table": [
-		"loadDataSet",
-		"readDataSet"
+	"readStata": [
+		"importSTATA"
 	],
-	"read.xport": [
-		"importSAS"
+	"readXL": [
+		"importExcel"
 	],
-	"recode": [
+	"Recode": [
 		"RecodeDialog"
-	],
-	"rect.hclust": [
-		"hclustSummary"
 	],
 	"regsubsets": [
 		"subsetRegression"
@@ -1123,11 +1079,22 @@
 	"reliability": [
 		"Reliability"
 	],
+	"remove": [
+		"enterTable",
+		"kmeansClustering",
+		"Bootstrap"
+	],
+	"repeatedMeasuresPlot": [
+		"oneWayRepeatedMeasures",
+		"twoWayRepeatedMeasures"
+	],
 	"resettest": [
 		"RESETtest"
 	],
-	"reshape": [
-		"reshapeLong2Wide",
+	"reshapeL2W": [
+		"reshapeLong2Wide"
+	],
+	"reshapeW2L": [
 		"reshapeWide2Long"
 	],
 	"residuals": [
@@ -1179,6 +1146,9 @@
 	],
 	"rnorm": [
 		"normalDistributionSamples"
+	],
+	"row.names": [
+		"setCaseNames"
 	],
 	"rowMeans": [
 		"normalDistributionSamples",
@@ -1267,7 +1237,8 @@
 		"uniformDistributionSamples"
 	],
 	"save": [
-		"saveDataSet"
+		"saveDataSet",
+		"Pindexnumbers"
 	],
 	"save.image": [
 		"saveWorkspace",
@@ -1275,8 +1246,7 @@
 	],
 	"scale": [
 		"standardize",
-		"CFA",
-		"kmeansClustering"
+		"CFA"
 	],
 	"scatter3d": [
 		"Scatter3D"
@@ -1323,6 +1293,9 @@
 	"setwd": [
 		"Setwd"
 	],
+	"simpleTheme": [
+		"Xyplot"
+	],
 	"Sindex": [
 		"Sindexnumbers",
 		"BCindexnumbers"
@@ -1333,11 +1306,11 @@
 	"stem.leaf": [
 		"stemAndLeaf"
 	],
-	"stem.leaf.backback": [
-		"stemAndLeaf"
-	],
 	"stepwise": [
 		"stepwiseRegression"
+	],
+	"strings2factors": [
+		"convertStrings2Factors"
 	],
 	"stripchart": [
 		"stripChart"
@@ -1352,8 +1325,7 @@
 	],
 	"sum": [
 		"frequencyDistribution",
-		"countMissing",
-		"pieChart"
+		"countMissing"
 	],
 	"summary": [
 		"summarizeDataSet",
@@ -1363,6 +1335,7 @@
 		"twoWayRepeatedMeasures",
 		"principalComponents",
 		"CFA",
+		"hclustSummary",
 		"linearRegressionModel",
 		"linearModel",
 		"generalizedLinearModel",
@@ -1371,8 +1344,6 @@
 		"linearMixedModel",
 		"generalizedLinearMixedModel",
 		"summarizeModel",
-		"subsetRegression",
-		"Bootstrap",
 		"transformResponse"
 	],
 	"support": [
@@ -1400,12 +1371,12 @@
 		"contrasteHipotesisMediasIndependientes",
 		"contrasteHipotesisMediasPareadas"
 	],
-	"tapply": [
+	"Tapply": [
 		"statisticsTable",
-		"independentSamplesTTest",
-		"oneWayAnova",
 		"multiWayAnova",
 		"twoVariancesFTest",
+		"BartlettTest",
+		"LeveneTest",
 		"twoSampleWilcoxonTest",
 		"KruskalWallisTest"
 	],
@@ -1419,25 +1390,9 @@
 	"textConnection": [
 		"CFA"
 	],
-	"tolower": [
-		"importSPSS"
-	],
-	"totPercents": [
-		"twoWayTable",
-		"twoWayTableFromCounts",
-		"multiWayTable"
-	],
 	"try": [
 		"installPackages",
 		"updatePackages"
-	],
-	"tryCatch": [
-		"importSPSS",
-		"importSAS",
-		"importSTATA"
-	],
-	"TukeyHSD": [
-		"oneWayAnova"
 	],
 	"twolevelfactor.runs.test": [
 		"randomnessFTest"
@@ -1460,11 +1415,6 @@
 		"intervaloConfianza2Varianzas",
 		"contrasteHipotesis2Varianzas"
 	],
-	"vcovHC": [
-		"summarizeModel",
-		"anovaTable",
-		"testLinearHypothesis"
-	],
 	"View": [
 		"viewDataSet",
 		"viewData",
@@ -1472,10 +1422,6 @@
 	],
 	"vif": [
 		"VIF"
-	],
-	"VKM.test": [
-		"intervaloConfianzaVarianza",
-		"contrasteHipotesisVarianza"
 	],
 	"VUM.test": [
 		"intervaloConfianzaVarianza",
@@ -1490,13 +1436,60 @@
 		"pairedWilcoxonTest"
 	],
 	"with": [
+		"sortDataSet",
 		"Compute",
+		"binVariable",
+		"reorderFactor",
+		"frequencyDistribution",
+		"correlationTest",
+		"singleSampleTTest",
+		"pairedTTest",
+		"oneWayAnova",
 		"oneWayAnovaRE",
+		"onesampleWilcoxonTest",
+		"pairedWilcoxonTest",
+		"FriedmanTest",
 		"randomnessFTest",
 		"randomnessNTest",
+		"DotPlot",
+		"Histogram",
+		"DiscretePlot",
+		"stemAndLeaf",
+		"QQPlot",
+		"linePlot",
+		"PlotMeans",
+		"barGraph",
+		"pieChart",
 		"binVariable2"
 	],
 	"within": [
+		"RecodeDialog",
+		"standardize",
+		"numericToFactor",
+		"characterToFactor",
+		"dropUnusedFactorLevels",
+		"deleteVariable",
+		"principalComponents",
+		"factorAnalysis",
+		"addObservationStatistics",
+		"normalDistributionSamples",
+		"tDistributionSamples",
+		"chisqDistributionSamples",
+		"FDistributionSamples",
+		"exponentialDistributionSamples",
+		"uniformDistributionSamples",
+		"betaDistributionSamples",
+		"CauchyDistributionSamples",
+		"logisticDistributionSamples",
+		"lognormalDistributionSamples",
+		"gammaDistributionSamples",
+		"WeibullDistributionSamples",
+		"GumbelDistributionSamples",
+		"binomialDistributionSamples",
+		"PoissonDistributionSamples",
+		"geomDistributionSamples",
+		"hyperDistributionSamples",
+		"negbinomialDistributionSamples",
 		"ConvertVariables",
 		"numericToFactor2",
 		"genericDistrSamples",
@@ -1523,13 +1516,11 @@
 		"twoWayTable",
 		"twoWayTableFromCounts",
 		"multiWayTable",
+		"multiWayAnova",
 		"singleProportionTest",
 		"twoSampleProportionsTest"
 	],
 	"xyplot": [
 		"Xyplot"
-	],
-	"yjPower": [
-		"transformVariables"
 	]
 }

@@ -1,193 +1,306 @@
-const { rs, rc, rbool, S } = require('../lib/rhelpers');
-const { numVar, numVars, factor, groups, labelFields, labelArgs, given, identifyField } = require('./common');
+// (no helpers needed from rhelpers: the code is written as Rcmdr writes it)
 
-const flagsOf = (label, items) => ({ k: 'flags', type: 'flags', label, items });
-const lines = (...parts) => parts.flat().filter(Boolean).join('\n');
-const scale = { k: 'scale', type: 'choice', label: 'Axis scaling', choices: [['frequency', 'Frequency counts'], ['percent', 'Percentages'], ['density', 'Densities']] };
-const fileType = { k: 'file', type: 'file', mode: 'save', label: 'Save the graph as' };
-const LEGEND = ['topright', 'topleft', 'bottomright', 'bottomleft', 'top', 'bottom', 'left', 'right', 'center'];
-const legendChoices = LEGEND.map(p => [p, p]);
-const id = v => (Number(v.idn) > 0 ? `list(n = ${v.idn}, method = "y")` : 'FALSE');
-const levelsField = { k: 'levels', type: 'numlist', label: 'Concentration levels:', def: '0.5, 0.95' };
-const spanField = { k: 'span', type: 'num', min: 0.05, max: 1, def: '0.5', label: 'Span for smooth' };
-const sizeFields = [
-  { k: 'cex', type: 'num', min: 0.1, def: '1', label: 'Point size' },
-  { k: 'cexAxis', type: 'num', min: 0.1, def: '1', label: 'Axis text size' },
-  { k: 'cexLab', type: 'num', min: 0.1, def: '1', label: 'Axis-labels text size' }
-];
-const COLORS = {
-  rainbow_hcl: n => `colorspace::rainbow_hcl(${n})`, rainbow: n => `rainbow(${n})`, heat: n => `heat.colors(${n})`,
-  terrain: n => `terrain.colors(${n})`, topo: n => `topo.colors(${n})`, hcl: n => `hcl.colors(${n})`, gray: n => `gray.colors(${n})`
-};
-const colorField = { k: 'colors', type: 'choice', label: 'Color Selection',
-  choices: [['rainbow_hcl', 'Rainbow (hcl)'], ['rainbow', 'Rainbow'], ['heat', 'Heat'], ['terrain', 'Terrain'], ['topo', 'Topographic'], ['hcl', 'HCL default'], ['gray', 'Grays']] };
+// The Graphs menu, dialog by dialog as in Rcmdr: same fields, labels, defaults and generated code.
+const lines = (...parts) => parts.flat().filter(x => x !== false && x !== undefined && x !== null && x !== '').join('\n');
+const check = (k, text, on = false, extra = {}) => ({ k, type: 'flags', label: '', items: [[k, text, on]], ...extra });
+const choice = (k, label, choices, def, extra = {}) => ({ k, type: 'choice', label, choices, ...(def !== undefined && { def }), ...extra });
+const groupsBox = (label = 'Plot by groups', kind = 'factor') => ({ k: 'g', type: 'var', kind, optional: true, label });
+const AUTO = '<auto>';
+// "Plot Labels": x-axis label, y-axis label and graph title, <auto> leaves R's own.
+const labelField = (k, label) => ({ k, type: 'text', optional: true, def: AUTO, label, sample: { xlab: 'Etiqueta x', ylab: 'Etiqueta y', main: 'Título' }[k] });
+const plotLabels = (keys = ['xlab', 'ylab', 'main']) => keys.map(k => labelField(k, { xlab: 'x-axis label', ylab: 'y-axis label', main: 'Graph title' }[k]));
+const given = text => text !== undefined && text.trim() !== '' && text.trim() !== AUTO;
+const labelArg = (v, k) => (given(v[k]) ? `, ${k}="${v[k].trim()}"` : '');
+const labelArgs = (v, keys = ['xlab', 'ylab', 'main']) => keys.map(k => labelArg(v, k)).join('');
+const identify = choice('identify', 'Identify Points', [['auto', 'Automatically'], ['not', 'Do not identify']]);
+const idn = (label = 'Number of points to identify  ', def = '2') => ({ k: 'idn', type: 'num', int: true, min: 0, def, label });
+const subsetField = { k: 'subset', type: 'text', optional: true, def: '<all valid cases>', label: 'Subset expression', sample: 'n1 > 0.5' };
+const subsetArg = v => (v.subset && v.subset.trim() && v.subset.trim() !== '<all valid cases>' ? `, subset=${v.subset.trim()}` : '');
+const levelsVector = text => `c(${text.replace(/,/g, ' ').trim().split(/[ ]+/).join(', ')})`;
+const fileFilters = { png: { 'PNG Files': ['png', 'PNG'] }, jpeg: { 'JPEG Files': ['jpg', 'JPG', 'jpeg', 'JPEG'] },
+  pdf: { 'PDF Files': ['pdf', 'PDF'] }, postscript: { 'Postscript Files': ['ps', 'PS'] }, eps: { 'Encapsulated Postscript Files': ['eps', 'EPS'] } };
+const saveTo = async (ui, type, ext) => ui.file({ mode: 'save', filters: { ...fileFilters[type], 'All Files': ['*'] }, def: `RGraph.${ext}` }, ui.t('Save the graph as'));
+const PALETTE = ['#000000', '#DF536B', '#61D04F', '#2297E6', '#28E2E5', '#CD0BBC', '#F5C710', '#9E9E9E'];
 
 module.exports = {
-  setPalette: { ds: false, fields: [{ k: 'pal', type: 'choice', label: 'Color palette',
-      choices: ['default', 'R3', 'R4', 'ggplot2', 'Okabe-Ito', 'Accent', 'Dark 2', 'Paired', 'Pastel 1', 'Pastel 2', 'Set 1', 'Set 2', 'Set 3', 'Tableau 10', 'Classic Tableau', 'Polychrome 36', 'Alphabet'].map(p => [p, p]) }],
-    code: v => `palette(${rs(v.pal)})\npalette()` },
+  // Rcmdr shows the eight colours of the palette, each one editable.
+  setPalette: { ds: false,
+    fields: PALETTE.map((hex, i) => ({ k: `hex${i + 1}`, type: 'text', label: '', prompt: `${i + 1}`, def: hex, compact: true,
+      pattern: /^(#[0-9A-Fa-f]{6}|[A-Za-z]+[0-9]*)$/, error: 'Enter a colour, e.g. #DF536B or red' })),
+    code: v => `palette(c(${PALETTE.map((_, i) => `"${v[`hex${i + 1}`].trim()}"`).join(', ')}))` },
 
-  indexPlot: { pkgs: ['RcmdrMisc'],
-    fields: [numVars('xs', 'Variable (pick one or more)'), groups('g', 'Mark by groups'),
-      { k: 'type', type: 'choice', label: 'Style of plot', choices: [['h', 'Spikes'], ['p', 'Points']] }, identifyField, ...labelFields(['ylab', 'main'])],
-    code: (v, c) => v.xs.map(n => `RcmdrMisc::indexplot(${c.dv(n)}, ${v.g ? `groups = ${c.dv(v.g)}, ` : ''}labels = rownames(${c.ds}), id.method = "y", type = ${rs(v.type)}, id.n = ${v.idn}, ` +
-      `ylab = ${rs(given(v.ylab) ? v.ylab.trim() : n)}${given(v.main) ? `, title = ${rs(v.main.trim())}` : ''})`).join('\n') },
-  DotPlot: { pkgs: ['RcmdrMisc'],
-    fields: [numVar('x'), groups('g'), flagsOf('Plot Options', [['bin', 'Bin variable', false]]),
-      { k: 'bins', type: 'num', int: true, min: 2, def: '10', label: 'Number of bins: ', when: v => v.flags.bin }, ...labelFields(['xlab'])],
-    code: (v, c) => `RcmdrMisc::Dotplot(${c.dv(v.x)}, ${v.g ? `by = ${c.dv(v.g)}, ` : ''}bin = ${rbool(v.flags.bin)}${v.flags.bin ? `, breaks = ${v.bins}` : ''}, xlab = ${rs(given(v.xlab) ? v.xlab.trim() : v.x)})` },
-  Histogram: { pkgs: ['RcmdrMisc'],
-    fields: [numVar('x'), groups('g'), { k: 'bins', type: 'text', label: 'Number of bins: ', optional: true, def: '', pattern: /^\d+$/, error: 'Enter a whole number or leave blank.', sample: '8' }, scale, ...labelFields()],
-    code: (v, c) => `RcmdrMisc::Hist(${c.dv(v.x)}, ${v.g ? `groups = ${c.dv(v.g)}, ` : ''}scale = ${rs(v.scale)}, breaks = ${v.bins.trim() || '"Sturges"'}, col = "darkgray"${labelArgs(v)})` },
-  DiscretePlot: { pkgs: ['RcmdrMisc'], fields: [{ k: 'x', type: 'var', kind: 'numeric', label: 'Variable (pick one)' }, groups('g'),
-      { k: 'scale', type: 'choice', label: 'Axis scaling', choices: [['frequency', 'Frequency counts'], ['percent', 'Percentages']] }, ...labelFields()],
-    code: (v, c) => `RcmdrMisc::discretePlot(${c.dv(v.x)}, ${v.g ? `by = ${c.dv(v.g)}, ` : ''}scale = ${rs(v.scale)}, xlab = ${rs(given(v.xlab) ? v.xlab.trim() : v.x)}${labelArgs(v, ['ylab', 'main'])})` },
-  DensityPlot: { pkgs: ['car'],
-    fields: [numVar('x'), groups('g'),
-      { k: 'kernel', type: 'choice', label: 'Kernel Function', choices: [['gaussian', 'Gaussian'], ['epanechnikov', 'Epanechnikov'], ['biweight', 'Biweight']] },
-      { k: 'method', type: 'choice', label: 'Method', choices: [['adaptive', 'Adaptive kernel'], ['kernel', 'Fixed bandwidth']] },
-      { k: 'bw', type: 'text', optional: true, def: '<auto>', label: 'Bandwidth', pattern: /^(<auto>|\s*\d*\.?\d+\s*)$/, error: 'Bandwidth must be <auto> or a positive number', sample: '0.5' },
-      { k: 'adjust', type: 'num', min: 0.01, def: '1', label: 'Multiply bandwidth by' },
-      { k: 'from', type: 'text', optional: true, def: '<auto>', label: 'From', pattern: /^(<auto>|\s*-?\d*\.?\d+\s*)$/, error: 'Enter a number or <auto>', sample: '0' },
-      { k: 'to', type: 'text', optional: true, def: '<auto>', label: 'To', pattern: /^(<auto>|\s*-?\d*\.?\d+\s*)$/, error: 'Enter a number or <auto>', sample: '10' },
-      ...labelFields(['xlab', 'ylab'])],
+  indexPlot: {
+    fields: [{ k: 'xs', type: 'var', kind: 'numeric', multi: true, label: 'Variable (pick one or more)' }, groupsBox('Mark by groups'),
+      choice('type', 'Style of plot', [['h', 'Spikes'], ['p', 'Points']]), identify, idn(), ...plotLabels(['ylab', 'main'])],
     code(v, c) {
-      const range = given(v.from) && given(v.to) ? `, xlim = c(${v.from.trim()}, ${v.to.trim()})` : '';
-      const bw = given(v.bw) ? `, bw = ${v.bw.trim()}` : '';
-      // The adaptive method takes a kernel function, the fixed one a kernel name.
-      const kernel = v.method === 'adaptive' ? { gaussian: 'dnorm', epanechnikov: 'car::depan', biweight: 'car::dbiwt' }[v.kernel] : rs(v.kernel);
-      return `car::densityPlot(${v.g ? `${c.S(v.x)} ~ ${c.S(v.g)}, data = ${c.ds}` : c.dv(v.x)}, method = ${rs(v.method)}${bw}, adjust = ${v.adjust}, kernel = ${kernel}${range}${labelArgs(v, ['xlab', 'ylab'])})`;
+      const x = v.xs.length === 1 ? `'${v.xs[0]}'` : `c(${v.xs.map(n => `'${n}'`).join(', ')})`;
+      return `indexplot(${c.ds}[,${x}, drop=FALSE], type='${v.type}', id.method='y', id.n=${v.identify === 'not' ? 0 : v.idn}${labelArgs(v, ['ylab', 'main'])}${v.g ? `, groups=${c.ds}$${v.g}` : ''})`;
+    } },
+  DotPlot: {
+    fields: [{ k: 'x', type: 'var', kind: 'numeric', label: 'Variable (pick one)' }, groupsBox(),
+      check('bin', 'Bin variable'), { k: 'bins', type: 'text', label: 'Number of bins: ', def: AUTO, compact: true, when: v => v.bin.bin }, ...plotLabels(['xlab'])],
+    code(v, c) {
+      const breaks = v.bin.bin ? `, breaks=${v.bins.trim() === AUTO ? '"Sturges"' : Number(v.bins)}` : '';
+      return `with(${c.ds}, Dotplot(${v.x}${v.g ? `, by=${v.g}` : ''}, bin=${v.bin.bin ? 'TRUE' : 'FALSE'}${breaks}${labelArg(v, 'xlab')}))`;
+    } },
+  Histogram: {
+    fields: [{ k: 'x', type: 'var', kind: 'numeric', label: 'Variable (pick one)' }, groupsBox(),
+      { k: 'bins', type: 'text', label: 'Number of bins: ', def: AUTO, pattern: /^(<auto>|\s*\d+\s*)$/, error: 'Enter a whole number or <auto>' },
+      choice('scale', 'Axis Scaling', [['frequency', 'Frequency counts'], ['percent', 'Percentages'], ['density', 'Densities']]), ...plotLabels()],
+    code: (v, c) => `with(${c.ds}, Hist(${v.x}${v.g ? `, groups=${v.g}` : ''}, scale="${v.scale}", breaks=${v.bins.trim() === AUTO ? '"Sturges"' : v.bins.trim()}, col="darkgray"${labelArgs(v)}))` },
+  DiscretePlot: {
+    fields: [{ k: 'x', type: 'var', kind: 'discrete', label: 'Variable (pick one)' }, groupsBox(),
+      choice('scale', 'Axis Scaling', [['frequency', 'Frequency counts'], ['percent', 'Percentages']]), ...plotLabels()],
+    code: (v, c) => `with(${c.ds}, discretePlot(${v.x}${v.g ? `, by=${v.g}` : ''}, scale="${v.scale}"${labelArgs(v)}))` },
+  DensityPlot: {
+    fields: [{ k: 'x', type: 'var', kind: 'numeric', label: 'Variable (pick one)' }, groupsBox(),
+      choice('kernel', '', [['gaussian', 'Gaussian'], ['epanechnikov', 'Epanechnikov'], ['biweight', 'Tukey biweight']], undefined, { prompt: 'Kernel Function' }),
+      choice('method', 'Method', [['adaptive', 'adaptive kernel'], ['kernel', 'kernel']]),
+      { k: 'bw', type: 'text', label: 'Bandwidth', def: AUTO, pattern: /^(<auto>|\s*\d*\.?\d+\s*)$/, error: 'Bandwidth must be <auto> or a positive number' },
+      { k: 'adjust', type: 'num', min: 0.1, max: 10, def: '1', label: 'Multiply bandwidth by' },
+      { k: 'from', type: 'text', label: 'From', def: AUTO, compact: true }, { k: 'to', type: 'text', label: 'To', def: AUTO, compact: true },
+      ...plotLabels(['xlab', 'ylab'])],
+    code(v, c) {
+      const bw = v.bw.trim() === AUTO ? (v.method === 'adaptive' ? 'bw.SJ' : '"SJ"') : v.bw.trim();
+      const kernel = v.method === 'adaptive' ? { gaussian: 'dnorm', epanechnikov: 'depan', biweight: 'dbiwt' }[v.kernel] : `"${v.kernel}"`;
+      // As Rcmdr: "To" is used only when "From" is given.
+      const range = v.from.trim() === AUTO ? '' : `, from=${v.from.trim()}, to=${v.to.trim()}`;
+      return `densityPlot(${v.g ? `${v.x}~${v.g}` : `~ ${v.x}`}, data=${c.ds}, bw=${bw}, adjust=${v.adjust}, kernel=${kernel}, method="${v.method}"${range}${labelArgs(v, ['xlab', 'ylab'])})`;
     } },
   stemAndLeaf: { pkgs: ['aplpack'],
-    fields: [numVar('x', 'Variable (pick one)'), { k: 'back', type: 'var', kind: 'twolevel', optional: true, label: 'Plot back-to-back by:' },
-      { k: 'leaf', type: 'text', def: 'auto', label: 'Leafs Digit:  ', pattern: /^\s*(auto|-?\d+)\s*$/, error: 'Enter auto or a whole number (the leaf unit is 10^n).' },
-      { k: 'parts', type: 'choice', label: 'Parts Per Stem', choices: [['auto', 'Automatic'], ['1', '1'], ['2', '2'], ['5', '5']] },
-      { k: 'style', type: 'choice', label: 'Style of Divided Stems', choices: [['Tukey', 'Tukey'], ['bare', 'Repeated stem digits']] },
-      flagsOf('Other Options', [['trim', 'Trim outliers', true], ['depths', 'Show depths', true], ['reverse', 'Reverse negative leaves', true]])],
+    fields: [{ k: 'x', type: 'var', kind: 'numeric', label: 'Variable (pick one)' }, groupsBox('Plot back-to-back by', 'twolevel'),
+      check('auto', 'Automatic', true, { prompt: 'Leafs Digit:  ' }),
+      { k: 'unit', type: 'num', int: true, min: -6, max: 6, def: '0', label: 'Leafs Digit:  ', when: v => !v.auto.auto },
+      choice('m', 'Parts Per Stem', [['auto', 'Automatic'], ['1', '   1'], ['2', '   2'], ['5', '   5']]),
+      choice('style', 'Style of Divided Stems', [['Tukey', 'Tukey'], ['bare', 'Repeated stem digits']]),
+      { k: 'opts', type: 'flags', label: 'Other Options', items: [['trim', 'Trim outliers', true], ['depths', 'Show depths', true], ['reverse', 'Reverse negative leaves', true]] }],
     code(v, c) {
-      const unit = v.leaf.trim() === 'auto' ? '' : `, unit = ${10 ** Number(v.leaf)}`;
-      const opts = `${v.style === 'bare' ? ', style = "bare"' : ''}${unit}${v.parts === 'auto' ? '' : `, m = ${v.parts}`}` +
-        `${v.flags.trim ? '' : ', trim.outliers = FALSE'}${v.flags.depths ? '' : ', depths = FALSE'}${v.flags.reverse ? '' : ', reverse.negative.leaves = FALSE'}, na.rm = TRUE`;
-      if (v.back) {
-        const g = c.dv(v.back), x = c.dv(v.x);
-        return lines('local({', `  .lv <- levels(as.factor(${g}))`, `  invisible(aplpack::stem.leaf.backback(${x}[${g} == .lv[1]], ${x}[${g} == .lv[2]]${opts}))`, '})');
-      }
-      return `invisible(aplpack::stem.leaf(${c.dv(v.x)}${opts}))`;
-    } },
-  boxPlot: { fields: [numVars('ys', 'Variable (pick one or more)'), groups('g', 'Plot by groups (with one variable)'),
-      flagsOf('Identify Outliers', [['id', 'Identify outliers with the row names', false]]), ...labelFields()],
+      const opts = `${v.style === 'Tukey' ? '' : ', style="bare"'}${v.auto.auto ? '' : `, unit=${10 ** Number(v.unit)}`}${v.m === 'auto' ? '' : `, m=${v.m}`}` +
+        `${v.opts.trim ? '' : ', trim.outliers=FALSE'}${v.opts.depths ? '' : ', depths=FALSE'}${v.opts.reverse ? '' : ', reverse.negative.leaves=FALSE'}, na.rm=TRUE`;
+      if (!v.g) return `library(aplpack)\nwith(${c.ds}, stem.leaf(${v.x}${opts}))`;
+      return `library(aplpack)\nwith(${c.ds}, stem.leaf.backback(${v.x}[${v.g} == "${v.levels[0]}"], ${v.x}[${v.g} == "${v.levels[1]}"]${opts}))`;
+    },
+    async after(v, ui) { v.levels = v.g ? await ui.query(`levels(as.factor(${ui.ctx.ds}$${v.g}))`) || [] : []; return true; } },
+  boxPlot: {
+    fields: [{ k: 'ys', type: 'var', kind: 'numeric', multi: true, label: 'Variable (pick one or more)' }, groupsBox(),
+      choice('identify', 'Identify Outliers', [['y', 'Automatically'], ['none', 'No']]), ...plotLabels()],
+    check: v => (v.g && v.ys.length > 1 ? 'You cannot plot by groups with more than one variable selected' : undefined),
+    code: (v, c) => (v.g ? `Boxplot(${v.ys[0]} ~ ${v.g}, data=${c.ds}, id=list(method="${v.identify}")${labelArgs(v)})`
+      : `Boxplot( ~ ${v.ys.join(' + ')}, data=${c.ds}, id=list(method="${v.identify}")${labelArgs(v, ['ylab', 'main'])})`) },
+  QQPlot: {
+    fields: [{ k: 'x', type: 'var', kind: 'numeric', label: 'Variable (pick one)' }, groupsBox(),
+      choice('dist', 'Distribution', [['norm', 'Normal'], ['t', 't'], ['chisq', 'Chi-square'], ['f', 'F'], ['other', 'Other']]),
+      { k: 'df', type: 'text', label: 'df = ', def: '', compact: true, when: v => v.dist === 't' },
+      { k: 'chisqdf', type: 'text', label: 'df = ', def: '', compact: true, when: v => v.dist === 'chisq' },
+      { k: 'fdf1', type: 'text', label: 'Numerator df = ', def: '', compact: true, when: v => v.dist === 'f' },
+      { k: 'fdf2', type: 'text', label: 'Denominator df = ', def: '', compact: true, when: v => v.dist === 'f' },
+      { k: 'othername', type: 'text', label: 'Specify: ', def: '', compact: true, when: v => v.dist === 'other' },
+      { k: 'otherparam', type: 'text', label: 'Parameters: ', def: '', when: v => v.dist === 'other' },
+      identify, idn(), ...plotLabels()],
+    check(v) {
+      const num = s => /^\s*\d*\.?\d+\s*$/.test(s || '');
+      if (v.dist === 't' && !num(v.df)) return 'You must specify the degrees of freedom.';
+      if (v.dist === 'chisq' && !num(v.chisqdf)) return 'You must specify the degrees of freedom.';
+      if (v.dist === 'f' && (!num(v.fdf1) || !num(v.fdf2))) return 'You must specify the degrees of freedom.';
+      if (v.dist === 'other' && (!v.othername.trim() || !v.otherparam.trim())) return 'You must specify the distribution name and parameters.';
+      return undefined;
+    },
     code(v, c) {
-      const one = v.ys.length === 1;
-      const data = one ? (v.g ? `${c.S(v.ys[0])} ~ ${c.S(v.g)}, data = ${c.ds}` : c.dv(v.ys[0])) : c.cols(v.ys);
-      const labels = labelArgs(v);
-      const ylab = !labels.includes('ylab =') && one ? `, ylab = ${rs(v.ys[0])}` : '';
-      return v.flags.id ? `car::Boxplot(${data}, id = list(method = "y")${ylab}${labels})` : `boxplot(${data}${ylab}${labels})`;
+      const args = v.dist === 'norm' ? 'dist="norm"' : v.dist === 't' ? `dist="t", df=${v.df}` : v.dist === 'chisq' ? `dist="chisq", df=${v.chisqdf}`
+        : v.dist === 'f' ? `dist="f", df1=${v.fdf1}, df2=${v.fdf2}` : `dist="${v.othername.trim()}", ${v.otherparam.trim()}`;
+      return `with(${c.ds}, qqPlot(${v.x}, ${args}, id=list(method="y", n=${v.identify === 'not' ? 0 : v.idn}, labels=rownames(${c.ds}))${labelArgs(v)}${v.g ? `, groups=${v.g}` : ''}))`;
     } },
-  QQPlot: { pkgs: ['car'], fields: [numVar('x'), groups('g'),
-      { k: 'dist', type: 'choice', label: 'Distribution', choices: [['norm', 'Normal'], ['t', 't'], ['chisq', 'Chi-squared'], ['f', 'F'], ['other', 'Other']] },
-      { k: 'df', type: 'num', min: 1, def: '5', label: 'df = ', when: v => v.dist === 't' || v.dist === 'chisq' || v.dist === 'f' },
-      { k: 'df2', type: 'num', min: 1, def: '5', label: 'Denominator df = ', when: v => v.dist === 'f' },
-      { k: 'other', type: 'text', def: 'exp', label: 'Specify:  ', pattern: /^[A-Za-z][A-Za-z0-9._]*$/, error: 'Enter the name of a distribution, e.g. exp', when: v => v.dist === 'other' },
-      { k: 'params', type: 'text', optional: true, def: '', label: 'Parameters:  ', sample: 'rate = 2', when: v => v.dist === 'other' },
-      identifyField, ...labelFields()],
+  Symbox: {
+    fields: [{ k: 'x', type: 'var', kind: 'numeric', label: 'Variable (pick one)' },
+      choice('family', 'Transformation Family', [['bcPower', 'Box-Cox'], ['bcnPower', 'Box-Cox with negatives'], ['yjPower', 'Yeo-Johnson']]),
+      { k: 'start', type: 'text', optional: true, def: '', label: 'Start (optional)', pattern: /^\s*-?\d*\.?\d+\s*$/, error: 'Enter a number or leave blank.' },
+      { k: 'powers', type: 'text', label: 'Powers', def: '-1, -0.5, 0, 0.5, 1' }],
     code(v, c) {
-      const dist = v.dist === 'other' ? v.other : v.dist;
-      const extra = v.dist === 't' || v.dist === 'chisq' ? `, df = ${v.df}` : v.dist === 'f' ? `, df1 = ${v.df}, df2 = ${v.df2}` : v.dist === 'other' && v.params.trim() ? `, ${v.params.trim()}` : '';
-      return `car::qqPlot(${v.g ? `${c.S(v.x)} ~ ${c.S(v.g)}, data = ${c.ds}` : c.dv(v.x)}, distribution = ${rs(dist)}${extra}, id = list(n = ${v.idn}, method = "y")${labelArgs(v)})`;
+      const powers = `c(${v.powers.replace(/ /g, ',').replace(/,+/g, ',')})`;
+      return `symbox(~ ${v.x}, data=${c.ds}, trans=${v.family}, powers=${powers}${v.start.trim() ? `, start=${v.start.trim()}` : ''})`;
     } },
-  Symbox: { pkgs: ['car'], fields: [numVar('x', 'Variable (positive values)'),
-      { k: 'start', type: 'text', optional: true, def: '', label: 'Start (optional)', pattern: /^\s*-?\d*\.?\d+\s*$/, error: 'Enter a number or leave blank.', sample: '0' },
-      { k: 'powers', type: 'numlist', label: 'Powers', def: '-1, -0.5, 0, 0.5, 1' }],
-    code: (v, c) => `car::symbox(~${c.S(v.x)}, data = ${c.ds}${v.start.trim() ? `, start = ${v.start.trim()}` : ''}, powers = c(${v.powers.join(', ')}))` },
 
-  scatterPlot: { pkgs: ['car'],
-    fields: [numVar('x', 'x-variable (pick one)'), numVar('y', 'y-variable (pick one)', { exclude: ['x'] }), groups('g'),
-      flagsOf('Plot Options', [['line', 'Least-squares line', true], ['smooth', 'Smooth line', false], ['box', 'Marginal boxplots', false], ['ellipse', 'Plot concentration ellipse(s)', false]]),
-      { ...spanField, when: v => v.flags.smooth }, { ...levelsField, when: v => v.flags.ellipse },
-      { k: 'legend', type: 'choice', label: 'Legend Position', choices: legendChoices, when: v => Boolean(v.g) },
-      identifyField, ...sizeFields, ...labelFields(['xlab', 'ylab'])],
-    code: (v, c) => `car::scatterplot(${c.S(v.y)} ~ ${c.S(v.x)}${v.g ? ` | ${c.S(v.g)}` : ''}, regLine = ${rbool(v.flags.line)}, ` +
-      `smooth = ${v.flags.smooth ? `list(span = ${v.span})` : 'FALSE'}, boxplots = ${v.flags.box ? '"xy"' : 'FALSE'}, ` +
-      `ellipse = ${v.flags.ellipse ? `list(levels = c(${v.levels.join(', ')}))` : 'FALSE'}, id = ${id(v)}${v.g ? `, legend = list(coords = ${rs(v.legend)})` : ''}, ` +
-      `cex = ${v.cex}, cex.axis = ${v.cexAxis}, cex.lab = ${v.cexLab}${labelArgs(v, ['xlab', 'ylab'])}, data = ${c.ds})` },
-  scatterPlotMatrix: { pkgs: ['car'],
-    fields: [numVars('xs', 'Select variables (three or more)', 3), groups('g'),
-      { k: 'diag', type: 'choice', label: 'On Diagonal', choices: [['density', 'Density estimate'], ['histogram', 'Histogram'], ['boxplot', 'Boxplot'], ['qqplot', 'Normal QQ plot'], ['none', 'Nothing']] },
-      flagsOf('Other Options', [['line', 'Least-squares lines', true], ['smooth', 'Smooth lines', false], ['ellipse', 'Plot concentration ellipse(s)', false]]),
-      { ...spanField, when: v => v.flags.smooth }, { ...levelsField, when: v => v.flags.ellipse }, identifyField, ...labelFields(['main'])],
-    code: (v, c) => `car::scatterplotMatrix(~${v.xs.map(S).join(' + ')}${v.g ? ` | ${c.S(v.g)}` : ''}, regLine = ${rbool(v.flags.line)}, ` +
-      `smooth = ${v.flags.smooth ? `list(span = ${v.span})` : 'FALSE'}, ellipse = ${v.flags.ellipse ? `list(levels = c(${v.levels.join(', ')}))` : 'FALSE'}, ` +
-      `id = ${id(v)}, diagonal = list(method = ${rs(v.diag)})${labelArgs(v, ['main'])}, data = ${c.ds})` },
-  linePlot: { fields: [numVar('x', 'x variable (pick one)'), numVars('ys', 'y variables (pick one or more)', 1, { exclude: ['x'] })],
-    code: (v, c) => lines(`.ord <- order(${c.dv(v.x)})`,
-      `matplot(${c.dv(v.x)}[.ord], ${c.cols(v.ys)}[.ord, , drop = FALSE], type = "b", pch = 1:${v.ys.length}, lty = 1, xlab = ${rs(v.x)}, ylab = ${rs(v.ys.join(', '))})`,
-      v.ys.length > 1 && `legend("topright", legend = ${rc(v.ys)}, pch = 1:${v.ys.length}, col = 1:${v.ys.length}, lty = 1)`, 'rm(.ord)') },
-  Xyplot: { fields: [numVars('xs', 'Explanatory variables (pick one or more)'), numVars('ys', 'Response variables (pick one or more)', 1, { exclude: ['xs'] }),
+  scatterPlot: {
+    fields: [{ k: 'x', type: 'var', kind: 'numeric', label: 'x-variable (pick one)' }, { k: 'y', type: 'var', kind: 'numeric', exclude: ['x'], label: 'y-variable (pick one)' },
+      groupsBox(), check('byGroup', 'Plot lines by group', true, { when: v => Boolean(v.g) }), subsetField,
+      { k: 'opts', type: 'flags', label: 'Plot Options', items: [['jitterX', 'Jitter x-variable', false], ['jitterY', 'Jitter y-variable', false], ['logX', 'Log x-axis', false],
+        ['logY', 'Log y-axis', false], ['boxplots', 'Marginal boxplots', false], ['lsLine', 'Least-squares line', false], ['smoothLine', 'Smooth line', false], ['spread', 'Show spread', false]] },
+      { k: 'span', type: 'num', int: true, min: 5, max: 100, def: '50', label: 'Span for smooth' },
+      check('ellipse', 'Plot concentration ellipse(s)'), { k: 'levels', type: 'text', label: 'Concentration levels: ', def: '.5, .9' },
+      choice('identify', 'Identify Points', [['auto', 'Automatically'], ['not', 'Do not identify']], 'not'), idn(),
+      ...plotLabels(), { k: 'pch', type: 'text', label: 'Plotting characters', def: AUTO },
+      { k: 'cex', type: 'num', min: 0.5, max: 2.5, def: '1', label: 'Point size' }, { k: 'cexAxis', type: 'num', min: 0.5, max: 2.5, def: '1', label: 'Axis text size' },
+      { k: 'cexLab', type: 'num', min: 0.5, max: 2.5, def: '1', label: 'Axis-labels text size' },
+      choice('legend', 'Legend Position', [['above', 'Above plot'], ['topleft', 'Top left'], ['topright', 'Top right'], ['bottomleft', 'Bottom left'], ['bottomright', 'Bottom right']], undefined, { when: v => Boolean(v.g) })],
+    code(v, c) {
+      const o = v.opts;
+      const jitter = o.jitterX && o.jitterY ? ', jitter=list(x=1, y=1)' : o.jitterX ? ', jitter=list(x=1)' : o.jitterY ? ', jitter=list(y=1)' : '';
+      const log = `${o.logX ? 'x' : ''}${o.logY ? 'y' : ''}`;
+      const smooth = o.smoothLine ? `, smooth=list(span=${Number(v.span) / 100}, spread=${o.spread ? 'TRUE' : 'FALSE'})` : ', smooth=FALSE';
+      const id = v.identify === 'auto' ? `, id=list(method='mahal', n=${v.idn})` : '';
+      const ellipse = v.ellipse.ellipse ? `, ellipse=list(levels=${levelsVector(v.levels)})` : '';
+      const cex = ['cex', 'cexAxis', 'cexLab'].map((k, i) => (Number(v[k]) === 1 ? '' : `, ${['cex', 'cex.axis', 'cex.lab'][i]}=${v[k]}`)).join('');
+      const pch = v.pch.trim() === AUTO ? '' : `, pch=c(${v.pch.replace(/ /g, ',')})`;
+      const groups = v.g ? `, by.groups=${v.byGroup.byGroup ? 'TRUE' : 'FALSE'}${v.legend !== 'above' ? `, legend=list(coords="${v.legend}")` : ''}` : '';
+      return `scatterplot(${v.y}~${v.x}${v.g ? ` | ${v.g}` : ''}${log ? `, log="${log}"` : ''}, regLine=${o.lsLine ? 'TRUE' : 'FALSE'}${smooth}${id}, boxplots=${o.boxplots ? "'xy'" : 'FALSE'}` +
+        `${ellipse}${jitter}${labelArgs(v)}${cex}${pch}${groups}, data=${c.ds}${subsetArg(v)})`;
+    } },
+  scatterPlotMatrix: {
+    fields: [{ k: 'xs', type: 'var', kind: 'numeric', multi: true, min: 3, label: 'Select variables (three or more)' },
+      groupsBox(), check('byGroup', 'Plot lines by group', true, { when: v => Boolean(v.g) }), subsetField,
+      { k: 'opts', type: 'flags', label: 'Other Options', items: [['lsLine', 'Least-squares lines', false], ['smoothLine', 'Smooth lines', false], ['spread', 'Show spread', false]] },
+      { k: 'span', type: 'num', int: true, min: 5, max: 100, def: '50', label: 'Span for smooth' },
+      check('ellipse', 'Plot concentration ellipse(s)'), { k: 'levels', type: 'text', label: 'Concentration levels: ', def: '.5, .9' },
+      idn('Number of points to identify  \nin each panel and group ', '0'),
+      choice('diag', 'On Diagonal', [['density', 'Density plots'], ['histogram', 'Histograms'], ['boxplot', 'Boxplots'], ['oned', 'One-dimensional scatterplots'], ['qqplot', 'Normal QQ plots'], ['none', 'Nothing (empty)']]),
+      ...plotLabels(['main'])],
+    code(v, c) {
+      const o = v.opts;
+      const smooth = o.smoothLine ? `, smooth=list(span=${Number(v.span) / 100}, spread=${o.spread ? 'TRUE' : 'FALSE'})` : ', smooth=FALSE';
+      const ellipse = v.ellipse.ellipse ? `, ellipse=list(levels=${levelsVector(v.levels)})` : '';
+      const id = Number(v.idn) !== 0 ? `, id=list(method="mahal", n=${v.idn})` : '';
+      return `scatterplotMatrix(~${v.xs.join('+')}${v.g ? ` | ${v.g}, \n                       ` : ', '}regLine=${o.lsLine ? 'TRUE' : 'FALSE'}${smooth}${ellipse}${id}, ` +
+        `diagonal=list(method="${v.diag}")${v.g ? `, by.groups=${v.byGroup.byGroup ? 'TRUE' : 'FALSE'}` : ''}, data=${c.ds}${subsetArg(v)}${labelArg(v, 'main')})`;
+    } },
+  linePlot: {
+    fields: [{ k: 'x', type: 'var', kind: 'numeric', label: 'x variable (pick one)' }, { k: 'ys', type: 'var', kind: 'numeric', multi: true, exclude: ['x'], label: 'y variables (pick one or more)' }],
+    code: (v, c) => `with(${c.ds}, lineplot(${v.x}, ${v.ys.join(', ')}))` },
+  Xyplot: {
+    fields: [{ k: 'xs', type: 'var', kind: 'numeric', multi: true, label: 'Explanatory variables (pick one or more)' },
+      { k: 'ys', type: 'var', kind: 'numeric', multi: true, exclude: ['xs'], label: 'Response variables (pick one or more)' },
       { k: 'cond', type: 'var', kind: 'factor', multi: true, min: 0, label: "Conditions '|' (pick zero or more)" },
-      { k: 'grp', type: 'var', kind: 'factor', multi: true, min: 0, label: "Groups 'groups=' (pick zero or more)" },
-      flagsOf('Plot Type (one or both)', [['points', 'Points', true], ['lines', 'Lines', false], ['reg', 'Add a least-squares line', true]]),
-      { k: 'xs_rel', type: 'choice', label: 'X-Axis Scales in Different Panels', choices: [['same', 'Identical'], ['free', 'Free'], ['sliced', 'Sliced']] },
-      { k: 'ys_rel', type: 'choice', label: 'Y-Axis Scales in Different Panels', choices: [['same', 'Identical'], ['free', 'Free'], ['sliced', 'Sliced']] },
-      { k: 'cols', type: 'text', optional: true, def: '<auto>', label: 'number of columns: ', pattern: /^(<auto>|\s*\d+\s*)$/, error: 'Enter a whole number or <auto>', sample: '2' },
-      { k: 'rows', type: 'text', optional: true, def: '<auto>', label: 'number of rows: ', pattern: /^(<auto>|\s*\d+\s*)$/, error: 'Enter a whole number or <auto>', sample: '2' },
-      ...labelFields()],
+      { k: 'grp', type: 'var', kind: 'factor', multi: true, min: 0, exclude: ['cond'], label: "Groups 'groups=' (pick zero or more)" },
+      { k: 'opts', type: 'flags', label: 'Other Options', items: [['auto.key', 'Automatically draw key', true], ['outer', 'Different panels for different y ~ x combinations', false]] },
+      { k: 'type', type: 'flags', label: 'Plot Type (one or both)', items: [['points', 'Points', true], ['lines', 'Lines', false]] },
+      choice('xrel', 'X-Axis Scales in Different Panels', [['same', 'Identical'], ['free', 'Free'], ['sliced', 'Same range']]),
+      choice('yrel', 'Y-Axis Scales in Different Panels', [['same', 'Identical'], ['free', 'Free'], ['sliced', 'Same range']]),
+      { k: 'cols', type: 'text', optional: true, def: '', label: 'number of columns:', compact: true, pattern: /^\s*\d*\s*$/, error: 'Enter a whole number or leave blank.' },
+      { k: 'rows', type: 'text', optional: true, def: '', label: 'number of rows:', compact: true, pattern: /^\s*\d*\s*$/, error: 'Enter a whole number or leave blank.' },
+      ...plotLabels()],
+    check: v => (!v.type.points && !v.type.lines ? 'Choose at least one of points or lines.' : undefined),
+    async after(v, ui) {
+      v.condLevels = 1;
+      for (const g of v.cond) v.condLevels *= Number((await ui.query(`nlevels(as.factor(${ui.ctx.ds}$${g}))`))?.[0] || 1);
+      return true;
+    },
     code(v, c) {
-      const type = [v.flags.points && '"p"', v.flags.lines && '"l"', v.flags.reg && '"r"'].filter(Boolean);
-      const both = given(v.cols) && given(v.rows);
-      const inter = names => names.length > 1 ? `interaction(${names.map(S).join(', ')})` : S(names[0]);
-      return `print(lattice::xyplot(${v.ys.map(S).join(' + ')} ~ ${v.xs.map(S).join(' + ')}${v.cond.length ? ` | ${v.cond.map(S).join(' + ')}` : ''}, ` +
-        `type = c(${type.join(', ') || '"p"'}), data = ${c.ds}${v.grp.length ? `, groups = ${inter(v.grp)}, auto.key = list(space = "right")` : ''}, ` +
-        `scales = list(x = list(relation = ${rs(v.xs_rel)}), y = list(relation = ${rs(v.ys_rel)}))${both ? `, layout = c(${v.cols.trim()}, ${v.rows.trim()})` : ''}${labelArgs(v)}))`;
+      const layout = v.cols.trim() && v.rows.trim() ? `c(${Number(v.cols)}, ${Number(v.rows)})` : '';
+      const outer = v.opts.outer;
+      let conditions = '';
+      if (!v.cond.length) conditions = outer ? (layout ? `, layout=${layout}` : `, layout=c( ${v.xs.length} , ${v.ys.length} )`) : layout ? `, layout=${layout}` : '';
+      else if (outer) {
+        const n = v.condLevels * v.xs.length - 1;
+        const between = Array.from({ length: n }, (_, i) => ((i + 1) % v.condLevels === 0 ? 1 : 0)).join(',');
+        conditions = layout ? `, layout=${layout}` : `, layout=c( ${v.condLevels} * ${v.xs.length} , ${v.ys.length} ), between=list(x=c(${between}), y=1)`;
+      } else if (layout) conditions = `, layout=${layout}`;
+      const groups = !v.grp.length ? '' : v.grp.length === 1 ? `, groups=${v.grp[0]}` : `, groups=interaction(${v.grp.join(',')})`;
+      const type = [v.type.points && '"p"', v.type.lines && '"l"'].filter(Boolean);
+      return lines('library(lattice)', `xyplot(${v.ys.join(' + ')} ~ ${v.xs.join(' + ')}${v.cond.length ? ` | ${v.cond.join(' + ')}` : ''}${outer ? ', outer=TRUE' : ''}${conditions}${groups}` +
+        `, type=${type.length > 1 ? `c(${type.join(', ')})` : type[0]}, pch=16${v.opts['auto.key'] ? ', auto.key=list(border=TRUE), par.settings=simpleTheme(pch=16)' : ''}` +
+        `, scales=list(x=list(relation='${v.xrel}'), y=list(relation='${v.yrel}')), data=${c.ds}${labelArgs(v)})`);
     } },
-  PlotMeans: { pkgs: ['RcmdrMisc'], fields: [factor('a', 'Factors (pick one or two)'), factor('b', 'Factor 2 (optional)', { optional: true, exclude: ['a'] }), numVar('y', 'Response Variable (pick one)'),
-      { k: 'err', type: 'choice', label: 'Error Bars', choices: [['se', 'Standard errors'], ['sd', 'Standard deviations'], ['conf.int', 'Confidence intervals'], ['none', 'No error bars']] },
-      { k: 'level', type: 'num', min: 0.0001, max: 0.9999, def: '0.95', label: 'Level of confidence: ', when: v => v.err === 'conf.int' },
-      { k: 'legend', type: 'choice', label: 'Position of Legend', choices: [['farright', 'farright'], ...['bottomright', 'bottom', 'bottomleft', 'left', 'topleft', 'top', 'topright', 'right', 'center'].map(p => [p, p])], when: v => Boolean(v.b) },
-      flagsOf('Options', [['connect', 'Connect profiles of means', true]]), ...labelFields()],
-    code: (v, c) => `RcmdrMisc::plotMeans(${c.dv(v.y)}, ${c.dv(v.a)}, ${v.b ? `${c.dv(v.b)}, ` : ''}error.bars = ${rs(v.err)}${v.err === 'conf.int' ? `, level = ${v.level}` : ''}` +
-      `${v.b ? `, legend.pos = ${rs(v.legend)}` : ''}, connect = ${rbool(v.flags.connect)}${labelArgs(v)})` },
-  stripChart: { fields: [{ k: 'gs', type: 'var', kind: 'factor', multi: true, min: 0, label: 'Factors (pick zero or more)' }, numVar('y', 'Response Variable (pick one)'),
-      { k: 'method', type: 'choice', label: 'Duplicate Values', choices: [['overplot', 'Overplot'], ['jitter', 'Jitter'], ['stack', 'Stack']] }, ...labelFields()],
+  PlotMeans: {
+    fields: [{ k: 'gs', type: 'var', kind: 'factor', multi: true, max: 2, label: 'Factors (pick one or two)' },
+      { k: 'y', type: 'var', kind: 'numeric', label: 'Response Variable (pick one)' },
+      choice('err', 'Error Bars', [['se', 'Standard errors'], ['sd', 'Standard deviations'], ['conf.int', 'Confidence intervals'], ['none', 'No error bars']]),
+      { k: 'level', type: 'num', min: 0.0001, max: 0.9999, def: '0.95', label: '   Level of confidence:', when: v => v.err === 'conf.int' },
+      check('connect', 'Connect profiles of means', true),
+      choice('legend', 'Position of Legend', [['farright', 'To right of graph'], ['topleft', 'Top left'], ['top', 'Top center'], ['topright', 'Top right']]),
+      ...plotLabels()],
+    async after(v, ui) {
+      if (v.gs.length === 2) {
+        const n = await ui.query(`c(nlevels(as.factor(${ui.ctx.ds}$${v.gs[0]})), nlevels(as.factor(${ui.ctx.ds}$${v.gs[1]})))`);
+        // As Rcmdr: the factor with more levels goes on the horizontal axis.
+        if (n && Number(n[0]) < Number(n[1])) v.gs = [v.gs[1], v.gs[0]];
+      }
+      return true;
+    },
     code(v, c) {
-      const rhs = v.gs.length > 1 ? `interaction(${v.gs.map(S).join(', ')})` : v.gs.length ? S(v.gs[0]) : '';
-      return `stripchart(${rhs ? `${c.S(v.y)} ~ ${rhs}, data = ${c.ds}` : c.dv(v.y)}, vertical = TRUE, method = ${rs(v.method)}${labelArgs(v)}${given(v.ylab) ? '' : `, ylab = ${rs(v.y)}`})`;
+      const level = v.err === 'conf.int' ? `, level=${v.level}` : '';
+      const common = `error.bars="${v.err}"${level}${labelArgs(v)}, connect=${v.connect.connect ? 'TRUE' : 'FALSE'}`;
+      return v.gs.length === 1 ? `with(${c.ds}, plotMeans(${v.y}, ${v.gs[0]}, ${common}))`
+        : `with(${c.ds}, plotMeans(${v.y}, ${v.gs[0]}, ${v.gs[1]}, ${common}, legend.pos="${v.legend}"))`;
+    } },
+  stripChart: {
+    fields: [{ k: 'gs', type: 'var', kind: 'factor', multi: true, min: 0, label: 'Factors (pick zero or more)' },
+      { k: 'y', type: 'var', kind: 'numeric', label: 'Response Variable (pick one)' },
+      choice('method', '', [['stack', 'Stack'], ['jitter', 'Jitter']], undefined, { prompt: 'Duplicate Values' }), ...plotLabels()],
+    code(v, c) {
+      const method = `, method="${v.method}"`;
+      if (!v.gs.length) return `stripchart(${c.ds}$${v.y}${method}, xlab="${given(v.xlab) ? v.xlab.trim() : v.y}"${labelArg(v, 'ylab')}${labelArg(v, 'main')})`;
+      return `stripchart(${v.y} ~ ${v.gs.join('*')}, vertical=TRUE${method}${labelArg(v, 'xlab')}, ylab="${given(v.ylab) ? v.ylab.trim() : v.y}"${labelArg(v, 'main')}, data=${c.ds})`;
     } },
 
-  barGraph: { pkgs: ['RcmdrMisc'], fields: [factor('f', 'Variable (pick one)'), factor('g', 'Plot by groups', { optional: true, exclude: ['f'] }),
-      { k: 'style', type: 'choice', label: 'Style of Group Bars', choices: [['parallel', 'Side by side'], ['divided', 'Stacked']], when: v => Boolean(v.g) },
-      { k: 'conditional', type: 'choice', label: 'Percentages for Group Bars', choices: [['TRUE', 'Percent within each group'], ['FALSE', 'Percent of all observations']], when: v => Boolean(v.g) },
-      { k: 'scale', type: 'choice', label: 'Axis Scaling', choices: [['frequency', 'Frequency counts'], ['percent', 'Percentages']] },
-      { k: 'legend', type: 'choice', label: 'Position of Legend', choices: [['above', 'above'], ...legendChoices], when: v => Boolean(v.g) },
-      flagsOf('Show counts or percentages in bars', [['label', 'Show counts or percentages in bars', false]]), ...labelFields()],
-    code: (v, c) => `RcmdrMisc::Barplot(${c.dv(v.f)}, ${v.g ? `by = ${c.dv(v.g)}, style = ${rs(v.style)}, conditional = ${v.conditional}, legend.pos = ${rs(v.legend)}, ` : ''}scale = ${rs(v.scale)}, label.bars = ${rbool(v.flags.label)}, ` +
-      `xlab = ${rs(given(v.xlab) ? v.xlab.trim() : v.f)}, ylab = ${rs(given(v.ylab) ? v.ylab.trim() : v.scale === 'percent' ? 'Percent' : 'Frequency')}${labelArgs(v, ['main'])})` },
-  pieChart: { pkgs: ['colorspace'], fields: [factor('f', 'Variable (pick one)'),
-      flagsOf('Include in Segment Labels', [['counts', 'Counts', false], ['percents', 'Percentages', false]]), colorField, ...labelFields()],
-    code: (v, c) => lines('local({', `  .Table <- table(${c.dv(v.f)})`,
-      `  .labels <- paste0(names(.Table)${v.flags.counts ? ', " (", .Table, ")"' : ''}${v.flags.percents ? ', " ", round(100 * .Table / sum(.Table), 1), "%"' : ''})`,
-      `  pie(.Table, labels = .labels, xlab = ${rs(given(v.xlab) ? v.xlab.trim() : '')}, ylab = ${rs(given(v.ylab) ? v.ylab.trim() : '')}, main = ${rs(given(v.main) ? v.main.trim() : v.f)}, col = ${COLORS[v.colors]('length(.Table)')})`, '})') },
+  barGraph: {
+    fields: [{ k: 'f', type: 'var', kind: 'factor', label: 'Variable (pick one)' }, groupsBox(),
+      choice('scale', 'Axis Scaling', [['frequency', 'Frequency counts'], ['percent', 'Percentages']]),
+      choice('style', 'Style of Group Bars', [['divided', 'Divided (stacked)'], ['parallel', 'Side-by-side (parallel)']], undefined, { when: v => Boolean(v.g) }),
+      choice('conditional', 'Percentages for Group Bars', [['conditional', 'Conditional'], ['total', 'Total']], undefined, { when: v => Boolean(v.g) }),
+      choice('colors', 'Color Selection', [['default', 'Default'], ['palette', 'From color palette']]),
+      choice('legend', 'Position of Legend', [['above', 'Above plot'], ['topright', 'Right'], ['top', 'Center'], ['topleft', 'Left']], undefined, { when: v => Boolean(v.g) }),
+      check('showcounts', 'Show counts or percentages in bars', true), ...plotLabels()],
+    async after(v, ui) { v.nlevels = v.g ? Number((await ui.query(`nlevels(as.factor(${ui.ctx.ds}$${v.g}))`))?.[0] || 2) : 0; return true; },
+    code(v, c) {
+      const xlab = `, xlab="${given(v.xlab) ? v.xlab.trim() : v.f}"`;
+      const ylab = `, ylab="${given(v.ylab) ? v.ylab.trim() : v.scale === 'frequency' ? 'Frequency' : 'Percent'}"`;
+      const scale = v.scale === 'frequency' ? '' : ', scale="percent"';
+      const counts = v.showcounts.showcounts ? ', label.bars=TRUE' : ', label.bars=FALSE';
+      if (!v.g) return `with(${c.ds}, Barplot(${v.f}${xlab}${ylab}${labelArg(v, 'main')}${v.colors === 'default' ? '' : ', col=palette()[2]'}${scale}${counts}))`;
+      return `with(${c.ds}, Barplot(${v.f}, by=${v.g}, style="${v.style}", legend.pos="${v.legend}"${xlab}${ylab}${labelArg(v, 'main')}` +
+        `${v.colors === 'default' ? '' : `, col=palette()[2:${v.nlevels + 1}]`}${scale}${v.conditional === 'conditional' ? '' : ', conditional=FALSE'}${counts}))`;
+    } },
+  pieChart: {
+    fields: [{ k: 'f', type: 'var', kind: 'factor', label: 'Variable (pick one)' },
+      choice('colors', 'Color Selection', [['default', 'Default'], ['palette', 'From color palette']]),
+      choice('scale', 'Include in Segment Labels', [['percent', 'Percentages'], ['frequency', 'Frequency counts'], ['none', 'Neither']]), ...plotLabels()],
+    async after(v, ui) { v.nlevels = Number((await ui.query(`nlevels(as.factor(${ui.ctx.ds}$${v.f}))`))?.[0] || 2); return true; },
+    code: (v, c) => `with(${c.ds}, piechart(${v.f}, xlab="${given(v.xlab) ? v.xlab.trim() : ''}", ylab="${given(v.ylab) ? v.ylab.trim() : ''}", main="${given(v.main) ? v.main.trim() : v.f}"` +
+      `${v.colors === 'default' ? `, col=colorspace::rainbow_hcl(${v.nlevels})` : `, col=palette()[2:${v.nlevels + 1}]`}, scale="${v.scale}"))` },
 
-  Scatter3D: { pkgs: ['rgl', 'car'], fields: [numVar('x', 'Explanatory variables (pick two): first'), numVar('z', 'second', { exclude: ['x'] }), numVar('y', 'Response variable (pick one)', { exclude: ['x', 'z'] }), groups('g'),
-      { k: 'fit', type: 'choice', label: 'Surfaces to Fit', choices: [['linear', 'Linear least-squares'], ['quadratic', 'Quadratic least-squares'], ['smooth', 'Smooth regression'], ['additive', 'Additive regression']] },
-      flagsOf('Options', [['axes', 'Show axis scales', true], ['grid', 'Show surface grid lines', true], ['resid', 'Show residuals', true], ['squares', 'Show squared residuals', false], ['ellipsoid', 'Plot 50% concentration ellipsoid', false], ['parallel', 'Parallel regression surfaces', false]]),
-      { k: 'bg', type: 'choice', label: 'Background Color', choices: [['white', 'White'], ['black', 'Black']] }],
-    code: (v, c) => `car::scatter3d(${c.S(v.y)} ~ ${c.S(v.x)} + ${c.S(v.z)}${v.g ? ` | ${c.S(v.g)}` : ''}, data = ${c.ds}, fit = ${rs(v.fit)}, residuals = ${rbool(v.flags.resid)}, ` +
-      `squares = ${rbool(v.flags.squares)}, bg = ${rs(v.bg)}, axis.scales = ${rbool(v.flags.axes)}, grid = ${rbool(v.flags.grid)}, ellipsoid = ${rbool(v.flags.ellipsoid)}, ` +
-      `surface.col = ${v.g ? 'carPalette()[-1]' : '"darkblue"'}${v.g ? `, parallel = ${rbool(v.flags.parallel)}` : ''})` },
-  saveBitmap: { ds: false, fields: [{ k: 'type', type: 'choice', label: 'Graphics File Type', choices: [['png', 'PNG'], ['jpeg', 'JPEG'], ['bmp', 'BMP'], ['tiff', 'TIFF']] },
-      { ...fileType, filters: { 'Bitmap': ['png', 'jpg', 'jpeg', 'bmp', 'tiff'] }, def: 'graph.png' },
-      { k: 'units', type: 'choice', label: 'Units', choices: [['px', 'Pixels'], ['in', 'Inches'], ['cm', 'Centimeters'], ['mm', 'Millimeters']] },
-      { k: 'w', type: 'num', min: 0.1, def: '500', label: 'Width' }, { k: 'h', type: 'num', min: 0.1, def: '500', label: 'Height' },
-      { k: 'pointsize', type: 'num', min: 1, def: '12', label: 'Text size (points)' }],
-    code: v => lines(`dev.copy(${v.type}, filename = ${rs(v.file)}, width = ${v.w}, height = ${v.h}, units = ${rs(v.units)}${v.units === 'px' ? '' : ', res = 300'}, pointsize = ${v.pointsize})`, 'invisible(dev.off())') },
-  savePDF: { ds: false, fields: [{ k: 'type', type: 'choice', label: 'Graphics File Type', choices: [['pdf', 'PDF'], ['postscript', 'PostScript'], ['eps', 'Encapsulated PostScript']] },
-      { ...fileType, filters: { 'Vector graphics': ['pdf', 'ps', 'eps'] }, def: 'graph.pdf' },
-      { k: 'w', type: 'num', min: 1, def: '7', label: 'Width in inches' }, { k: 'h', type: 'num', min: 1, def: '7', label: 'Height in inches' },
-      { k: 'pointsize', type: 'num', min: 1, def: '12', label: 'Text size (points)' }],
-    // Plain device copies work from any graphics device, including the VS Code plot viewer.
-    code: v => lines(v.type === 'eps'
-      ? `dev.copy(postscript, file = ${rs(v.file)}, onefile = FALSE, horizontal = FALSE, paper = "special", width = ${v.w}, height = ${v.h}, pointsize = ${v.pointsize})`
-      : `dev.copy(${v.type}, file = ${rs(v.file)}, width = ${v.w}, height = ${v.h}, pointsize = ${v.pointsize})`, 'invisible(dev.off())') },
-  saveRglGraph: { ds: false, pkgs: ['rgl'], fields: [{ ...fileType, filters: { 'PNG image': ['png'] }, def: 'graph3d.png' }],
-    code: v => `rgl::rgl.snapshot(${rs(v.file)})` }
+  Scatter3D: { pkgs: ['rgl'],
+    fields: [{ k: 'xs', type: 'var', kind: 'numeric', multi: true, min: 2, max: 2, label: 'Explanatory variables (pick two)' },
+      { k: 'y', type: 'var', kind: 'numeric', exclude: ['xs'], label: 'Response variable (pick one)' },
+      groupsBox(), check('parallel', 'Parallel regression surfaces', false, { when: v => Boolean(v.g) }),
+      { k: 'show', type: 'flags', label: '', items: [['scales', 'Show axis scales', true], ['grid', 'Show surface grid lines', true], ['squares', 'Show squared residuals', false]] },
+      { k: 'surfaces', type: 'flags', label: 'Surfaces to Fit', items: [['linear', 'Linear least-squares', false], ['quadratic', 'Quadratic least-squares', false],
+        ['robust', 'Robust linear regression', false], ['smooth', 'Smooth regression', false], ['additive', 'Additive regression', false]] },
+      { k: 'dfSmooth', type: 'text', label: 'df = ', def: AUTO, compact: true, when: v => v.surfaces.smooth },
+      { k: 'dfAdd', type: 'text', label: 'df(each term) = ', def: AUTO, compact: true, when: v => v.surfaces.additive },
+      check('ellipsoid', 'Plot 50% concentration ellipsoid'),
+      choice('bg', 'Background Color', [['black', 'Black'], ['white', 'White']], 'white'),
+      choice('identify', 'Identify Points', [['auto', 'Automatically'], ['not', 'Do not identify']], 'not'), idn(),
+      { k: 'rotations', type: 'num', int: true, min: 0, def: '0', label: 'Number of automatic rotations  ' }],
+    code(v, c) {
+      const surfaces = ['linear', 'quadratic', 'robust', 'smooth', 'additive'].filter(s => v.surfaces[s]).map(s => `"${s}"`);
+      const fit = !surfaces.length ? ', surface=FALSE' : surfaces.length === 1 ? `, fit=${surfaces[0]}` : `, fit=c(${surfaces.join(',')})`;
+      const dfs = `${v.surfaces.smooth && v.dfSmooth.trim() !== AUTO ? `, df.smooth=${Number(v.dfSmooth)}` : ''}${v.surfaces.additive && v.dfAdd.trim() !== AUTO ? `, df.additive=${Number(v.dfAdd)}` : ''}`;
+      const id = v.identify === 'auto' ? `, id=list(method='mahal', n =${v.idn})` : '';
+      return 'library(rgl)\nlibrary(mgcv)\n' + `scatter3d(${v.y}~${v.xs[0]}+${v.xs[1]}${v.g ? `|${v.g}` : ''}, data=${c.ds}${fit}${v.show.squares ? ', residuals="squares"' : ', residuals=TRUE'}${dfs}` +
+        `${v.g ? `, parallel=${v.parallel.parallel ? 'TRUE' : 'FALSE'}` : ''}, bg="${v.bg}", axis.scales=${v.show.scales ? 'TRUE' : 'FALSE'}, grid=${v.show.grid ? 'TRUE' : 'FALSE'}` +
+        `, ellipsoid=${v.ellipsoid.ellipsoid ? 'TRUE' : 'FALSE'}${id}${v.rotations !== '0' ? `, revolutions = ${v.rotations}` : ''})`;
+    } },
+  saveBitmap: { ds: false,
+    fields: [choice('type', 'Graphics File Type', [['png', 'PNG'], ['jpeg', 'JPEG']]), choice('units', 'Units', [['in', 'inches'], ['cm', 'cm'], ['px', 'pixels']]),
+      { k: 'width', type: 'num', min: 0.1, def: '7', label: 'Width' }, { k: 'height', type: 'num', min: 0.1, def: '7', label: 'Height' },
+      { k: 'res', type: 'num', int: true, min: 20, def: '72', label: 'Resolution', when: v => v.units !== 'px' },
+      { k: 'pointsize', type: 'num', int: true, min: 6, max: 16, def: '12', label: 'Text size (points)' }],
+    async after(v, ui) { v.file = await saveTo(ui, v.type, v.type === 'png' ? 'png' : 'jpg'); return Boolean(v.file); },
+    // Rcmdr uses dev.print(), which needs a screen device; dev.copy() also works from VS Code's plot viewer.
+    code: v => `dev.copy(${v.type}, filename="${v.file}", width=${v.width}, height=${v.height}, pointsize=${v.pointsize}, units="${v.units}"${v.units === 'px' ? '' : `, res=${v.units === 'cm' ? Math.round(Number(v.res) / 2.54) : v.res}`})\ninvisible(dev.off())` },
+  savePDF: { ds: false,
+    fields: [choice('type', 'Graphics File Type', [['pdf', 'PDF'], ['postscript', 'Postscript'], ['eps', 'Encapsulated Postscript']]),
+      choice('units', 'Units', [['in', 'inches'], ['cm', 'cm']]),
+      { k: 'width', type: 'num', min: 0.1, def: '7', label: 'Width' }, { k: 'height', type: 'num', min: 0.1, def: '7', label: 'Height' },
+      { k: 'pointsize', type: 'num', int: true, min: 6, max: 16, def: '12', label: 'Text size (points)' }],
+    async after(v, ui) { v.file = await saveTo(ui, v.type, { pdf: 'pdf', postscript: 'ps', eps: 'eps' }[v.type]); return Boolean(v.file); },
+    code(v) {
+      const size = x => (v.units === 'cm' ? Math.round((Number(x) / 2.54) * 10) / 10 : x);
+      // As in saveBitmap, dev.copy() instead of dev.print()/dev.copy2eps(), which need a screen device.
+      return (v.type === 'eps' ? `dev.copy(postscript, file="${v.file}", width=${size(v.width)}, height=${size(v.height)}, pointsize=${v.pointsize}, onefile=FALSE, horizontal=FALSE, paper="special")`
+        : `dev.copy(${v.type}, file="${v.file}", width=${size(v.width)}, height=${size(v.height)}, pointsize=${v.pointsize})`) + '\ninvisible(dev.off())';
+    } },
+  saveRglGraph: { ds: false, pkgs: ['rgl'],
+    async after(v, ui) { v.file = await ui.file({ mode: 'save', filters: { 'PNG Files': ['png'] }, def: 'RGLGraph.png' }, ui.t('Save the graph as')); return Boolean(v.file); },
+    code: v => `library(rgl)\nrgl.snapshot("${v.file}")` }
 };
+

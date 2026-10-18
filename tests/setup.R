@@ -10,6 +10,9 @@ Dataset$chr <- rep(c("u", "v", "w", "t"), 15)
 Dataset$yr <- 2001:2060
 Dataset$yr2 <- rep(2001:2020, 3)
 Dataset$prod <- rep(c("A", "B", "C"), each = 20)
+# TeachStat wants the period as a factor
+Dataset$period <- factor(Dataset$yr)
+Dataset$period2 <- factor(Dataset$yr2)
 Other <- data.frame(n1 = 1:5, k = letters[1:5])
 RegModel.1 <- lm(n1 ~ n2 + n3, data = Dataset)
 GLM.1 <- glm(f2b ~ n1 + n2, family = binomial, data = Dataset)

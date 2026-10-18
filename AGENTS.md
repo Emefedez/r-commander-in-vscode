@@ -3,7 +3,7 @@
 Notas para quien (persona o agente) trabaje en este repositorio: cómo está montado, qué está hecho, qué se está
 haciendo y qué queda. Léelo antes de tocar nada y **actualízalo al terminar** cada tarea.
 
-Última actualización: 2026-10-12.
+Última actualización: 2026-10-15.
 Ubicación del repositorio: `~/Work/r-commander-play` (antes estaba dentro de `ESTI/Practica I/.vscode/`).
 Los `.vsix` antiguos de esa carpeta (0.1.0–0.5.0) no forman parte del repositorio.
 
@@ -111,6 +111,22 @@ make install    # empaqueta e instala en VS Code; luego "Developer: Reload Windo
   estado desplegado por id; también al cambiar el filtro, para que los resultados salgan desplegados. Con búsqueda
   activa no se pliega. Pruebas en `tests/tree.js` y `tests/extension.js`; `make test`: 1312/1320 (los 8 de `rgl`).
   Falta verlo en la ventana real de VS Code.
+
+- **Diálogos idénticos a los de R Commander** (2026-10-15): todos los diálogos de `catalog/*.js` se rehicieron
+  comparándolos con el código de Rcmdr 2.9/TeachStat 1.1.1 (campos, etiquetas exactas, valores por defecto, orden
+  y el código R que generan, p. ej. `Boxplot(y ~ g, data=..., id=list(method="y"))`, `subset(..., subset=,
+  select=c(a,b))`, `numSummary(...)`, `Tapply(...)`). Los menús usan los títulos de Rcmdr tal cual (`spanishOf` en
+  `build/generate.js` traduce como `gettextMenus`); `es.manual.json` solo cubre lo propio de la extensión y
+  traducciones de Rcmdr que no se entienden (7 entradas).
+  Tipos de campo nuevos en el formulario: `formula` (modelFormula), `table` (tabla de recuentos o matriz de
+  hipótesis), `note`, `hidden`, campos sin título (`label: ''` + `prompt`) y `compact`. `runner.R` informa de los
+  factores ordenados (`kind` `ordered`) y adjunta las funciones de Rcmdr también cuando su nombre va entre comillas.
+  Diferencias que quedan a propósito: *Cargar conjunto de datos* vuelve a ser solo `load()` como en Rcmdr; guardar
+  gráficas usa `dev.copy` (con el visor de VS Code `dev.print` falla); el SAS xport v8 usa `haven` si `foreign`
+  falla; el punto medio de intervalos de TeachStat lleva `stringsAsFactors=TRUE` (su código es de R < 4). Para
+  comparar de nuevo con Rcmdr: extraer los widgets de cada función con `deparse(Rcmdr:::<id>)`.
+  Pruebas: `tests/catalog.js` admite `ONLY=id1,id2` y `DIALOG_ONLY=1`; `tests/setup.R` tiene `period`/`period2`
+  (factores) para los números índice.
 
 ### En curso
 - Nada abierto. Pendiente de confirmar con el usuario: a qué se refiere con "la salida de la instalación es distinta

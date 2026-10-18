@@ -30,7 +30,7 @@ const fixtureFor = (title, pass) => {
   if (/STATA/i.test(title)) return pick('iris.dta', 'small.dta');
   if (/Excel/i.test(title)) return path.join(fixtures, 'datasets.xlsx');
   if (/package archive/i.test(title)) return path.join(repoDir, 'rcptest_1.1.tar.gz');
-  if (/file to load/i.test(title)) return pick('two-frames.RData', 'small.csv');
+  if (/file to load/i.test(title)) return path.join(fixtures, 'two-frames.RData');
   return path.join(fixtures, pass === 'A' ? 'small.tsv' : 'small.csv');
 };
 const runnerR = path.join(root, 'runner.R');
@@ -61,16 +61,35 @@ const ANSWERS = [ // prompt substring -> typed answer
   ['Right-hand side of the variance formula', 'n2'], ['Package names', 'car'], ['Name of the new variable', 'newvar'],
   ['Values of', '1, 2, 3'], ['URL of the data file', `file://${path.join(fixtures, 'small.csv')}`], ['Name of the data set in the R session', 'Dataset'],
   ['Name of the model in the R session', 'RegModel.1'], ['Package name', 'datasets'], ['Data set name', 'iris'],
-  ['Rows to remove', '1, 2'], ['Rows to select', '1:10'], ['Variable names separated', 'u, w']
+  ['Rows to remove', '1, 2'], ['Rows to select', '1:10'], ['Variable names separated', 'u, w'],
+  ['Internet URL', `file://${path.join(fixtures, 'small.csv')}`], ['row(s) to select', '1 2 3'], ['row(s) to remove', '1 2'],
+  ['Enter recode directives', '"a" = "A"; else = "B"'], ['Other (specify)', 'median'], ['Expression to evaluate', 'b1/b2'], ['Shape 1', '2'], ['Shape 2', '3'], ['Shape', '2'], ['Degrees of freedom', '5'], ['degrees of freedom', '5'], ['Binomial trials', '10'], ['Variable value(s)', '1, 2'], ['Known variance value', '4'], ['Known mean value', '1'], ['Sigma^2_', '2'], ['Specify:', ',']
 ];
 // single-pick overrides: command id -> { prompt substring: label }
 const PICKS = (pass) => ({
-  Deflation: { 'Base variable': 'yr' }, generalizedLinearModel: { 'Response variable': pass === 'A' ? 'f2b' : 'n3' },
-  generalizedLinearMixedModel: { 'Response variable': pass === 'A' ? 'f2b' : 'n3' },
-  multinomialLogitModel: { 'Response variable': 'f3' }, ordinalRegressionModel: { 'Response variable': 'f3' },
-  mergeDataSets: { 'First data set': 'Dataset', 'Second data set': pass === 'A' ? 'Other' : 'Dataset' },
-  compareModels: { 'First model': 'RegModel.1', 'Second model': 'RegModel.1' },
-  readDataFromPackage: { 'Attached package': 'datasets', 'Data set': 'iris' }
+  Deflation: { 'Base variable': 'period', basevar: 'period' }, Sindexnumbers: { 'Base variable': 'period', basevar: 'period' },
+  BCindexnumbers: { 'Base variable': 'period', basevar: 'period' },
+  DgenericDistrDefine: pass === 'A' ? { proba: '0.2, 0.3, 0.5', Probabilities: '0.2, 0.3, 0.5' } : { proba: '0.2, 0.5, 1', Probabilities: '0.2, 0.5, 1' },
+  Cindexnumbers: { means: { arithmetic: true, geometric: true, harmonic: false }, 'Aggregation Method': ['Arithmetic', 'Geometric'] },
+  Pindexnumbers: { 'Base variable': 'period2', basevar: 'period2', 'Product variable': 'prod', prod: 'prod' }, generalizedLinearModel: { lhs: pass === 'A' ? 'f2b' : 'n3' },
+  generalizedLinearMixedModel: { lhs: pass === 'A' ? 'f2b' : 'n3', rhs: 'n1 + (1 | f3)', family: pass === 'A' ? 'binomial' : 'poisson', 'Family (double-click': pass === 'A' ? 'binomial' : 'poisson' },
+  linearMixedModel: { rhs: 'n2 + (1 | f3)' },
+  multinomialLogitModel: { lhs: 'f3' }, ordinalRegressionModel: { lhs: 'f3' },
+  hierarchicalCluster: { distance: 'euc2', 'Distance Measure': 'Squared-Euclidian' },
+  linearRegressionModel: { 'Response variable': 'n5' },
+  Xyplot: { cond: ['f3'], grp: ['f2'], "Conditions '|'": ['f3'], "Groups 'groups='": ['f2'] },
+  boxPlot: pass === 'A' ? { g: '', 'Plot by groups': '(none)' } : { ys: ['n1'], 'Variable (pick one or more)': ['n1'], g: 'f3', 'Plot by groups': 'f3' },
+  QQPlot: { df: '5', chisqdf: '3', fdf1: '3', fdf2: '20', othername: 'exp', otherparam: 'rate=1', 'df = ': '5', 'Numerator df': '3', 'Denominator df': '20', 'Specify: ': 'exp', 'Parameters: ': 'rate=1' },
+  BartlettTest: { gs: ['f2', 'f3'], 'Factors (pick one or more)': ['f2', 'f3'] }, factorAnalysis: { subset: '<all valid cases>', 'Subset expression': '<all valid cases>' },
+  // Repeated measures: three levels (or a 2 x 2 grid), the rest left empty.
+  oneWayRepeatedMeasures: Object.fromEntries([1, 2, 3, 4, 5, 6, 7, 8].flatMap(i => [[`rm${i}`, i <= 3 ? `n${i}` : ''], [`Level-${i}`, i <= 3 ? `n${i}` : '(none)']])),
+  twoWayRepeatedMeasures: Object.fromEntries([1, 2, 3, 4, 5].flatMap(i => [1, 2, 3, 4, 5].flatMap(j => {
+    const v = i <= 2 && j <= 2 ? `n${(i - 1) * 2 + j}` : '';
+    return [[`rm${i}${j}`, v], [`Row-${i} × Column-${j}`, v || '(none)']];
+  }))),
+  mergeDataSets: { 'First Data Set': 'Dataset', 'Second Data Set': 'Other' },
+  compareModels: { m1: 'RegModel.1', m2: 'GLM.1', 'First model': 'RegModel.1', 'Second model': 'GLM.1' },
+  readDataFromPackage: { 'Package (Double-click': 'datasets', 'Data set (Double-click': 'iris' }
 });
 
 function fakeVscode(pass, id, log) {
@@ -79,12 +98,12 @@ function fakeVscode(pass, id, log) {
     // Two different groups; the second one is the second level.
     if (/Group 2/.test(String(placeholder))) return items[1] || items[0];
     if (/Group 1/.test(String(placeholder))) return items[0];
+    const key = Object.keys(picks).find(k => String(placeholder).includes(k));
+    if (key) return items.find(i => i.label === picks[key]) || items[0];
     // Commands with a cross-field check need a real variable, not "(none)".
     if (catalog[id]?.check && items[0]?.name !== undefined && typeof items[0].name !== 'string' && items[1]) return items[1];
     // The CRAN mirror is always the first line: the test repository, never a real mirror.
     if (/CRAN mirror/.test(String(placeholder))) return items[0];
-    const key = Object.keys(picks).find(k => String(placeholder).includes(k));
-    if (key) return items.find(i => i.label === picks[key]) || items[0];
     const real = items.filter(i => i.name !== undefined ? typeof i.name === 'string' : true);
     if (pass === 'B' && items[0]?.name !== undefined && typeof items[0].name !== 'string' && items[1]) return items[1];
     if (pass === 'B' && 'value' in items[0]) return items[items.length - 1];
@@ -98,9 +117,11 @@ function fakeVscode(pass, id, log) {
     window: {
       showQuickPick: async (items, opts) => {
         if (opts.canPickMany) {
+          const many = PICKS(pass)[id] || {}, mk = Object.keys(many).find(k => Array.isArray(many[k]) && String(opts.placeHolder).includes(k));
+          if (mk) return items.filter(i => many[mk].includes(i.label));
           if (items[0]?.key !== undefined) return items.filter(i => i.picked);
           if (/loading on factor [2-9]/.test(opts.placeHolder)) return []; // later CFA factors are left undefined
-          const k = Math.min(items.length, id === 'twoWayRepeatedMeasures' || id === 'multiWayTable' ? 4 : 4);
+          const k = Math.min(items.length, /pick (one or )?two\)/.test(opts.placeHolder) ? 2 : 4);
           return items.slice(0, k).map(i => ({ ...i }));
         }
         return choose(items, opts.placeHolder);
@@ -113,7 +134,20 @@ function fakeVscode(pass, id, log) {
           const j = Number(String(opts.prompt).match(/Contrast (\d+)/)[1]);
           return helmert(levels).map(([, cells]) => cells[j - 1]).join(', ');
         }
-        const value = String(opts.prompt).includes('New name for') ? `${opts.value}_r` : hit ? hit[1] : opts.value;
+        const prompt = String(opts.prompt);
+        const renamed = prompt.match(/Old Name: (\S+)\./);
+        // Level and bin names must differ from each other: take them from the prompt.
+        const levelName = /Level name|: Name$/.test(prompt) ? `L${prompt.replace(/[^A-Za-z0-9]/g, '').slice(-8)}` : undefined;
+        // Model formulas typed in steps: the left-hand side, then the right-hand side ("— ~ (" when one-sided).
+        const picks = PICKS(pass)[id] || {};
+        const formula = /Left-hand side/.test(prompt) ? picks.lhs ?? 'n1' : / ~ \(/.test(prompt) ? picks.rhs ?? (/— ~ \(/.test(prompt) ? 'f2' : 'n2 + n3') : undefined;
+        const counts = prompt.match(/Row (\d+) \((\d+)\)/);
+        // A hypothesis matrix: row r tests coefficient r + 1 = 0; a table of counts: positive counts.
+        const row = !counts ? undefined : /hypothesis/i.test(prompt)
+          ? Array.from({ length: Number(counts[2]) }, (_, j) => String(Number(j === Number(counts[1])))).join(' ')
+          : Array.from({ length: Number(counts[2]) }, (_, j) => String(4 + Number(counts[1]) * 3 + 7 * j)).join(' ');
+        const picked = Object.keys(picks).find(k => prompt.includes(k));
+        const value = (picked && typeof picks[picked] === 'string' ? picks[picked] : undefined) ?? formula ?? row ?? (prompt.includes('New name for') ? `${opts.value}_r` : renamed ? `${renamed[1]}_r` : levelName || (hit ? hit[1] : opts.value));
         const err = opts.validateInput?.(value);
         if (err) throw new Error(`Invalid default for "${opts.prompt}": ${value} (${err})`);
         return value;
@@ -137,15 +171,16 @@ class FakeForm {
   async run(spec, title, dialog, finish, env) {
     const fields = spec.fields;
     const raw = {};
-    const pickLabel = f => Object.keys(this.picks).find(k => String(f.label).includes(k));
+    const pickLabel = f => Object.keys(this.picks).find(k => String(f.label || f.prompt).includes(k));
     for (const f of fields) {
       const values = model.normalize(fields, raw, env);
       if (f.when && !f.when(values)) continue;
       const list = model.items(f, values, env);
-      const answer = ANSWERS.find(([k]) => String(f.label).includes(k));
+      const answer = ANSWERS.find(([k]) => String(f.label || f.prompt).includes(k));
       switch (f.type) {
         case 'var':
-          if (f.multi) raw[f.k] = list.slice(0, f.min === 0 ? (f.minOrNone ? 0 : (this.pass === 'B' || spec.check) ? 1 : 0) : 4).map(i => i.value);
+          if (this.picks[f.k] !== undefined) raw[f.k] = this.picks[f.k];
+          else if (f.multi) raw[f.k] = list.slice(0, f.min === 0 ? (f.minOrNone ? 0 : (this.pass === 'B' || spec.check) ? 1 : 0) : Math.min(4, f.max ?? 4)).map(i => i.value);
           else if (f.optional) raw[f.k] = (this.pass === 'B' || spec.check) && list[0] ? list[0].value : '';
           else raw[f.k] = (list.find(i => i.value === this.picks[pickLabel(f)]) || list[0]).value;
           break;
@@ -164,10 +199,24 @@ class FakeForm {
           raw[f.k] = helmert(rows);
           break;
         }
-        case 'name': case 'text': raw[f.k] = answer ? answer[1] : ((this.pass === 'B' || (spec.check && !f.sampleOnlyB)) && f.optional && f.sample) ? f.sample : String(model.evalDefault(f.def, env.ctx, values) ?? ''); break;
+        case 'name': case 'text': raw[f.k] = this.picks[f.k] !== undefined ? this.picks[f.k] : answer ? answer[1] : ((this.pass === 'B' || (spec.check && !f.sampleOnlyB)) && f.optional && f.sample) ? f.sample : String(model.evalDefault(f.def, env.ctx, values) ?? ''); break;
         case 'num': case 'numlist': raw[f.k] = answer && f.type === 'numlist' ? answer[1] : String(f.def ?? ''); break;
-        case 'choice': raw[f.k] = this.pass === 'B' ? list[list.length - 1].value : list[f.def || 0].value; break;
-        case 'flags': raw[f.k] = Object.fromEntries(f.items.map(([key, , on]) => [key, Boolean(on)])); break;
+        case 'choice': {
+          const def = f.defFor ? f.defFor(values) : f.def;
+          raw[f.k] = this.picks[f.k] ?? (this.pass === 'B' ? list[list.length - 1].value : (typeof def === 'string' ? list.find(i => i.value === def) : list[def || 0]).value);
+          break;
+        }
+        case 'formula': raw[f.k] = { lhs: f.hasLhs === false ? '' : this.picks.lhs ?? 'n1', rhs: this.picks.rhs ?? (f.hasLhs === false ? 'f2' : 'n2 + n3') }; break;
+        case 'table': {
+          const fixed = f.colsExpr ? await env.session.query(f.colsExpr(env.ctx)) : null;
+          const [nr, nc] = [Number(values[f.rowsOf]) || 2, fixed ? fixed.length : Number(values[f.colsOf]) || 2];
+          raw[f.k] = { rows: Array.from({ length: nr }, (_, i) => `r${i + 1}`), cols: Array.from({ length: nc }, (_, j) => `c${j + 1}`),
+            cells: Array.from({ length: nr }, (_, i) => Array.from({ length: nc }, (_, j) => (fixed ? String(Number(i === j - 1)) : String(5 + 3 * i + 7 * j)))), rhs: Array.from({ length: nr }, () => '0') };
+          break;
+        }
+        case 'flags': raw[f.k] = this.picks[f.k] || Object.fromEntries(f.items.map(([key, , on]) => [key, Boolean(on)])); break;
+        case 'note': break;
+        case 'hidden': raw[f.k] = String(model.evalDefault(f.def, env.ctx, values) ?? ''); break;
         case 'levelorder': {
           const rows = await env.session.query(`levels(as.factor(${env.ctx.dv(values[f.of])}))`);
           raw[f.k] = Object.fromEntries(rows.map((r, i) => [r, String(rows.length - i)])); // reversed order
@@ -225,6 +274,8 @@ class FakeForm {
   fs.writeFileSync(path.join(tmp, 'cases.json'), JSON.stringify(scripts));
   console.log(`generated ${scripts.length} snippets; dialog problems: ${failures.length}`);
   failures.forEach(f => console.log('  ' + f));
+  // DIALOG_ONLY=1 checks the dialogs without running the code in R.
+  if (process.env.DIALOG_ONLY) { process.exitCode = failures.length ? 1 : 0; return; }
 
   // Execute in R. Commands that would quit, open viewers or install are only parsed.
   const parseOnly = ['listInstalledPackages', 'CFA', 'importMinitab', 'closeCommanderAndR', 'viewData', 'viewDataSet', 'editDataSet', 'startHelp', 'browseRcmdrHexSticker', 'helpCommander', 'loadPackages', 'loadPlugins', 'helpDataSet'];

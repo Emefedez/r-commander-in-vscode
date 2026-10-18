@@ -32,7 +32,7 @@
 		"icon": "beaker",
 		"label": {
 			"en": "Select active model...",
-			"es": "Seleccionar modelo activo..."
+			"es": "Selecciona el modelo activo..."
 		}
 	},
 	{
@@ -41,7 +41,7 @@
 	{
 		"label": {
 			"en": "File",
-			"es": "Archivo"
+			"es": "Fichero"
 		},
 		"color": "charts.blue",
 		"icon": "file",
@@ -64,7 +64,7 @@
 				"icon": "circle-filled",
 				"label": {
 					"en": "Open script file...",
-					"es": "Abrir script de R..."
+					"es": "Abrir archivo de instrucciones..."
 				}
 			},
 			{
@@ -73,7 +73,7 @@
 				"icon": "circle-filled",
 				"label": {
 					"en": "Save script...",
-					"es": "Guardar script de R..."
+					"es": "Guardar las instrucciones..."
 				}
 			},
 			{
@@ -82,7 +82,7 @@
 				"icon": "circle-filled",
 				"label": {
 					"en": "Save script as...",
-					"es": "Guardar script de R como..."
+					"es": "Guardar las instrucciones como..."
 				}
 			},
 			{
@@ -103,7 +103,7 @@
 				"icon": "circle-filled",
 				"label": {
 					"en": "Save R Markdown file...",
-					"es": "Guardar archivo R Markdown..."
+					"es": "Guardar fichero R Markdown..."
 				}
 			},
 			{
@@ -112,7 +112,7 @@
 				"icon": "circle-filled",
 				"label": {
 					"en": "Save R Markdown file as...",
-					"es": "Guardar archivo R Markdown como..."
+					"es": "Guardar el fichero R Markdown como..."
 				}
 			},
 			{
@@ -124,7 +124,7 @@
 				"icon": "circle-filled",
 				"label": {
 					"en": "Save R workspace...",
-					"es": "Guardar el espacio de trabajo de R..."
+					"es": "Guardar el entorno de trabajo R..."
 				}
 			},
 			{
@@ -133,7 +133,7 @@
 				"icon": "circle-filled",
 				"label": {
 					"en": "Save R workspace as...",
-					"es": "Guardar el espacio de trabajo de R como..."
+					"es": "Guardar el entorno de trabajo R como..."
 				}
 			},
 			{
@@ -153,7 +153,7 @@
 						"icon": "circle-filled",
 						"label": {
 							"en": "From Commander and R",
-							"es": "Salir de R Commander y R"
+							"es": "De Commander y R"
 						}
 					},
 					{
@@ -339,7 +339,7 @@
 						"icon": "circle-filled",
 						"label": {
 							"en": "from SAS xport file...",
-							"es": "desde un archivo SAS XPORT..."
+							"es": "desde un archivo SAS exportado..."
 						}
 					},
 					{
@@ -383,7 +383,7 @@
 			{
 				"label": {
 					"en": "Data in packages",
-					"es": "Conjuntos de datos en paquetes"
+					"es": "Conjunto de datos en paquetes"
 				},
 				"color": "charts.green",
 				"icon": "folder",
@@ -403,7 +403,7 @@
 						"icon": "circle-filled",
 						"label": {
 							"en": "Read data set from an attached package...",
-							"es": "Cargar conjunto de datos de un paquete cargado..."
+							"es": "Leer conjunto de datos desde paquete adjunto..."
 						}
 					}
 				]
@@ -530,7 +530,7 @@
 						"icon": "circle-filled",
 						"label": {
 							"en": "Remove cases with missing data...",
-							"es": "Eliminar casos con datos faltantes..."
+							"es": "Eliminar los casos con valores omitidos..."
 						}
 					},
 					{
@@ -539,7 +539,7 @@
 						"icon": "circle-filled",
 						"label": {
 							"en": "Reshape data set from long to wide format...",
-							"es": "Reestructurar datos de formato largo a ancho..."
+							"es": "Reorganizar el conjunto de datos de formato largo a ancho ..."
 						}
 					},
 					{
@@ -548,7 +548,7 @@
 						"icon": "circle-filled",
 						"label": {
 							"en": "Reshape data set from wide to long format...",
-							"es": "Reestructurar datos de formato ancho a largo..."
+							"es": "Reorganizar el conjunto de datos de formato ancho a largo ..."
 						}
 					},
 					{
@@ -557,7 +557,7 @@
 						"icon": "circle-filled",
 						"label": {
 							"en": "Convert all character variables to factors",
-							"es": "Convertir todas las variables de texto en factores"
+							"es": "Convertir todas las variables de caracteres en factores"
 						}
 					},
 					{
@@ -566,7 +566,7 @@
 						"icon": "circle-filled",
 						"label": {
 							"en": "Save active data set...",
-							"es": "Guardar el conjunto de datos activo..."
+							"es": "Guardar el conjunto de datos activos..."
 						}
 					},
 					{
@@ -630,7 +630,7 @@
 						"icon": "circle-filled",
 						"label": {
 							"en": "Standardize variables...",
-							"es": "Estandarizar variables..."
+							"es": "Tipificar variables..."
 						}
 					},
 					{
@@ -639,7 +639,7 @@
 						"icon": "circle-filled",
 						"label": {
 							"en": "Convert numeric variables to factors...",
-							"es": "Convertir variables numéricas en factores..."
+							"es": "Convertir variable numérica en factor..."
 						}
 					},
 					{
@@ -648,7 +648,7 @@
 						"icon": "circle-filled",
 						"label": {
 							"en": "Convert character variables to factors...",
-							"es": "Convertir variables de texto en factores..."
+							"es": "Convertir variables de caracteres en factores ..."
 						}
 					},
 					{
@@ -657,7 +657,7 @@
 						"icon": "circle-filled",
 						"label": {
 							"en": "Bin numeric variable...",
-							"es": "Agrupar variable numérica en intervalos..."
+							"es": "Segmentar variable numérica..."
 						}
 					},
 					{
@@ -712,7 +712,7 @@
 	{
 		"label": {
 			"en": "Statistics",
-			"es": "Estadística"
+			"es": "Estadísticos"
 		},
 		"color": "charts.purple",
 		"icon": "graph",
@@ -749,7 +749,7 @@
 						"icon": "circle-filled",
 						"label": {
 							"en": "Frequency distributions...",
-							"es": "Distribuciones de frecuencias..."
+							"es": "Distribución de frecuencias..."
 						}
 					},
 					{
@@ -767,7 +767,7 @@
 						"icon": "circle-filled",
 						"label": {
 							"en": "Table of statistics...",
-							"es": "Tabla de estadísticos..."
+							"es": "Tabla de estadísticas..."
 						}
 					},
 					{
@@ -785,7 +785,7 @@
 						"icon": "circle-filled",
 						"label": {
 							"en": "Correlation test...",
-							"es": "Prueba de correlación..."
+							"es": "Test de correlación..."
 						}
 					},
 					{
@@ -794,7 +794,7 @@
 						"icon": "circle-filled",
 						"label": {
 							"en": "Test of normality...",
-							"es": "Prueba de normalidad..."
+							"es": "Test de normalidad..."
 						}
 					},
 					{
@@ -868,7 +868,7 @@
 						"icon": "circle-filled",
 						"label": {
 							"en": "Single-sample t-test...",
-							"es": "Prueba t para una muestra..."
+							"es": "Test t para una muestra..."
 						}
 					},
 					{
@@ -877,7 +877,7 @@
 						"icon": "circle-filled",
 						"label": {
 							"en": "Independent samples t-test...",
-							"es": "Prueba t para muestras independientes..."
+							"es": "Test t para muestras independientes..."
 						}
 					},
 					{
@@ -886,7 +886,7 @@
 						"icon": "circle-filled",
 						"label": {
 							"en": "Paired t-test...",
-							"es": "Prueba t para datos relacionados..."
+							"es": "Test t para datos relacionados..."
 						}
 					},
 					{
@@ -950,7 +950,7 @@
 						"icon": "circle-filled",
 						"label": {
 							"en": "Single-sample proportion test...",
-							"es": "Prueba de una proporción..."
+							"es": "Test de proporciones para una muestra..."
 						}
 					},
 					{
@@ -959,7 +959,7 @@
 						"icon": "circle-filled",
 						"label": {
 							"en": "Two-sample proportions test...",
-							"es": "Prueba de proporciones para dos muestras..."
+							"es": "Test de proporciones para dos muestras..."
 						}
 					}
 				]
@@ -978,7 +978,7 @@
 						"icon": "circle-filled",
 						"label": {
 							"en": "Two-variances F-test...",
-							"es": "Prueba F para dos varianzas..."
+							"es": "Test F para dos varianzas..."
 						}
 					},
 					{
@@ -987,7 +987,7 @@
 						"icon": "circle-filled",
 						"label": {
 							"en": "Bartlett's test...",
-							"es": "Prueba de Bartlett..."
+							"es": "Test de Bartlett..."
 						}
 					},
 					{
@@ -996,7 +996,7 @@
 						"icon": "circle-filled",
 						"label": {
 							"en": "Levene's test...",
-							"es": "Prueba de Levene..."
+							"es": "Test de Levene..."
 						}
 					}
 				]
@@ -1004,7 +1004,7 @@
 			{
 				"label": {
 					"en": "Nonparametric tests",
-					"es": "Pruebas no paramétricas"
+					"es": "Test no paramétricos"
 				},
 				"color": "charts.purple",
 				"icon": "folder",
@@ -1015,7 +1015,7 @@
 						"icon": "circle-filled",
 						"label": {
 							"en": "Two-sample Wilcoxon test...",
-							"es": "Prueba de Wilcoxon para dos muestras..."
+							"es": "Test de Wilcoxon para dos muestras..."
 						}
 					},
 					{
@@ -1024,7 +1024,7 @@
 						"icon": "circle-filled",
 						"label": {
 							"en": "Single-sample Wilcoxon test...",
-							"es": "Prueba de Wilcoxon para una muestra..."
+							"es": "Test de Wilcoxon para una muestra..."
 						}
 					},
 					{
@@ -1033,7 +1033,7 @@
 						"icon": "circle-filled",
 						"label": {
 							"en": "Paired-samples Wilcoxon test...",
-							"es": "Prueba de Wilcoxon para muestras pareadas..."
+							"es": "Test de Wilcoxon para muestras pareadas..."
 						}
 					},
 					{
@@ -1042,7 +1042,7 @@
 						"icon": "circle-filled",
 						"label": {
 							"en": "Kruskal-Wallis test...",
-							"es": "Prueba de Kruskal-Wallis..."
+							"es": "Test de Kruskal-Wallis..."
 						}
 					},
 					{
@@ -1051,7 +1051,7 @@
 						"icon": "circle-filled",
 						"label": {
 							"en": "Friedman rank-sum test...",
-							"es": "Prueba de Friedman..."
+							"es": "Test de suma de rangos de Friedman..."
 						}
 					},
 					{
@@ -1060,7 +1060,7 @@
 						"icon": "circle-filled",
 						"label": {
 							"en": "Randomness test for two level factor...",
-							"es": "Prueba de aleatoriedad para un factor de dos niveles..."
+							"es": "Test de aleatoriedad para un factor de dos niveles..."
 						}
 					},
 					{
@@ -1069,7 +1069,7 @@
 						"icon": "circle-filled",
 						"label": {
 							"en": "Randomness test for numeric variable...",
-							"es": "Prueba de aleatoriedad para una variable numérica..."
+							"es": "Test de aleatoriedad para una variable numérica..."
 						}
 					}
 				]
@@ -1077,7 +1077,7 @@
 			{
 				"label": {
 					"en": "Dimensional analysis",
-					"es": "Reducción de dimensionalidad"
+					"es": "Análisis dimensional"
 				},
 				"color": "charts.purple",
 				"icon": "folder",
@@ -1115,13 +1115,13 @@
 						"icon": "circle-filled",
 						"label": {
 							"en": "Confirmatory factor analysis...",
-							"es": "Análisis factorial confirmatorio..."
+							"es": "Análisis confirmatorio factorial..."
 						}
 					},
 					{
 						"label": {
 							"en": "Cluster analysis",
-							"es": "Análisis de clústeres"
+							"es": "Análisis de agrupación"
 						},
 						"color": "charts.purple",
 						"icon": "folder",
@@ -1207,7 +1207,7 @@
 						"icon": "circle-filled",
 						"label": {
 							"en": "Multinomial logit model...",
-							"es": "Modelo logit multinomial..."
+							"es": "Modelo logit multinominal..."
 						}
 					},
 					{
@@ -1216,7 +1216,7 @@
 						"icon": "circle-filled",
 						"label": {
 							"en": "Ordinal regression model...",
-							"es": "Modelo de regresión ordinal..."
+							"es": "Modelo ordinal de regresión ..."
 						}
 					},
 					{
@@ -1244,7 +1244,7 @@
 	{
 		"label": {
 			"en": "Graphs",
-			"es": "Gráficos"
+			"es": "Gráficas"
 		},
 		"color": "charts.orange",
 		"icon": "graph-line",
@@ -1378,7 +1378,7 @@
 				"icon": "circle-filled",
 				"label": {
 					"en": "XY conditioning plot...",
-					"es": "Gráfico XY por paneles..."
+					"es": "Gráfica XY..."
 				}
 			},
 			{
@@ -1505,7 +1505,7 @@
 				"icon": "beaker",
 				"label": {
 					"en": "Select active model...",
-					"es": "Seleccionar modelo activo..."
+					"es": "Selecciona el modelo activo..."
 				}
 			},
 			{
@@ -1532,7 +1532,7 @@
 				"icon": "circle-filled",
 				"label": {
 					"en": "Add observation statistics to data...",
-					"es": "Añadir estadísticos de las observaciones a los datos..."
+					"es": "Añadir las estadísticas de las observaciones a los datos..."
 				}
 			},
 			{
@@ -1544,7 +1544,7 @@
 				"icon": "circle-filled",
 				"label": {
 					"en": "Akaike Information Criterion (AIC)",
-					"es": "Criterio de información de Akaike (AIC)"
+					"es": "Criterio de Información de Akaike (AIC)"
 				}
 			},
 			{
@@ -1553,7 +1553,7 @@
 				"icon": "circle-filled",
 				"label": {
 					"en": "Bayesian Information Criterion (BIC)",
-					"es": "Criterio de información bayesiano (BIC)"
+					"es": "Criterio de Información Bayesiano (BIC)"
 				}
 			},
 			{
@@ -1571,7 +1571,7 @@
 				"icon": "circle-filled",
 				"label": {
 					"en": "Subset model selection...",
-					"es": "Selección de modelos por subconjuntos..."
+					"es": "Selección de modelo..."
 				}
 			},
 			{
@@ -1592,7 +1592,7 @@
 				"icon": "circle-filled",
 				"label": {
 					"en": "Bootstrap confidence intervals...",
-					"es": "Intervalos de confianza bootstrap..."
+					"es": "Intervalo de confianza bootstrap..."
 				}
 			},
 			{
@@ -1601,13 +1601,13 @@
 				"icon": "circle-filled",
 				"label": {
 					"en": "Delta method confidence interval...",
-					"es": "Intervalo de confianza por el método delta..."
+					"es": "Intervalo de confianza método delta..."
 				}
 			},
 			{
 				"label": {
 					"en": "Hypothesis tests",
-					"es": "Contrastes de hipótesis"
+					"es": "Test de hipótesis"
 				},
 				"color": "charts.red",
 				"icon": "folder",
@@ -1667,7 +1667,7 @@
 						"icon": "circle-filled",
 						"label": {
 							"en": "Breusch-Pagan test for heteroscedasticity...",
-							"es": "Prueba de Breusch-Pagan para heteroscedasticidad..."
+							"es": "Test de Breusch-Pagan para heteroscedasticidad..."
 						}
 					},
 					{
@@ -1676,7 +1676,7 @@
 						"icon": "circle-filled",
 						"label": {
 							"en": "Durbin-Watson test for autocorrelation...",
-							"es": "Prueba de Durbin-Watson para autocorrelación..."
+							"es": "Test de Durbin-Watson para autocorrelación..."
 						}
 					},
 					{
@@ -1685,7 +1685,7 @@
 						"icon": "circle-filled",
 						"label": {
 							"en": "RESET test for nonlinearity...",
-							"es": "Prueba RESET de no linealidad..."
+							"es": "Test RESET de no linealidad..."
 						}
 					},
 					{
@@ -1694,7 +1694,7 @@
 						"icon": "circle-filled",
 						"label": {
 							"en": "Bonferroni outlier test",
-							"es": "Prueba de valores atípicos de Bonferroni"
+							"es": "Test de valores atípicos de Bonferroni"
 						}
 					},
 					{
@@ -1711,7 +1711,7 @@
 			{
 				"label": {
 					"en": "Graphs",
-					"es": "Gráficos"
+					"es": "Gráficas"
 				},
 				"color": "charts.red",
 				"icon": "folder",
@@ -1740,7 +1740,7 @@
 						"icon": "circle-filled",
 						"label": {
 							"en": "Component+residual plots...",
-							"es": "Gráficos de componentes y residuos..."
+							"es": "Gráfica de componentes+residuos..."
 						}
 					},
 					{
@@ -1749,7 +1749,7 @@
 						"icon": "circle-filled",
 						"label": {
 							"en": "Added-variable plots...",
-							"es": "Gráficos de regresión parcial..."
+							"es": "Gráfica de variables agregadas..."
 						}
 					},
 					{
@@ -1912,7 +1912,7 @@
 					{
 						"label": {
 							"en": "Chi-squared distribution",
-							"es": "Distribución chi-cuadrado"
+							"es": "Distribución Chi-cuadrado"
 						},
 						"color": "terminal.ansiCyan",
 						"icon": "folder",
@@ -1923,7 +1923,7 @@
 								"icon": "circle-filled",
 								"label": {
 									"en": "Chi-squared quantiles...",
-									"es": "Cuantiles de la distribución chi-cuadrado..."
+									"es": "Cuantiles Chi-cuadrado..."
 								}
 							},
 							{
@@ -1932,7 +1932,7 @@
 								"icon": "circle-filled",
 								"label": {
 									"en": "Chi-squared probabilities...",
-									"es": "Probabilidades acumuladas de la distribución chi-cuadrado..."
+									"es": "Probabilidades Chi-cuadrado acumuladas..."
 								}
 							},
 							{
@@ -1941,7 +1941,7 @@
 								"icon": "circle-filled",
 								"label": {
 									"en": "Plot chi-squared distribution...",
-									"es": "Gráfica de la distribución chi-cuadrado..."
+									"es": "Gráfica de la distribución Chi-cuadrado..."
 								}
 							},
 							{
@@ -1950,7 +1950,7 @@
 								"icon": "circle-filled",
 								"label": {
 									"en": "Sample from chi-squared distribution...",
-									"es": "Muestra de una distribución chi-cuadrado..."
+									"es": "Muestra de una distribución Chi-cuadrado..."
 								}
 							}
 						]
@@ -2245,7 +2245,7 @@
 								"icon": "circle-filled",
 								"label": {
 									"en": "Lognormal quantiles...",
-									"es": "Cuantiles de la distribución lognormal..."
+									"es": "Cuantiles lognormal..."
 								}
 							},
 							{
@@ -2254,7 +2254,7 @@
 								"icon": "circle-filled",
 								"label": {
 									"en": "Lognormal probabilities...",
-									"es": "Probabilidades acumuladas de la distribución lognormal..."
+									"es": "Probabilidades lognormal acumuladas..."
 								}
 							},
 							{
@@ -2659,7 +2659,7 @@
 								"icon": "circle-filled",
 								"label": {
 									"en": "Negative binomial quantiles...",
-									"es": "Cuantiles de la distribución binomial negativa..."
+									"es": "Cuantiles binomiales negativos..."
 								}
 							},
 							{
@@ -2668,7 +2668,7 @@
 								"icon": "circle-filled",
 								"label": {
 									"en": "Negative binomial tail probabilities...",
-									"es": "Probabilidades acumuladas de la distribución binomial negativa..."
+									"es": "Probabilidades binomiales negativas acumuladas..."
 								}
 							},
 							{
@@ -2677,7 +2677,7 @@
 								"icon": "circle-filled",
 								"label": {
 									"en": "Negative binomial probabilities...",
-									"es": "Probabilidades de la distribución binomial negativa..."
+									"es": "Probabilidades binomiales negativas..."
 								}
 							},
 							{
@@ -2707,7 +2707,7 @@
 	{
 		"label": {
 			"en": "Basic Statistics",
-			"es": "Estadística básica"
+			"es": "Estadística Básica"
 		},
 		"color": "terminal.ansiYellow",
 		"icon": "book",
@@ -2763,7 +2763,7 @@
 					{
 						"label": {
 							"en": "Data in packages",
-							"es": "Conjuntos de datos en paquetes"
+							"es": "Conjunto de datos en paquetes"
 						},
 						"color": "terminal.ansiYellow",
 						"icon": "folder",
@@ -2783,7 +2783,7 @@
 								"icon": "circle-filled",
 								"label": {
 									"en": "Read data set from an attached package...",
-									"es": "Cargar conjunto de datos de un paquete cargado..."
+									"es": "Leer conjunto de datos desde paquete adjunto..."
 								}
 							}
 						]
@@ -2883,7 +2883,7 @@
 								"icon": "circle-filled",
 								"label": {
 									"en": "Remove cases with missing data...",
-									"es": "Eliminar casos con datos faltantes..."
+									"es": "Eliminar los casos con valores omitidos..."
 								}
 							},
 							{
@@ -2892,7 +2892,7 @@
 								"icon": "circle-filled",
 								"label": {
 									"en": "Save active data set...",
-									"es": "Guardar el conjunto de datos activo..."
+									"es": "Guardar el conjunto de datos activos..."
 								}
 							},
 							{
@@ -2956,7 +2956,7 @@
 								"icon": "circle-filled",
 								"label": {
 									"en": "Standardize variables...",
-									"es": "Estandarizar variables..."
+									"es": "Tipificar variables..."
 								}
 							},
 							{
@@ -2965,7 +2965,7 @@
 								"icon": "circle-filled",
 								"label": {
 									"en": "Convert numeric variables to factors...",
-									"es": "Convertir variables numéricas en factores..."
+									"es": "Convertir variable numérica en factor..."
 								}
 							},
 							{
@@ -2974,7 +2974,7 @@
 								"icon": "circle-filled",
 								"label": {
 									"en": "Bin numeric variable...",
-									"es": "Agrupar variable numérica en intervalos..."
+									"es": "Segmentar variable numérica..."
 								}
 							},
 							{
@@ -3020,7 +3020,7 @@
 			{
 				"label": {
 					"en": "Index Numbers",
-					"es": "Números índice"
+					"es": "Números Índice"
 				},
 				"color": "terminal.ansiYellow",
 				"icon": "folder",
@@ -3075,7 +3075,7 @@
 			{
 				"label": {
 					"en": "Descriptive Statistics",
-					"es": "Estadística descriptiva"
+					"es": "Estadística Descriptiva"
 				},
 				"color": "terminal.ansiYellow",
 				"icon": "folder",
@@ -3095,7 +3095,7 @@
 						"icon": "circle-filled",
 						"label": {
 							"en": "Frequency distributions for qualitative variables...",
-							"es": "Distribuciones de frecuencias de variables cualitativas..."
+							"es": "Distribuciones de frecuencia variables cualitativas..."
 						}
 					},
 					{
@@ -3176,7 +3176,7 @@
 			{
 				"label": {
 					"en": "Random Variables",
-					"es": "Variables aleatorias"
+					"es": "Variables Aleatorias"
 				},
 				"color": "terminal.ansiYellow",
 				"icon": "folder",
@@ -3212,7 +3212,7 @@
 										"icon": "circle-filled",
 										"label": {
 											"en": "Continuous Generic quantiles...",
-											"es": "Cuantiles de la distribución genérica continua..."
+											"es": "Cuantiles genéricos continuos..."
 										}
 									},
 									{
@@ -3221,7 +3221,7 @@
 										"icon": "circle-filled",
 										"label": {
 											"en": "Continuous Generic probabilities...",
-											"es": "Probabilidades acumuladas de la distribución genérica continua..."
+											"es": "Probabilidades genéricas continuas acumuladas..."
 										}
 									},
 									{
@@ -3239,7 +3239,7 @@
 										"icon": "circle-filled",
 										"label": {
 											"en": "Continuous Generic characteristics...",
-											"es": "Características de la distribución genérica continua..."
+											"es": "Características genéricas continuas..."
 										}
 									},
 									{
@@ -3294,7 +3294,7 @@
 										"icon": "circle-filled",
 										"label": {
 											"en": "Normal characteristics...",
-											"es": "Características de la distribución normal..."
+											"es": "Características normales..."
 										}
 									},
 									{
@@ -3349,7 +3349,7 @@
 										"icon": "circle-filled",
 										"label": {
 											"en": "t characteristics...",
-											"es": "Características de la distribución t..."
+											"es": "Características t..."
 										}
 									},
 									{
@@ -3366,7 +3366,7 @@
 							{
 								"label": {
 									"en": "Chi-squared distribution",
-									"es": "Distribución chi-cuadrado"
+									"es": "Distribución Chi-cuadrado"
 								},
 								"color": "terminal.ansiYellow",
 								"icon": "folder",
@@ -3377,7 +3377,7 @@
 										"icon": "circle-filled",
 										"label": {
 											"en": "Chi-squared quantiles...",
-											"es": "Cuantiles de la distribución chi-cuadrado..."
+											"es": "Cuantiles Chi-cuadrado..."
 										}
 									},
 									{
@@ -3386,7 +3386,7 @@
 										"icon": "circle-filled",
 										"label": {
 											"en": "Chi-squared probabilities...",
-											"es": "Probabilidades acumuladas de la distribución chi-cuadrado..."
+											"es": "Probabilidades Chi-cuadrado acumuladas..."
 										}
 									},
 									{
@@ -3395,7 +3395,7 @@
 										"icon": "circle-filled",
 										"label": {
 											"en": "Plot chi-squared distribution...",
-											"es": "Gráfica de la distribución chi-cuadrado..."
+											"es": "Gráfica de la distribución Chi-cuadrado..."
 										}
 									},
 									{
@@ -3404,7 +3404,7 @@
 										"icon": "circle-filled",
 										"label": {
 											"en": "ChiSquared characteristics...",
-											"es": "Características de la distribución chi-cuadrado..."
+											"es": "Características Chi-cuadrado..."
 										}
 									},
 									{
@@ -3413,7 +3413,7 @@
 										"icon": "circle-filled",
 										"label": {
 											"en": "Sample from chi-squared distribution...",
-											"es": "Muestra de una distribución chi-cuadrado..."
+											"es": "Muestra de una distribución Chi-cuadrado..."
 										}
 									}
 								]
@@ -3459,7 +3459,7 @@
 										"icon": "circle-filled",
 										"label": {
 											"en": "F characteristics...",
-											"es": "Características de la distribución F..."
+											"es": "Características F..."
 										}
 									},
 									{
@@ -3514,7 +3514,7 @@
 										"icon": "circle-filled",
 										"label": {
 											"en": "Exponential characteristics...",
-											"es": "Características de la distribución exponencial..."
+											"es": "Características exponenciales..."
 										}
 									},
 									{
@@ -3569,7 +3569,7 @@
 										"icon": "circle-filled",
 										"label": {
 											"en": "Uniform characteristics...",
-											"es": "Características de la distribución uniforme..."
+											"es": "Características uniformes..."
 										}
 									},
 									{
@@ -3616,7 +3616,7 @@
 										"icon": "circle-filled",
 										"label": {
 											"en": "Discrete Generic quantiles...",
-											"es": "Cuantiles de la distribución genérica discreta..."
+											"es": "Cuantiles genéricos discretos..."
 										}
 									},
 									{
@@ -3625,7 +3625,7 @@
 										"icon": "circle-filled",
 										"label": {
 											"en": "Discrete Generic tail probabilities...",
-											"es": "Probabilidades acumuladas de la distribución genérica discreta..."
+											"es": "Probabilidades genéricas discretas acumuladas..."
 										}
 									},
 									{
@@ -3634,7 +3634,7 @@
 										"icon": "circle-filled",
 										"label": {
 											"en": "Discrete Generic probabilities...",
-											"es": "Probabilidades de la distribución genérica discreta..."
+											"es": "Probabilidades genéricas discretas..."
 										}
 									},
 									{
@@ -3652,7 +3652,7 @@
 										"icon": "circle-filled",
 										"label": {
 											"en": "Discrete Generic characteristics...",
-											"es": "Características de la distribución genérica discreta..."
+											"es": "Características genéricas discretas..."
 										}
 									},
 									{
@@ -3716,7 +3716,7 @@
 										"icon": "circle-filled",
 										"label": {
 											"en": "Binomial characteristics...",
-											"es": "Características de la distribución binomial..."
+											"es": "Características binomiales..."
 										}
 									},
 									{
@@ -3780,7 +3780,7 @@
 										"icon": "circle-filled",
 										"label": {
 											"en": "Poisson characteristics...",
-											"es": "Características de la distribución de Poisson..."
+											"es": "Características de Poisson..."
 										}
 									},
 									{
@@ -3844,7 +3844,7 @@
 										"icon": "circle-filled",
 										"label": {
 											"en": "Geometric characteristics...",
-											"es": "Características de la distribución geométrica..."
+											"es": "Características geométricas..."
 										}
 									},
 									{
@@ -3872,7 +3872,7 @@
 										"icon": "circle-filled",
 										"label": {
 											"en": "Negative binomial quantiles...",
-											"es": "Cuantiles de la distribución binomial negativa..."
+											"es": "Cuantiles binomiales negativos..."
 										}
 									},
 									{
@@ -3881,7 +3881,7 @@
 										"icon": "circle-filled",
 										"label": {
 											"en": "Negative binomial tail probabilities...",
-											"es": "Probabilidades acumuladas de la distribución binomial negativa..."
+											"es": "Probabilidades binomiales negativas acumuladas..."
 										}
 									},
 									{
@@ -3890,7 +3890,7 @@
 										"icon": "circle-filled",
 										"label": {
 											"en": "Negative binomial probabilities...",
-											"es": "Probabilidades de la distribución binomial negativa..."
+											"es": "Probabilidades binomiales negativas..."
 										}
 									},
 									{
@@ -3908,7 +3908,7 @@
 										"icon": "circle-filled",
 										"label": {
 											"en": "NegativeBinomial characteristics...",
-											"es": "Características de la distribución binomial negativa..."
+											"es": "Características binomiales negativas..."
 										}
 									},
 									{
@@ -3929,7 +3929,7 @@
 			{
 				"label": {
 					"en": "Statistical Inference",
-					"es": "Inferencia estadística"
+					"es": "Inferencia Estadística"
 				},
 				"color": "terminal.ansiYellow",
 				"icon": "folder",
@@ -3993,7 +3993,7 @@
 										"icon": "circle-filled",
 										"label": {
 											"en": "Confidence interval for the difference of independent means...",
-											"es": "Intervalo de confianza para la diferencia de medias (muestras independientes)..."
+											"es": "Intervalo de confianza para la diferencia de medias independientes..."
 										}
 									},
 									{
@@ -4002,7 +4002,7 @@
 										"icon": "circle-filled",
 										"label": {
 											"en": "Confidence interval for mean paired difference...",
-											"es": "Intervalo de confianza para la media de las diferencias pareadas..."
+											"es": "Intervalo de confianza para la diferencia de medias de dos muestras pareadas..."
 										}
 									},
 									{
@@ -4011,7 +4011,7 @@
 										"icon": "circle-filled",
 										"label": {
 											"en": "Confidence interval for the ratio of two variances...",
-											"es": "Intervalo de confianza para el cociente de dos varianzas..."
+											"es": "Intervalo de confianza para cociente varianzas..."
 										}
 									},
 									{
@@ -4020,7 +4020,7 @@
 										"icon": "circle-filled",
 										"label": {
 											"en": "Confidence interval for difference of proportions...",
-											"es": "Intervalo de confianza para la diferencia de proporciones..."
+											"es": "Intervalo de confianza para diferencia de proporciones..."
 										}
 									}
 								]
@@ -4086,7 +4086,7 @@
 										"icon": "circle-filled",
 										"label": {
 											"en": "Hypothesis testing for independent means...",
-											"es": "Contraste de medias de muestras independientes..."
+											"es": "Contraste de hipótesis para medias independientes..."
 										}
 									},
 									{
@@ -4095,7 +4095,7 @@
 										"icon": "circle-filled",
 										"label": {
 											"en": "Hypothesis testing for paired means...",
-											"es": "Contraste de medias de muestras pareadas..."
+											"es": "Contraste de hipótesis para medias pareadas..."
 										}
 									},
 									{
@@ -4104,7 +4104,7 @@
 										"icon": "circle-filled",
 										"label": {
 											"en": "Hypothesis testing for the ratio of two variances...",
-											"es": "Contraste de hipótesis para el cociente de dos varianzas..."
+											"es": "Contraste de hipótesis para cociente varianzas..."
 										}
 									},
 									{
@@ -4113,7 +4113,7 @@
 										"icon": "circle-filled",
 										"label": {
 											"en": "Hypothesis testing for difference of proportions...",
-											"es": "Contraste de hipótesis para la diferencia de proporciones..."
+											"es": "Contraste de hipótesis para diferencia de proporciones..."
 										}
 									}
 								]
@@ -4147,7 +4147,7 @@
 				"icon": "circle-filled",
 				"label": {
 					"en": "Load Rcmdr plug-in(s)...",
-					"es": "Cargar complementos de Rcmdr..."
+					"es": "Cargar plugin(s) de Rcmdr..."
 				}
 			},
 			{
@@ -4250,7 +4250,7 @@
 				"icon": "circle-filled",
 				"label": {
 					"en": "Introduction to the R Commander (English version)",
-					"es": "Introducción a R Commander (en inglés)"
+					"es": "Introduction to the R Commander (English version)"
 				}
 			},
 			{
@@ -4277,7 +4277,7 @@
 				"icon": "circle-filled",
 				"label": {
 					"en": "R Commander hex sticker",
-					"es": "Pegatina hexagonal de R Commander"
+					"es": "R Commander hex sticker"
 				}
 			},
 			{
@@ -4310,7 +4310,7 @@
 				"icon": "circle-filled",
 				"label": {
 					"en": "R website",
-					"es": "Sitio web de R"
+					"es": "Sitio R"
 				}
 			},
 			{
@@ -4319,7 +4319,7 @@
 				"icon": "circle-filled",
 				"label": {
 					"en": "Using R Markdown",
-					"es": "Uso de R Markdown"
+					"es": "Usando R Markdown"
 				}
 			}
 		]

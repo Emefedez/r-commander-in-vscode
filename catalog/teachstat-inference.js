@@ -12,13 +12,14 @@ const fixedAlt = [['two.sided', 'Two-sided'], ['less', 'Left-sided'], ['greater'
 // ---- fields shared by many dialogs ----------------------------------------------------------------------------
 const intervalType = { k: 'type', type: 'choice', label: 'Interval type', choices: fixedAlt };
 const confidence = { k: 'conf', type: 'num', min: 0, max: 1, def: '0.95', label: 'Confidence level:' };
-const alternative = { k: 'alt', type: 'choice', label: 'Alternative hypothesis', choices: fixedAlt };
+// Each test words its alternatives ("Population mean != mu0", ...), as TeachStat does.
+const alternative = (notEqual, less, greater) => ({ k: 'alt', type: 'choice', label: 'Alternative hypothesis', choices: [['two.sided', notEqual], ['less', less], ['greater', greater]] });
 const knownValue = (k, label, when, extra = {}) => ({ k, type: 'num', label, def: '1', when, ...extra });
 
 // Level pickers need the factor first: the levels come from R once a factor is chosen.
 const groupLevels = (factorKey, ds) => ({
-  g1: { k: 'level1', type: 'rlist', of: factorKey, single: true, selectFirst: true, label: 'Group 1', exprFor: (g, c) => `levels(as.factor(${c.ds}$${S(g)}))` },
-  g2: { k: 'level2', type: 'rlist', of: factorKey, single: true, label: 'Group 2', exprFor: (g, c) => `levels(as.factor(${c.ds}$${S(g)}))` }
+  g1: { k: 'level1', type: 'rlist', of: factorKey, single: true, selectFirst: true, compact: true, label: 'Group 1', exprFor: (g, c) => `levels(as.factor(${c.ds}$${S(g)}))` },
+  g2: { k: 'level2', type: 'rlist', of: factorKey, single: true, compact: true, label: 'Group 2', exprFor: (g, c) => `levels(as.factor(${c.ds}$${S(g)}))` }
 });
 const pickedLevel = value => [].concat(value || [])[0];
 
@@ -67,13 +68,13 @@ const altText = (v, less, greater, notEqual) => (v.alt === 'less' ? less : v.alt
 const altQuoted = v => rs(v.alt);
 
 // ---- confidence intervals -------------------------------------------------------------------------------------------
-const knownVariance = { k: 'variance', type: 'choice', label: 'Variance', choices: [['unknown', 'Unknown'], ['known', 'Known']] };
-const unknownKnownMean = { k: 'mean', type: 'choice', label: 'Mean', choices: [['unknown', 'Unknown'], ['known', 'Known']] };
-const variancesChoice = { k: 'variances', type: 'choice', label: 'Variances', def: 2, choices: [['known', 'Known'], ['equal', 'Unknown and equal'], ['unequal', 'Unknown and unequal']] };
-const sigma = (k, label, when) => knownValue(k, label, when, { positive: true, def: '1' });
+const knownVariance = { k: 'variance', type: 'choice', label: 'Variance', choices: [['known', 'Known'], ['unknown', 'Unknown']], def: 'unknown' };
+const unknownKnownMean = { k: 'mean', type: 'choice', label: 'Mean', choices: [['known', 'Known'], ['unknown', 'Unknown']], def: 'unknown' };
+const variancesChoice = { k: 'variances', type: 'choice', label: 'Variances', def: 'equal', choices: [['known', 'Known'], ['equal', 'Unknown and equal'], ['unequal', 'Unknown and unequal']] };
+const sigma = (k, label, when, prompt) => knownValue(k, label, when, { positive: true, def: '', ...(prompt && { prompt }) });
 
 const ci = {
-  intervaloConfianzaMedia: { fields: [numVar('x', 'Variable (pick one)'), knownVariance, sigma('s2', 'Known variance value', v => v.variance === 'known'), intervalType, confidence],
+  intervaloConfianzaMedia: { fields: [numVar('x', 'Variable (pick one)', { compact: true }), knownVariance, sigma('s2', '', v => v.variance === 'known', 'Known variance value'), intervalType, confidence],
     code: (v, c) => {
       const x = `${c.ds}$${S(v.x)}`;
       const known = v.variance === 'known';
@@ -82,7 +83,7 @@ const ci = {
         title: known ? `${t('Confidence Interval for the mean with known variance =')} ${Number(v.s2)}` : t('Confidence Interval for the mean with unknown variance'),
         variableLine: [`cat("${t('Variable')}: ${v.x}\\n")`] })(v);
     } },
-  intervaloConfianzaVarianza: { fields: [numVar('x', 'Variable (pick one)'), unknownKnownMean, knownValue('mu', 'Known mean value', v => v.mean === 'known', { def: '0' }), intervalType, confidence],
+  intervaloConfianzaVarianza: { fields: [numVar('x', 'Variable (pick one)', { compact: true }), unknownKnownMean, knownValue('mu', '', v => v.mean === 'known', { def: '', prompt: 'Known mean value', pattern: undefined }), intervalType, confidence],
     code: (v, c) => {
       const x = `${c.ds}$${S(v.x)}`;
       const known = v.mean === 'known';
@@ -91,8 +92,8 @@ const ci = {
         title: known ? `${t('Confidence Interval for the variance with known mean =')} ${Number(v.mu)}` : t('Confidence Interval for the variance with unknown mean'),
         variableLine: [`cat("${t('Variable')}: ${v.x}\\n")`] })(v);
     } },
-  intervaloConfianzaMediasIndependientes: (() => { const lv = groupLevels('g'); return { fields: [numVar('x', 'Variable (pick one)'), factor('g', 'Groups (pick one)'), lv.g1, lv.g2, variancesChoice,
-      sigma('s1', 'Variance of group 1', v => v.variances === 'known'), sigma('s2', 'Variance of group 2', v => v.variances === 'known'), intervalType, confidence],
+  intervaloConfianzaMediasIndependientes: (() => { const lv = groupLevels('g'); return { fields: [numVar('x', 'Variable (pick one)', { compact: true }), factor('g', 'Groups (pick one)', { compact: true }), lv.g1, lv.g2, variancesChoice,
+      sigma('s1', '   Sigma^2_1', v => v.variances === 'known'), sigma('s2', '   Sigma^2_2', v => v.variances === 'known'), intervalType, confidence],
     check: v => (pickedLevel(v.level1) === pickedLevel(v.level2) ? 'Group 1 and Group 2 must not coincide' : undefined),
     code: (v, c) => {
       const [l1, l2] = [pickedLevel(v.level1), pickedLevel(v.level2)];
@@ -107,10 +108,10 @@ const ci = {
       return intervalReport({ command: [...subsets, ...body], title, estimate: 'two',
         variableLine: [`cat("${t('Variable')}: ${v.x}\\n")`, `cat("${t('Groups')}: ${v.g} [${l1} vs. ${l2}]\\n")`] })(v);
     } }; })(),
-  intervaloConfianzaMediasPareadas: { fields: [numVar('x', 'First variable (pick one)'), numVar('y', 'Second variable (pick one)', { exclude: ['x'] }), intervalType, confidence],
+  intervaloConfianzaMediasPareadas: { fields: [numVar('x', 'First variable (pick one)', { compact: true }), numVar('y', 'Second variable (pick one)', { exclude: ['x'], compact: true }), intervalType, confidence],
     code: (v, c) => intervalReport({ command: [`aux<-t.test(${c.ds}$${S(v.x)}, ${c.ds}$${S(v.y)}, paired = TRUE, conf.level=${v.conf}, alternative='${v.type}')`],
       title: t('Confidence Interval for the mean difference of two paired samples'), variableLine: [`cat("${t('Variable')}: ${v.x} vs. ${v.y}\\n")`] })(v) },
-  intervaloConfianza2Varianzas: (() => { const lv = groupLevels('g'); return { fields: [numVar('x', 'Variable (pick one)'), factor('g', 'Groups (pick one)'), lv.g1, lv.g2, intervalType, confidence],
+  intervaloConfianza2Varianzas: (() => { const lv = groupLevels('g'); return { fields: [numVar('x', 'Variable (pick one)', { compact: true }), factor('g', 'Groups (pick one)', { compact: true }), lv.g1, lv.g2, intervalType, confidence],
     check: v => (pickedLevel(v.level1) === pickedLevel(v.level2) ? 'Group 1 and Group 2 must not coincide' : undefined),
     code: (v, c) => {
       const [l1, l2] = [pickedLevel(v.level1), pickedLevel(v.level2)];
@@ -153,7 +154,7 @@ ci.intervaloConfianzaProporcion = { fields: [...proportionSource(), intervalType
 
 ci.intervaloConfianzaDiferenciaProporciones = (() => {
   const lv = groupLevels('g');
-  return { fields: [factor('g', 'Groups (pick one)'), lv.g1, lv.g2, { k: 'x', type: 'var', kind: 'factor', optional: true, exclude: ['g'], label: 'Variable' },
+  return { fields: [factor('g', 'Groups (pick one)', { compact: true }), lv.g1, lv.g2, { k: 'x', type: 'var', kind: 'factor', optional: true, exclude: ['g'], label: 'Variable' },
     { k: 'success', type: 'rlist', of: 'x', single: true, selectFirst: true, label: 'Success', exprFor: (x, c) => `levels(as.factor(${c.ds}$${S(x)}))` },
     countField('s1', 'No. successes'), countField('f1', 'No. failures'), countField('s2', 'No. successes'), countField('f2', 'No. failures'), intervalType, confidence],
   check: v => {
@@ -183,7 +184,7 @@ ci.intervaloConfianzaDiferenciaProporciones = (() => {
 const nullValue = (k, label, def, extra = {}) => ({ k, type: 'num', label, def, ...extra });
 const tests = {};
 
-tests.contrasteHipotesisMedia = { fields: [numVar('x', 'Variable (pick one)'), knownVariance, sigma('s2', 'Known variance value', v => v.variance === 'known'), alternative, nullValue('mu0', 'Null hypothesis: mu = ', '0.0'), confidence],
+tests.contrasteHipotesisMedia = { fields: [numVar('x', 'Variable (pick one)', { compact: true }), knownVariance, sigma('s2', '', v => v.variance === 'known', 'Known variance value'), alternative('Population mean != mu0', 'Population mean < mu0', 'Population mean > mu0'), nullValue('mu0', 'Null hypothesis: mu =', '0.0'), confidence],
   code: (v, c) => {
     const x = `${c.ds}$${S(v.x)}`, known = v.variance === 'known', mu0 = Number(v.mu0);
     return testReport({ title: known ? `${t('Hypothesis Testing for the mean with known variance =')} ${Number(v.s2)}` : t('Hypothesis Testing for the mean with unknown variance'),
@@ -192,7 +193,7 @@ tests.contrasteHipotesisMedia = { fields: [numVar('x', 'Variable (pick one)'), k
       hAlt: w => `${altText(w, t('Population mean is less than'), t('Population mean is greater than'), t('Population mean is not equal to'))} ${mu0}` })(v);
   } };
 
-tests.contrasteHipotesisVarianza = { fields: [numVar('x', 'Variable (pick one)'), unknownKnownMean, knownValue('mu', 'Known mean value', v => v.mean === 'known', { def: '0' }), alternative, nullValue('sigma20', 'Null hypothesis: sigma^2 = ', '1', { positive: true }), confidence],
+tests.contrasteHipotesisVarianza = { fields: [numVar('x', 'Variable (pick one)', { compact: true }), unknownKnownMean, knownValue('mu', '', v => v.mean === 'known', { def: '', prompt: 'Known mean value', pattern: undefined }), alternative('Population variance != sigma^2_0', 'Population variance < sigma^2_0', 'Population variance > sigma^2_0'), nullValue('sigma20', 'Null hypothesis: sigma^2 = ', '1', { positive: true }), confidence],
   code: (v, c) => {
     const x = `${c.ds}$${S(v.x)}`, known = v.mean === 'known', s0 = Number(v.sigma20);
     return testReport({ title: known ? `${t('Hypothesis Testing for the variance with known mean =')} ${Number(v.mu)}` : t('Hypothesis Testing for the variance with unknown mean'),
@@ -201,7 +202,7 @@ tests.contrasteHipotesisVarianza = { fields: [numVar('x', 'Variable (pick one)')
       hAlt: w => `${altText(w, t('Population variance is less than'), t('Population variance is greater than'), t('Population variance is not equal to'))} ${s0}` })(v);
   } };
 
-tests.contrastHipotesisProporcion = { fields: [...proportionSource(), alternative, nullValue('p0', 'Null hypothesis: p = ', '0.5', { min: 0, max: 1 }), confidence],
+tests.contrastHipotesisProporcion = { fields: [...proportionSource(), alternative('Population proportion != p0', 'Population proportion < p0', 'Population proportion > p0'), nullValue('p0', 'Null hypothesis: p =', '0.5', { min: 0, max: 1 }), confidence],
   check: v => proportionCheck(v) || (Number(v.p0) <= 0 || Number(v.p0) >= 1 ? 'Value for the null hypothesis must be between 0 and 1 (and not be)' : undefined),
   code: (v, c) => {
     const p0 = Number(v.p0);
@@ -218,8 +219,8 @@ tests.contrastHipotesisProporcion = { fields: [...proportionSource(), alternativ
       variableLine: () => `${t('Sample')}: ${t('No. successes')} = ${s} -- ${t('No. attempts')} = ${n}\\n`, distribution: distributions.normal, hAlt })(v);
   } };
 
-tests.contrasteHipotesisMediasIndependientes = (() => { const lv = groupLevels('g'); return { fields: [numVar('x', 'Variable (pick one)'), factor('g', 'Groups (pick one)'), lv.g1, lv.g2, variancesChoice,
-    sigma('s1', 'Variance of group 1', v => v.variances === 'known'), sigma('s2', 'Variance of group 2', v => v.variances === 'known'), alternative, nullValue('mu0', 'Null hypothesis: mu_1 - mu_2 = ', '0.0'), confidence],
+tests.contrasteHipotesisMediasIndependientes = (() => { const lv = groupLevels('g'); return { fields: [numVar('x', 'Variable (pick one)', { compact: true }), factor('g', 'Groups (pick one)', { compact: true }), lv.g1, lv.g2, variancesChoice,
+    sigma('s1', '   Sigma^2_1', v => v.variances === 'known'), sigma('s2', '   Sigma^2_2', v => v.variances === 'known'), alternative('Population mean difference != mu0_1-mu0_2', 'Population mean difference < mu0_1-mu0_2', 'Population mean difference > mu0_1-mu0_2'), nullValue('mu0', 'Null hypothesis: mu_1 - mu_2 = ', '0.0'), confidence],
   check: v => (pickedLevel(v.level1) === pickedLevel(v.level2) ? 'Group 1 and Group 2 must not coincide' : undefined),
   code: (v, c) => {
     const [l1, l2] = [pickedLevel(v.level1), pickedLevel(v.level2)], mu0 = Number(v.mu0);
@@ -234,7 +235,7 @@ tests.contrasteHipotesisMediasIndependientes = (() => { const lv = groupLevels('
       hAlt: w => `${altText(w, t('Population difference is less than'), t('Population difference is greater than'), t('Population difference is not equal to'))} ${mu0}` })(v);
   } }; })();
 
-tests.contrasteHipotesisMediasPareadas = { fields: [numVar('x', 'First variable (pick one)'), numVar('y', 'Second variable (pick one)', { exclude: ['x'] }), alternative, nullValue('mu0', 'Null hypothesis: mu_1 - mu_2 = ', '0.0'), confidence],
+tests.contrasteHipotesisMediasPareadas = { fields: [numVar('x', 'First variable (pick one)', { compact: true }), numVar('y', 'Second variable (pick one)', { exclude: ['x'], compact: true }), alternative('Difference between population means != mu0_1-mu0_2', 'Difference between population means < mu0_1-mu0_2', 'Difference between population means > mu0_1-mu0_2'), nullValue('mu0', 'Null hypothesis: mu_1 - mu_2 =', '0.0'), confidence],
   code: (v, c) => {
     const mu0 = Number(v.mu0);
     return testReport({ title: t('Hypothesis Testing for the mean difference of two paired samples'),
@@ -243,7 +244,7 @@ tests.contrasteHipotesisMediasPareadas = { fields: [numVar('x', 'First variable 
       hAlt: w => `${altText(w, t('Population difference is less than'), t('Population difference is greater than'), t('Population difference is not equal to'))} ${mu0}` })(v);
   } };
 
-tests.contrasteHipotesis2Varianzas = (() => { const lv = groupLevels('g'); return { fields: [numVar('x', 'Variable (pick one)'), factor('g', 'Groups (pick one)'), lv.g1, lv.g2, alternative,
+tests.contrasteHipotesis2Varianzas = (() => { const lv = groupLevels('g'); return { fields: [numVar('x', 'Variable (pick one)', { compact: true }), factor('g', 'Groups (pick one)', { compact: true }), lv.g1, lv.g2, alternative('Ratio of population variances != sigma^2_1/sigma^2_2', 'Ratio of population variances < sigma^2_1/sigma^2_2', 'Ratio of population variances > sigma^2_1/sigma^2_2'),
     nullValue('r0', 'Null hypothesis: sigma^2_1/sigma^2_2 = ', '1', { positive: true }), confidence],
   check: v => (pickedLevel(v.level1) === pickedLevel(v.level2) ? 'Group 1 and Group 2 must not coincide' : undefined),
   code: (v, c) => {
@@ -255,9 +256,9 @@ tests.contrasteHipotesis2Varianzas = (() => { const lv = groupLevels('g'); retur
       hAlt: w => `${altText(w, t('Ratio of population variances is less than '), t('Ratio of population variances is greater than '), t('Ratio of population variances is not equal to '))}${r0}` })(v);
   } }; })();
 
-tests.contrasteHipotesisDiferenciaProporciones = (() => { const lv = groupLevels('g'); return { fields: [factor('g', 'Groups (pick one)'), lv.g1, lv.g2, { k: 'x', type: 'var', kind: 'factor', optional: true, exclude: ['g'], label: 'Variable' },
+tests.contrasteHipotesisDiferenciaProporciones = (() => { const lv = groupLevels('g'); return { fields: [factor('g', 'Groups (pick one)', { compact: true }), lv.g1, lv.g2, { k: 'x', type: 'var', kind: 'factor', optional: true, exclude: ['g'], label: 'Variable' },
     { k: 'success', type: 'rlist', of: 'x', single: true, selectFirst: true, label: 'Success', exprFor: (x, c) => `levels(as.factor(${c.ds}$${S(x)}))` },
-    countField('s1', 'No. successes'), countField('f1', 'No. failures'), countField('s2', 'No. successes'), countField('f2', 'No. failures'), alternative,
+    countField('s1', 'No. successes'), countField('f1', 'No. failures'), countField('s2', 'No. successes'), countField('f2', 'No. failures'), alternative('Population proportion difference != p0_1 - p0_2', 'Population proportion difference < p0_1 - p0_2', 'Population proportion difference > p0_1 - p0_2'),
     nullValue('d0', 'Null hypothesis: p_1 - p_2 = ', '0', { min: -1, max: 1 }), confidence],
   check: v => {
     const typed = [v.s1, v.f1, v.s2, v.f2].some(x => x.trim() !== '');

@@ -8,10 +8,10 @@ const flagsOf = (label, items, extra = {}) => ({ k: 'stats', type: 'flags', labe
 const lines = (...parts) => parts.flat().filter(Boolean).join('\n');
 
 const STATS = [['mean', 'Mean', true], ['sd', 'Standard Deviation', true], ['se(mean)', 'Standard Error of Mean', false], ['IQR', 'Interquartile Range', true],
-  ['quantiles', 'Quantiles', true], ['cv', 'Coefficient of Variation', false], ['skewness', 'Skewness', false], ['kurtosis', 'Kurtosis', false]];
-const statsField = (extra = []) => flagsOf('Statistics', [...STATS.slice(0, 4), ...extra, ...STATS.slice(4)]);
-const quantilesField = { k: 'q', type: 'numlist', label: 'Quantiles:', def: '0,0.25,0.5,0.75,1', when: v => v.stats.quantiles };
-const typeField = { k: 'type', type: 'choice', label: 'Type of skewness and kurtosis', choices: [['2', '2'], ['1', '1'], ['3', '3']],
+  ['quantiles', 'Quantiles:', true], ['cv', 'Coefficient of Variation', false], ['skewness', 'Skewness', false], ['kurtosis', 'Kurtosis', false]];
+const statsField = (extra = []) => flagsOf('', [...STATS.slice(0, 4), ...extra, ...STATS.slice(4)], { prompt: 'Statistics' });
+const quantilesField = { k: 'q', type: 'numlist', label: '', prompt: 'Quantiles:', def: '0,0.25,0.5,0.75,1', when: v => v.stats.quantiles };
+const typeField = { k: 'type', type: 'choice', label: '', prompt: 'Type of skewness and kurtosis', choices: [['1', 'Type 1'], ['2', 'Type 2'], ['3', 'Type 3']], def: '2',
   when: v => v.stats.skewness || v.stats.kurtosis };
 const chosen = v => STATS.map(s => s[0]).concat('mode').filter(k => v.stats[k]);
 const statistics = v => `c(${chosen(v).map(rs).join(', ')})`;
@@ -75,7 +75,7 @@ const mainTitle = (fam, v) => {
       : fam.params.map(([k, label]) => `${label}=${paramValue(fam, v, k)}`).join(', ');
   return `${fam.title} Distribution: ${text}`;
 };
-const colorField = (k, label, def) => ({ k, type: 'text', def, label, pattern: /^\S+$/, error: 'Enter a color name or a hex code.' });
+const colorField = (k, label, def) => ({ k, type: 'text', def, label, compact: true, pattern: /^\S+$/, error: 'Enter a color name or a hex code.' });
 const LEGEND_POSITIONS = ['topright', 'topleft', 'bottomright', 'bottomleft', 'top', 'bottom', 'left', 'right', 'center'].map(p => [p, p]);
 const numberList = text => String(text || '').trim().split(/[\s,]+/).filter(Boolean);
 const validNumbers = list => list.every(x => /^[-+]?(Inf|\d*\.?\d+([eE][-+]?\d+)?)$/.test(x));
@@ -90,17 +90,18 @@ function distributionCommands(fam) {
 
   out[`${prefix}DistrQuantiles`] = { ds: false,
     fields: [{ k: 'probs', type: 'numlist', label: 'Probabilities', def: '' }, ...params,
-      { k: 'tail', type: 'choice', label: 'Tail', choices: [['lower', 'Lower tail'], ['upper', 'Upper tail']] }],
+      { k: 'tail', type: 'choice', label: '', prompt: 'Tail', choices: [['lower', 'Lower tail'], ['upper', 'Upper tail']] }],
     check: famCheck,
     code: v => `distr::q(${distribution(fam, v)})(c(${v.probs.join(',')}), lower.tail=${rbool(v.tail === 'lower')})` };
 
   out[`${prefix}ProbabilitiesInter`] = { ds: false,
     fields: [...params,
+      { k: 'hp', type: 'note', heading: true, label: 'Probabilities:' },
       { k: 'from', type: 'text', optional: true, def: '', label: 'From (>)', pattern: /^[\s,\-+.\dEeInf]*$/, error: 'Enter numbers separated by commas.', sample: '-1' },
       { k: 'to', type: 'text', optional: true, def: '', label: 'To (<=)', pattern: /^[\s,\-+.\dEeInf]*$/, error: 'Enter numbers separated by commas.', sample: '1' },
-      { k: 'flags', type: 'flags', label: 'Options', items: [['plot', 'Plot region', false]] },
+      { k: 'flags', type: 'flags', label: '', items: [['plot', 'Plot region', false]] },
       colorField('color', ' color: ', 'gray'),
-      { k: 'legend', type: 'choice', label: 'Legend position', choices: LEGEND_POSITIONS }],
+      { k: 'legend', type: 'choice', label: 'Position of Legend', choices: [['topright', 'Top right'], ['topleft', 'Top left'], ['top', 'Top center']] }],
     check(v) {
       const from = numberList(v.from), to = numberList(v.to);
       if (!from.length && !to.length) return 'No values specified.';
@@ -124,7 +125,7 @@ function distributionCommands(fam) {
 
   if (fam.discrete) {
     out[`${prefix}DistrMass`] = { ds: false,
-      fields: [...params, { k: 'flags', type: 'flags', label: 'Options', items: [['cum', 'Show cumulative probabilities', false]] }],
+      fields: [...params, { k: 'flags', type: 'flags', label: '', items: [['cum', 'Show cumulative probabilities', false]] }],
       check: famCheck,
       code: v => lines('local({', `  .D <- ${distribution(fam, v)}`, '  .p <- distr::d(.D)(distr::support(.D))',
         `  .Table <- data.frame(Probability=.p${v.flags.cum ? ', Cumulative=cumsum(.p)' : ''})`, '  rownames(.Table) <- distr::support(.D)', '  print(.Table)', '})') };
@@ -134,13 +135,14 @@ function distributionCommands(fam) {
     fields: [...params,
       { k: 'flags', type: 'flags', label: 'Select function to plot:', items: [['cum', 'Plot distribution function', false], ['dens', fam.discrete ? 'Plot probability mass function' : 'Plot density function', true]] },
       { k: 'by', type: 'choice', label: 'Optionally specify regions under the density function by', choices: [['values', 'x-values'], ['quantiles', 'quantiles']] },
-      { k: 'from1', type: 'text', optional: true, def: '', label: 'From', pattern: /^\s*(-?Inf|[-+]?\d*\.?\d+([eE][-+]?\d+)?)?\s*$/, error: 'Enter a number.', sample: '-1' },
-      { k: 'to1', type: 'text', optional: true, def: '', label: 'To', pattern: /^\s*(-?Inf|[-+]?\d*\.?\d+([eE][-+]?\d+)?)?\s*$/, error: 'Enter a number.', sample: '1' },
-      colorField('color1', ' color: ', 'gray'),
-      { k: 'from2', type: 'text', optional: true, def: '', label: 'From', pattern: /^\s*(-?Inf|[-+]?\d*\.?\d+([eE][-+]?\d+)?)?\s*$/, error: 'Enter a number.', sample: '0.2' },
-      { k: 'to2', type: 'text', optional: true, def: '', label: 'To', pattern: /^\s*(-?Inf|[-+]?\d*\.?\d+([eE][-+]?\d+)?)?\s*$/, error: 'Enter a number.', sample: '0.4' },
-      colorField('color2', ' color: ', 'gray'),
-      { k: 'legend', type: 'choice', label: 'Legend position', choices: LEGEND_POSITIONS }],
+      { k: 'hr', type: 'note', heading: true, label: 'Regions to Fill (specify one or two, or leave blank)' },
+      { k: 'from1', type: 'text', optional: true, def: '', compact: true, label: 'Region 1: from ', pattern: /^\s*(-?Inf|[-+]?\d*\.?\d+([eE][-+]?\d+)?)?\s*$/, error: 'Enter a number.', sample: '-1' },
+      { k: 'to1', type: 'text', optional: true, def: '', compact: true, label: ' to ', pattern: /^\s*(-?Inf|[-+]?\d*\.?\d+([eE][-+]?\d+)?)?\s*$/, error: 'Enter a number.', sample: '1' },
+      colorField('color1', ' color ', 'gray'),
+      { k: 'from2', type: 'text', optional: true, def: '', compact: true, label: 'Region 2: from ', pattern: /^\s*(-?Inf|[-+]?\d*\.?\d+([eE][-+]?\d+)?)?\s*$/, error: 'Enter a number.', sample: '0.2' },
+      { k: 'to2', type: 'text', optional: true, def: '', compact: true, label: ' to ', pattern: /^\s*(-?Inf|[-+]?\d*\.?\d+([eE][-+]?\d+)?)?\s*$/, error: 'Enter a number.', sample: '0.4' },
+      colorField('color2', ' color ', 'gray'),
+      { k: 'legend', type: 'choice', label: 'Position of Legend', choices: [['topright', 'Top right'], ['topleft', 'Top left'], ['top', 'Top center']] }],
     check: v => (!v.flags.cum && !v.flags.dens ? 'No plot selected.' : v.from1.trim() && !v.to1.trim() ? "You must specify 'from' and 'to' for at least one range." : famCheck?.(v)),
     code(v) {
       const main = `main=paste(${rs(mainTitle(fam, v))})`;
@@ -175,9 +177,9 @@ function distributionCommands(fam) {
   const name = fam.sampleName || `${fam.title}Samples`;
   out[`${prefix}DistrSamples`] = { ds: false, activeDataset: v => v.name,
     fields: [{ k: 'name', type: 'name', label: 'Enter name for data set:', def: name }, ...params,
-      { k: 'nsamples', type: 'num', int: true, positive: true, def: '100', label: 'Number of samples' },
-      { k: 'nobs', type: 'num', int: true, positive: true, def: '1', label: 'Sample size' },
-      { k: 'flags', type: 'flags', label: 'Add to data set:', items: [['mean', 'Mean', false], ['sum', 'Sum', false], ['sd', 'Standard Deviation', false]] }],
+      { k: 'nsamples', type: 'num', int: true, positive: true, def: '100', label: 'Number of samples (rows) ' },
+      { k: 'nobs', type: 'num', int: true, positive: true, def: '1', label: 'Number of observations (columns) ' },
+      { k: 'flags', type: 'flags', label: 'Add to Data Set:', items: [['mean', 'Sample means', false], ['sum', 'Sample sums', false], ['sd', 'Sample standard deviations', false]] }],
     check: famCheck,
     code(v) {
       const n = v.name, obs = Number(v.nobs), samples = Number(v.nsamples);
@@ -199,10 +201,10 @@ const distributions = Object.assign({}, ...FAMILIES.map(distributionCommands));
 const PIECES = [1, 2, 3, 4];
 const numberOrBlank = /^\s*(-?Inf|[-+]?\d*\.?\d+([eE][-+]?\d+)?)?\s*$/;
 const piece = k => PIECES.flatMap(i => (i < k ? [] : [
-  { k: `def${i}`, type: 'text', label: i === 1 ? 'Definition (an expression in x)' : `Definition of piece ${i} (an expression in x)`, def: i === 1 ? '2*x' : '', optional: i > 1, sample: 'x',
+  { k: `def${i}`, type: 'text', label: 'Definition', prompt: `Definition ${i}`, def: i === 1 ? '2*x' : '', optional: i > 1, sample: 'x',
     when: v => i === 1 || (v[`def${i - 1}`] || '').trim() !== '' },
-  { k: `from${i}`, type: 'text', optional: true, def: i === 1 ? '0' : '', label: 'from', pattern: numberOrBlank, error: 'Enter a number.', sample: String(i - 1), when: v => i === 1 || (v[`def${i - 1}`] || '').trim() !== '' },
-  { k: `to${i}`, type: 'text', optional: true, def: i === 1 ? '1' : '', label: 'to', pattern: numberOrBlank, error: 'Enter a number.', sample: String(i), when: v => i === 1 || (v[`def${i - 1}`] || '').trim() !== '' }]));
+  { k: `from${i}`, type: 'text', optional: true, def: i === 1 ? '0' : '', label: 'From', compact: true, pattern: numberOrBlank, error: 'Enter a number.', sample: String(i - 1), when: v => i === 1 || (v[`def${i - 1}`] || '').trim() !== '' },
+  { k: `to${i}`, type: 'text', optional: true, def: i === 1 ? '1' : '', label: 'To', compact: true, pattern: numberOrBlank, error: 'Enter a number.', sample: String(i), when: v => i === 1 || (v[`def${i - 1}`] || '').trim() !== '' }]));
 const definedPieces = v => PIECES.filter(i => (v[`def${i}`] || '').trim() !== '').map(i => ({ def: v[`def${i}`].trim(), from: (v[`from${i}`] || '').trim(), to: (v[`to${i}`] || '').trim() }));
 
 const defineContinuous = {
@@ -236,7 +238,7 @@ const defineContinuous = {
 const defineDiscrete = {
   fields: [{ k: 'name', type: 'name', label: 'Enter name for the distribution', def: 'MyDiscreteDistribution' },
     { k: 'massorcum', type: 'choice', label: 'Select function to provide:', choices: [['mass', 'Probability mass function'], ['cum', 'Distribution function']] },
-    { k: 'supp', type: 'numlist', label: 'Support', def: '0,1,2' }, { k: 'proba', type: 'text', optional: true, def: '', label: 'Probability values (optional)', pattern: /^[\s,\d.eE+-]*$/, error: 'Enter numbers separated by commas.', sample: '0,0,1' }],
+    { k: 'supp', type: 'numlist', label: 'Support', def: '0,1,2' }, { k: 'proba', type: 'text', optional: true, def: '', label: 'Probabilities', pattern: /^[\s,\d.eE+-]*$/, error: 'Enter numbers separated by commas.', sample: '0,0,1' }],
   check(v) {
     const supp = v.supp.map(Number);
     if (supp.some((x, i) => i && x <= supp[i - 1])) return 'Support is not ordered.';
@@ -259,14 +261,14 @@ const defineDiscrete = {
 // Commands the plug-in adds to R Commander's Statistics menus (means, nonparametric tests).
 const extras = {
   oneWayAnovaRE: { activeModel: v => (v.method === 'mm' ? v.name : undefined),
-    fields: [factor('g', 'Groups (pick one)'), numVar('y', 'Response Variable (pick one)'), { k: 'name', type: 'name', label: 'Enter name for model: ', def: c => c.fresh('AnovaModel') },
-      { k: 'method', type: 'choice', label: 'Variance estimations: ', choices: [['mm', 'Moments'], ['ml', 'ML'], ['reml', 'REML']] }],
+    fields: [{ k: 'name', type: 'name', label: 'Enter name for model: ', def: c => c.fresh('AoVREModel') }, factor('g', 'Groups (pick one)'), numVar('y', 'Response Variable (pick one)'),
+      { k: 'method', type: 'choice', label: 'Variance estimations:', choices: [['mm', 'Moments'], ['ml', 'Maximum likelihood'], ['reml', 'Restricted maximum likelihood (REML)']] }],
     code: (v, c) => lines(`with(${c.ds}, numSummary(${S(v.y)}, groups=${S(v.g)}, statistics=c("mean", "sd")))`,
       v.method === 'mm' ? `${v.name} <- aovremm(${S(v.y)} ~ ${S(v.g)}, data=${c.ds})$model`
         : `${v.name} <- aovreml(${S(v.y)} ~ ( 1 | ${S(v.g)} ), data=${c.ds}, REML=${rbool(v.method === 'reml')}, Lconfint=TRUE)$model`) },
   randomnessFTest: { fields: [{ k: 'x', type: 'var', kind: 'twolevel', label: 'Variable (pick one)' }],
     code: (v, c) => `with(${c.ds}, twolevelfactor.runs.test(${S(v.x)}))` },
-  randomnessNTest: { fields: [numVar('x', 'Variable (pick one)'), { k: 'flags', type: 'flags', label: 'Options', items: [['plot', 'Show graphically', false]] },
+  randomnessNTest: { fields: [numVar('x', 'Variable (pick one)'), { k: 'flags', type: 'flags', label: '', items: [['plot', 'Show graphically', false]] },
       { k: 'threshold', type: 'text', optional: true, def: '', label: 'Cut-point (median by default):', pattern: /^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/, error: 'Cut-point must be numeric or NULL', sample: '1' }],
     code: (v, c) => `with(${c.ds}, numeric.runs.test(${S(v.x)}, threshold=${v.threshold.trim() ? Number(v.threshold) : `median(${S(v.x)},na.rm=TRUE)`}, plot=${rbool(v.flags.plot)}))` }
 };
@@ -278,9 +280,9 @@ module.exports = {
   DgenericDistrDefine: { ds: false, ...defineDiscrete },
   resumenVariablesCualitativas: {
     fields: [
-      { k: 'nominal', type: 'var', kind: 'factor', multi: true, min: 0, label: 'Nominal variables' },
-      { k: 'ordinal', type: 'var', kind: 'factor', multi: true, min: 0, label: 'Ordinal variables' },
-      { k: 'flags', type: 'flags', label: 'Options', items: [['sort', 'Sort by frequency', false]] },
+      { k: 'nominal', type: 'var', kind: 'nominal', multi: true, min: 0, label: 'Nominal variables' },
+      { k: 'ordinal', type: 'var', kind: 'ordinal', multi: true, min: 0, label: 'Ordinal variables' },
+      { k: 'flags', type: 'flags', label: '', items: [['sort', 'Sort by frequency', false]] },
       { k: 'p', type: 'num', min: 0, max: 1, def: '0.5', label: 'Quantile:' }],
     check: v => (v.nominal.length || v.ordinal.length ? undefined : 'At least one variable must be selected'),
     code(v, c) {
@@ -289,25 +291,25 @@ module.exports = {
     } },
 
   resumenNumericoVContinua: {
-    fields: [numVars('xs', 'Variables (pick one or more)'), groups('g', 'Group (pick one)'), statsField(), quantilesField, typeField,
-      { k: 'flags', type: 'flags', label: 'Frequency table', items: tableFlag }, ...breaksFields()],
+    fields: [numVars('xs', 'Variables (pick one or more)'), { ...groups('g', 'Group (pick one)'), compact: true }, statsField(), quantilesField, typeField,
+      { k: 'flags', type: 'flags', label: '', items: tableFlag }, ...breaksFields()],
     code: (v, c) => `calcularResumenVariablesContinuas(data=${dsCols(c, v.xs)}${v.g ? `, groups=${groupArg(c, v.g)}` : ''}, statistics=${statistics(v)}, ` +
       `quantiles=${quantiles(v)}${v.type && (v.stats.skewness || v.stats.kurtosis) ? `, type=${rs(v.type)}` : ''}, tablaFrecuencia=${rbool(v.flags.table)}, cortes=${breaks(v)})` },
 
   resumenNumericoVDiscreta: {
-    fields: [numVars('xs', 'Variables (pick one or more)'), groups('g', 'Group (pick one)'), statsField(), quantilesField,
-      { k: 'flags', type: 'flags', label: 'Frequency table', items: tableFlag }, ...breaksFields()],
+    fields: [numVars('xs', 'Variables (pick one or more)'), { ...groups('g', 'Group (pick one)'), compact: true }, statsField(), quantilesField,
+      { k: 'flags', type: 'flags', label: '', items: tableFlag }, ...breaksFields()],
     code: (v, c) => `calcularResumenVariablesDiscretas(data=${dsCols(c, v.xs)}, statistics =${statistics(v)}, quantiles = ${quantiles(v)}, ` +
       `groups=${groupArg(c, v.g)}, tablaFrecuencia=${rbool(v.flags.table)}, cortes=${breaks(v)})` },
 
   resumenNumericoPonderada: {
-    fields: [numVars('xs', 'Variables (pick one or more)'), numVar('w', 'Weight variable', { exclude: ['xs'] }), groups('g', 'Group (pick one)'), statsField(), quantilesField, typeField],
+    fields: [numVars('xs', 'Variables (pick one or more)'), numVar('w', 'Weight variable', { exclude: ['xs'], compact: true }), { ...groups('g', 'Group (pick one)'), compact: true }, statsField(), quantilesField, typeField],
     code: (v, c) => `W.numSummary(data=${dsCols(c, v.xs)}, statistics =${statistics(v)}, quantiles = ${quantiles(v)}, weights=${c.ds}$${S(v.w)}, groups=${groupArg(c, v.g)})` },
 
   resumenDatosTabulados: {
-    fields: [numVar('lo', 'Lower bound'), numVar('up', 'Upper bound', { exclude: ['lo'] }), numVar('ni', 'Frequency', { exclude: ['lo', 'up'] }),
-      flagsOf('Statistics', [...STATS.slice(0, 4), ['mode', 'Mode', false], ...STATS.slice(4)]), quantilesField,
-      { k: 'flags', type: 'flags', label: 'Frequency table', items: tableFlag }],
+    fields: [numVar('lo', 'Lower bound', { compact: true }), numVar('up', 'Upper bound', { exclude: ['lo'], compact: true }), numVar('ni', 'Frequency', { exclude: ['lo', 'up'], compact: true }),
+      flagsOf('', [...STATS.slice(0, 4), ['mode', 'Mode', false], ...STATS.slice(4)]), quantilesField,
+      { k: 'flags', type: 'flags', label: '', items: tableFlag }],
     code: (v, c) => `calcularResumenDatosTabulados(l_inf=${c.ds}$${S(v.lo)}, l_sup=${c.ds}$${S(v.up)}, ni=${c.ds}$${S(v.ni)}, statistics =${statistics(v)}, ` +
       `quantiles = ${quantiles(v)}, tablaFrecuencia=${rbool(v.flags.table)})` }
 };

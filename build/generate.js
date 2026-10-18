@@ -25,9 +25,18 @@ function readPo(file) {
 }
 const po = readPo(path.join(__dirname, 'Rcmdr-es.po'));
 const poPlugin = readPo(path.join(__dirname, 'TeachStat-es.po'));
-const spanish = en => manual[en] || po[en] || poPlugin[en] || undefined;
-// Labels of the RcmdrPlugin.TeachStat menus use that plugin's translation first (its own wording).
-const spanishOf = item => (item.source === 'plugin' ? manual[item.label] || poPlugin[item.label] || po[item.label] || undefined : spanish(item.label));
+// Dialog strings: i18n/es.manual.json first (fixes Rcmdr wording that is hard to understand).
+const exact = en => manual[en] || po[en] || poPlugin[en] || undefined;
+// As R's gettext(): leading and trailing white space is ignored when looking up, and put back afterwards.
+const spanish = en => {
+  if (exact(en)) return exact(en);
+  const [, before, core, after] = /^(\s*)([\s\S]*?)(\s*)$/.exec(en);
+  const found = core && core !== en ? exact(core) : undefined;
+  return found ? before + found + after : undefined;
+};
+// Menu titles keep R Commander's exact wording, translated as its gettextMenus() does (Rcmdr's catalog,
+// then the plug-in's on the result); what R Commander leaves in English stays in English.
+const spanishOf = item => { const rcmdr = po[item.label] || item.label; return poPlugin[rcmdr] || (rcmdr !== item.label ? rcmdr : undefined); };
 
 // --- Rcmdr menu definition ----------------------------------------------------
 const menus = {};      // menu name -> ordered items
@@ -242,7 +251,7 @@ Object.assign(nls.en, baseNls.en); Object.assign(nls.es, baseNls.es);
 // Runtime strings: every English literal given to t() or used as a dialog label.
 const strings = new Set();
 const fromSource = file => { for (const m of fs.readFileSync(file, 'utf8').matchAll(/\bt\(\s*(['"`])((?:\\.|(?!\1)[^\\])*)\1/g)) strings.add(JSON.parse(`"${m[2].replace(/"/g, '\\"').replace(/\\'/g, "'")}"`.replace(/\\`/g, '`'))); };
-for (const f of ['../lib/hover.js', '../lib/form.js', '../lib/formmodel.js', '../lib/dialog.js', '../lib/commander.js', '../extension.js', '../catalog/data.js', '../catalog/stats.js', '../catalog/models.js']) fromSource(path.join(__dirname, f));
+for (const f of ['../lib/hover.js', '../lib/form.js', '../lib/formmodel.js', '../lib/dialog.js', '../lib/commander.js', '../extension.js', '../catalog/data.js', '../catalog/stats.js', '../catalog/models.js', '../catalog/graphs.js', '../catalog/distributions.js', '../catalog/system.js', '../catalog/teachstat.js', '../catalog/teachstat-data.js', '../catalog/teachstat-index.js', '../catalog/teachstat-inference.js']) fromSource(path.join(__dirname, f));
 (function walk(x, key) {
   if (typeof x === 'string') { if (['label', 'error'].includes(key)) strings.add(x); }
   else if (Array.isArray(x)) {

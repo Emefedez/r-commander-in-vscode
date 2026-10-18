@@ -13,30 +13,31 @@ const run = (id, values) => ({ id, code: catalog[id].code(values, ctx) });
 
 const levels = ['x', 'y', 'z'];
 const helmert = [['x', ['-1', '-1']], ['y', ['1', '-1']], ['z', ['0', '2']]];
-const contrasts = model.normalize(catalog.setContrasts.fields, { f: 'f3', type: 'custom', matrix: helmert });
-assert.deepEqual(model.validate(catalog.setContrasts.fields, { f: 'f3', type: 'custom', matrix: helmert }, { t }), {});
+const contrasts = model.normalize(catalog.setContrasts.fields, { f: 'f3', type: 'specify', matrix: helmert });
+assert.deepEqual(model.validate(catalog.setContrasts.fields, { f: 'f3', type: 'specify', matrix: helmert }, { t }), {});
 const dependent = [['x', ['1', '1']], ['y', ['2', '2']], ['z', ['3', '3']]]; // columns repeat: not independent
-assert.ok(model.validate(catalog.setContrasts.fields, { f: 'f3', type: 'custom', matrix: dependent }, { t }).matrix, 'dependent contrasts are rejected');
+assert.ok(model.validate(catalog.setContrasts.fields, { f: 'f3', type: 'specify', matrix: dependent }, { t }).matrix, 'dependent contrasts are rejected');
 
 // Confirmatory factor analysis needs data that really has factors (see run below with CFA_data).
 const cfaValues = (extra = {}) => ({ name1: 'Visual', vars1: ['x1', 'x2', 'x3'], name2: 'Verbal', vars2: ['x4', 'x5', 'x6'], matrix: 'covariance', cor: 'correlated',
-  identify: 'factors', flags: { robust: false, AIC: true, BIC: true, GFI: true, RMSEA: true, CFI: true }, ...extra });
+  identify: 'factors', robust: { robust: false }, indices: { AIC: true, BIC: true, GFI: true, RMSEA: true, CFI: true }, ...extra });
 const cfaCtx = context('CFA_data', { objects: [] });
 const cfaRun = values => ({ id: 'CFA', code: catalog.CFA.code(values, cfaCtx) });
 const cases = [
   cfaRun(cfaValues()),
-  cfaRun(cfaValues({ matrix: 'correlation', cor: 'orthogonal', identify: 'loadings', flags: { robust: true, AIC: true } })),
-  cfaRun({ ...cfaValues(), name2: undefined, vars2: [], flags: { AIC: true } }),
+  cfaRun(cfaValues({ matrix: 'correlation', cor: 'orthogonal', identify: 'loadings', robust: { robust: true }, indices: { AIC: true } })),
+  cfaRun({ ...cfaValues(), name2: undefined, vars2: [], indices: { AIC: true } }),
   run('setContrasts', contrasts),
-  run('effectPlots', { flags: { all: false, resid: true }, terms: ['n2'], style: 'multiline', span: '0.5' }),
-  run('effectPlots', { flags: { all: false, resid: false }, terms: ['n2', 'n3'], style: 'panels', span: '0.5' }),
-  run('predictorEffectPlots', { flags: { all: false, resid: true }, terms: ['n3'], style: 'panels', span: '0.4' }),
-  run('predictorEffectPlots', { flags: { all: true, resid: false }, terms: [], style: 'multiline', span: '0.5' }),
-  run('stemAndLeaf', { x: 'n1', back: 'f2', leaf: '-1', parts: '2', style: 'Tukey', flags: { trim: false, depths: false, reverse: false } }),
-  run('stemAndLeaf', { x: 'n4', back: undefined, leaf: 'auto', parts: '1', style: 'bare', flags: { trim: true, depths: true, reverse: true } })
+  run('effectPlots', { cls: 'lm', all: 'FALSE', partial: { partial: true }, predictors: ['n2'], style: 'stacked', span: '50' }),
+  run('effectPlots', { cls: 'lm', all: 'FALSE', partial: { partial: false }, predictors: ['n2', 'n3'], style: 'stacked', span: '50' }),
+  run('predictorEffectPlots', { cls: 'lm', all: 'FALSE', partial: { partial: true }, predictors: ['n3'], style: 'stacked', span: '40' }),
+  run('predictorEffectPlots', { cls: 'lm', all: 'TRUE', partial: { partial: false }, predictors: [], style: 'stacked', span: '50' }),
+  run('stemAndLeaf', { x: 'n1', g: 'f2', levels: ['a', 'b'], auto: { auto: false }, unit: '-1', m: '2', style: 'Tukey', opts: { trim: false, depths: false, reverse: false } }),
+  run('stemAndLeaf', { x: 'n4', g: undefined, auto: { auto: true }, unit: '0', m: '1', style: 'bare', opts: { trim: true, depths: true, reverse: true } })
 ];
 const script = `
 pdf(NULL)
+local({ r <- new.env(); sys.source(${JSON.stringify(path.join(__dirname, '..', 'runner.R'))}, r); suppressMessages(r$attach_rcmdr()) })
 cases <- list(${cases.map(c => JSON.stringify(c.code)).join(', ')})
 ids <- c(${cases.map(c => JSON.stringify(c.id)).join(', ')})
 for (i in seq_along(cases)) {

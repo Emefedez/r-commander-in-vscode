@@ -1,110 +1,186 @@
-const { rs, rc, rbool, S, splitList } = require('../lib/rhelpers');
-const { conf } = require('./common');
+// The Models menu, dialog by dialog as in Rcmdr: same fields, labels, defaults and generated code.
+// Several dialogs change with the class of the active model; the hidden field `cls` holds it for `when`.
+const lines = (...parts) => parts.flat().filter(x => x !== false && x !== undefined && x !== null && x !== '').join('\n');
+const on = spec => ({ needsModel: true, ds: false, ...spec });
+const simple = code => on({ code: (v, c) => code(c.model, c) });
+const cls = { k: 'cls', type: 'hidden', def: c => c.modelClass || '' };
+const isLm = v => v.cls === 'lm';
+const isGlm = v => v.cls === 'glm';
+const check = (k, text, on = false, extra = {}) => ({ k, type: 'flags', label: '', items: [[k, text, on]], ...extra });
+const choice = (k, label, choices, def, extra = {}) => ({ k, type: 'choice', label, choices, ...(def !== undefined && { def }), ...extra });
+const note = (k, text) => ({ k, type: 'note', heading: true, label: text });
+const SANDWICH = [['HC0', 'HC0'], ['HC1', 'HC1'], ['HC2', 'HC2'], ['HC3', 'HC3'], ['HC4', 'HC4'], ['HAC', 'HAC']];
+const sandwichFields = text => [check('sandwich', text, false, { when: isLm }),
+  choice('sandwichType', 'Sandwich estimator', SANDWICH, 'HC3', { when: v => isLm(v) && v.sandwich.sandwich })];
+const vcovArg = (v, m) => (isLm(v) && v.sandwich?.sandwich ? (v.sandwichType === 'HAC' ? `, vcov=vcovHAC(${m})` : `, vcov=hccm(${m}, type="${v.sandwichType.toLowerCase()}")`) : '');
+const identify = (withNot = true) => choice('identify', 'Identify Points', [['auto', 'Automatically'], ...(withNot ? [['not', 'Do not identify']] : [])]);
+const idn = { k: 'idn', type: 'num', int: true, min: 0, def: '2', label: 'Number of points to identify  ' };
+// The family of a GLM, read from R (Rcmdr chooses its tests with it).
+const familyOf = async (ui, m) => (await ui.query(`if (inherits(${m}, "glm")) ${m}$family$family else ""`))?.[0] || '';
+// "y ~ x1 + x2", as Rcmdr writes the active model's formula into lmtest calls.
+const formulaOf = async (ui, m) => (await ui.query(`local({ f <- as.character(formula(${m})); paste(f[2], "~", f[3]) })`))?.[0];
 
-const lines = (...parts) => parts.flat().filter(Boolean).join('\n');
-const flagsOf = (label, items) => ({ k: 'flags', type: 'flags', label, items });
-// Commands that act on the active model; `c.model` is its name.
-const on = (spec) => ({ needsModel: true, ds: false, ...spec });
-const simple = (code, pkgs) => on({ pkgs, code: (v, c) => code(c.model, c) });
-const sandwich = { k: 'flags', type: 'flags', label: 'Sandwich estimator', items: [['hc', 'Use sandwich estimator of coefficient standard errors', false]] };
-const vcov = (m, v) => (v.flags.hc ? `, vcov. = sandwich::vcovHC(${m}, type = "HC3")` : '');
-const idField = { k: 'idn', type: 'num', int: true, min: 0, def: '2', label: 'Number of points to identify' };
-
-// Fields shared by the two effect-plot dialogs: all effects or a chosen subset.
-const effectFields = (expr, allLabel) => [
-  { k: 'flags', type: 'flags', label: 'Options', items: [['all', allLabel, true], ['resid', 'Plot partial residuals', false]] },
-  { k: 'terms', type: 'rlist', label: 'Predictors (pick one or more)', expr: c => expr.replace('{m}', c.model), when: v => !v.flags.all },
-  { k: 'style', type: 'choice', label: 'Style of Graph', choices: [['panels', 'Separate panels'], ['multiline', 'All lines in one panel']] },
-  { k: 'span', type: 'num', min: 0.05, max: 1, def: '0.5', label: 'Span for smooth', when: v => v.flags.resid }
-];
+const effectFields = (allLabel, expr) => [cls,
+  choice('all', allLabel, [['TRUE', 'Yes'], ['FALSE', 'No']]),
+  { k: 'predictors', type: 'rlist', label: 'Predictors (pick one or more)', expr: c => expr.replace(/\{m\}/g, c.model), when: v => v.all === 'FALSE' },
+  check('partial', 'Plot partial residuals', false, { when: v => !['multinom', 'polr'].includes(v.cls) }),
+  choice('style', 'Style of Graph', [['stacked', 'Stacked areas'], ['lines', 'Lines with confidence bands']], undefined, { when: v => ['multinom', 'polr'].includes(v.cls) }),
+  { k: 'span', type: 'num', int: true, min: 5, max: 100, def: '50', label: 'Span for smooth', when: v => v.partial?.partial }];
+const effectArgs = v => ['multinom', 'polr'].includes(v.cls) ? [`, axes=list(y=list(style="${v.style}"))`, '']
+  : v.partial.partial ? [`, partial.residuals=list(span=${Number(v.span) / 100})`, ', residuals=TRUE'] : ['', ''];
 
 module.exports = {
   selectActiveModel: { ds: false, select: 'model' },
-  summarizeModel: on({ pkgs: ['lmtest', 'sandwich'], fields: [sandwich],
-    code: (v, c) => lines(`summary(${c.model})`, v.flags.hc && `lmtest::coeftest(${c.model}, vcov. = sandwich::vcovHC(${c.model}, type = "HC3"))`) }),
-  compareCoefficients: { ds: false, pkgs: ['car'],
-    fields: [{ k: 'ms', type: 'models', label: 'Models to compare (pick two or more)' }],
-    code: v => `car::compareCoefs(${v.ms.map(S).join(', ')})` },
+  // Only linear models have a dialog (the sandwich estimator); the others print their summary straight away.
+  summarizeModel: on({ noForm: c => c.modelClass !== 'lm',
+    fields: [cls, ...sandwichFields('Use sandwich estimator of    \ncoefficient standard errors')],
+    code: (v, c) => (c.modelClass !== 'lm' ? `summary(${c.model}, cor=FALSE)`
+      : v.sandwich.sandwich ? `summarySandwich(${c.model}, type="${v.sandwichType.toLowerCase()}")` : `summary(${c.model})`) }),
+  compareCoefficients: { ds: false,
+    fields: [{ k: 'ms', type: 'models', label: 'Select models (pick two or more)' }],
+    code: v => `compareCoefs(${v.ms.join(', ')})` },
   addObservationStatistics: on({ ds: true,
-    fields: [flagsOf('Statistics to add to the data set', [['fitted', 'Fitted values', true], ['residuals', 'Residuals', true], ['rstudent', 'Studentized residuals', true],
-      ['hatvalues', 'Hat-values', true], ['cooks.distance', 'Cook\'s distances', true], ['obs', 'Observation indices', false]])],
-    code: (v, c) => Object.keys(v.flags).filter(k => v.flags[k]).map(k => k === 'obs'
-      ? `${c.ds}$obsNumber <- 1:nrow(${c.ds})`
-      : `${c.ds}$${S(`${{ fitted: 'fitted', residuals: 'residuals', rstudent: 'rstudent', hatvalues: 'hatvalues', 'cooks.distance': 'cooks.distance' }[k]}.${c.model}`)} <- ${k === 'fitted' ? 'fitted.values' : k}(${c.model})`).join('\n') }),
+    fields: [{ k: 'stats', type: 'flags', label: '', items: [['fitted', 'Fitted values', true], ['residuals', 'Residuals', true], ['rstudent', 'Studentized residuals', true],
+      ['hatvalues', 'Hat-values', true], ['cooks.distance', 'Cook\'s distances', true], ['obsNumbers', 'Observation indices', true]] }],
+    code(v, c) {
+      const adds = ['fitted', 'residuals', 'rstudent', 'hatvalues', 'cooks.distance'].filter(k => v.stats[k]).map(k => `\n  ${k}.${c.model} <- ${k}(${c.model})`);
+      return `${c.ds}<- within(${c.ds}, {${adds.join('')}${v.stats.obsNumbers ? `\n  obsNumber <- 1:nrow(${c.ds})` : ''} \n})`;
+    } }),
   aic: simple(m => `AIC(${m})`),
   bic: simple(m => `BIC(${m})`),
-  stepwiseRegression: on({ pkgs: ['RcmdrMisc'],
-    fields: [{ k: 'dir', type: 'choice', label: 'Direction', choices: [['backward/forward', 'Backward/forward'], ['forward/backward', 'Forward/backward'], ['backward', 'Backward'], ['forward', 'Forward']] },
-      { k: 'crit', type: 'choice', label: 'Criterion', choices: [['BIC', 'BIC'], ['AIC', 'AIC']] }],
-    code: (v, c) => `RcmdrMisc::stepwise(${c.model}, direction = ${rs(v.dir)}, criterion = ${rs(v.crit)})` }),
-  subsetRegression: on({ pkgs: ['leaps'],
-    fields: [{ k: 'scale', type: 'choice', label: 'Criterion to display', choices: [['bic', 'BIC'], ['Cp', 'Mallows Cp'], ['adjr2', 'Adjusted R-squared'], ['r2', 'R-squared']] },
-      { k: 'nbest', type: 'num', int: true, min: 1, def: '1', label: 'Number of best models for each size' }],
-    code: (v, c) => lines('local({', `  .sub <- leaps::regsubsets(formula(${c.model}), data = model.frame(${c.model}), nbest = ${v.nbest})`, '  print(summary(.sub))', `  plot(.sub, scale = ${rs(v.scale)})`, '})') }),
-  confidenceIntervals: on({ fields: [{ k: 'test', type: 'choice', label: 'Test Based On', choices: [['lr', 'Likelihood-ratio statistic'], ['wald', 'Wald statistic']] }, conf],
-    code: (v, c) => `${v.test === 'wald' ? 'confint.default' : 'confint'}(${c.model}, level = ${v.conf})` }),
-  Bootstrap: on({ pkgs: ['car', 'boot'],
-    fields: [{ k: 'R', type: 'num', int: true, min: 10, def: '999', label: 'Number of bootstrap replications' },
-      { k: 'method', type: 'choice', label: 'Method', choices: [['case', 'Case resampling'], ['residual', 'Residual resampling']] },
-      { k: 'type', type: 'choice', label: 'Type of interval', choices: [['bca', 'Bias-corrected, accelerated'], ['perc', 'Percentile'], ['norm', 'Normal'], ['basic', 'Basic']] }, conf],
-    code: (v, c) => lines('library(car)', 'local({', `  .boot <- car::Boot(${c.model}, R = ${v.R}, method = ${rs(v.method)})`, '  print(summary(.boot))', `  print(confint(.boot, level = ${v.conf}, type = ${rs(v.type)}))`, '})') }),
-  DeltaMethodConfInt: on({ pkgs: ['car'],
-    fields: [{ k: 'expr', type: 'text', label: 'Expression in the coefficient names (see the model summary), e.g. b1 / b2', def: '' }, conf],
+  stepwiseRegression: on({
+    fields: [choice('direction', 'Direction', [['backward/forward', 'backward/forward'], ['forward/backward', 'forward/backward'], ['backward', 'backward'], ['forward', 'forward']]),
+      choice('criterion', 'Criterion', [['BIC', 'BIC'], ['AIC', 'AIC']])],
+    code: (v, c) => `stepwise(${c.model}, direction='${v.direction}', criterion='${v.criterion}')` }),
+  subsetRegression: on({ ds: true,
+    fields: [choice('criterion', 'Criterion for Model Plot', [['bic', 'BIC'], ['Cp', 'Mallows Cp'], ['adjr2', 'Adjusted R-sq.'], ['r2', 'R-squared']]),
+      { k: 'nbest', type: 'num', int: true, min: 1, max: 10, def: '1', label: 'Number of best models\nof each size:' },
+      { k: 'nvmax', type: 'text', optional: true, def: '', label: 'Maximum size:', pattern: /^\s*\d*\s*$/, error: 'Enter a whole number.', compact: true }],
+    // Rcmdr's "Maximum size" starts at the number of predictors (at most 25).
     async after(v, ui) {
-      const names = await ui.query(`names(coef(${ui.ctx.model}))`);
-      if (names) {
-        const text = await ui.text({ label: ui.t('Expression using these coefficient names: {0}', names.join(', ')), def: v.expr,
-          validate: s => s.trim() ? undefined : ui.t('A value is required.') });
-        if (text === undefined) return false;
-        v.expr = text; v.names = names;
-      }
+      v.formula = (await ui.query(`paste(sub("^[ ]*", "", deparse(formula(${ui.ctx.model}))), collapse = "")`))?.[0];
+      if (!v.nvmax.trim()) v.nvmax = (await ui.query(`min(25, ncol(model.matrix(${ui.ctx.model})) - 1)`))?.[0] || '1';
+      return Boolean(v.formula);
+    },
+    code: (v, c) => lines('library(leaps)', `plot(regsubsets(${v.formula}, data=${c.ds}, nbest=${v.nbest}, nvmax=${v.nvmax.trim()}), scale='${v.criterion}')`) }),
+  confidenceIntervals: on({
+    fields: [cls, note('n', 'Confidence Intervals for Individual Coefficients'),
+      { k: 'level', type: 'num', min: 0.0001, max: 0.9999, def: '0.95', label: 'Confidence Level: ' },
+      choice('statistic', 'Test Based On', [['LR', 'Likelihood-ratio statistic'], ['Wald', 'Wald statistic']], undefined, { when: isGlm })],
+    async after(v, ui) {
+      v.link = (await ui.query(`local({ m <- ${ui.ctx.model}; l <- if (isS4(m)) m@resp$family$link else m$family$link; if (is.null(l)) "" else l })`))?.[0] || '';
       return true;
     },
-    code: (v, c) => `car::deltaMethod(${c.model}, ${rs(v.expr)}${v.names ? `, parameterNames = ${rc(v.names.map(n => n.replace(/[^A-Za-z0-9_.]/g, '.')))}` : ''}, level = ${v.conf})` }),
-  anovaTable: on({ pkgs: ['car', 'sandwich'], fields: [{ k: 'type', type: 'choice', label: 'Type of tests', choices: [['II', 'Sequential-free, marginal (type II)'], ['III', 'Each term adjusted for all others (type III)']] }, sandwich],
-    code: (v, c) => `car::Anova(${c.model}, type = ${rs(v.type)}${vcov(c.model, v)})` }),
+    code: (v, c) => lines(isGlm(v) ? `Confint(${c.model}, level=${v.level}, type="${v.statistic}")` : `Confint(${c.model}, level=${v.level})`,
+      ['logit', 'log'].includes(v.link) && `Confint(${c.model}, level=${v.level}, type="${v.statistic || 'LR'}", exponentiate=TRUE)`) }),
+  Bootstrap: on({
+    fields: [cls, note('n', 'Bootstrap Confidence Intervals for Coefficients'),
+      { k: 'level', type: 'num', min: 0.0001, max: 0.9999, def: '0.95', label: 'Confidence level:' },
+      { k: 'samples', type: 'num', int: true, min: 1, def: '999', label: 'Number of bootstrap samples:' },
+      choice('type', 'Type of Confidence Intervals', [['bca', 'BCa (adjusted percentile)'], ['norm', 'Normal theory'], ['basic', 'Basic bootstrap'], ['perc', 'Percentile']]),
+      choice('method', 'Resampling Method', [['case', 'Case resampling'], ['residual', 'Residual resampling']], undefined, { when: isLm }),
+      check('plot', 'Plot bootstrap samples', true)],
+    code(v, c) {
+      const boot = isLm(v) ? `Boot(${c.model}, R=${v.samples}, method="${v.method}")` : `Boot(${c.model}, R=${v.samples})`;
+      if (!v.plot.plot) return `confint(${boot},  level=${v.level}, type="${v.type}")`;
+      return lines(`.bs.samples <- ${boot}\nplotBoot(.bs.samples)`, `confint(.bs.samples, level=${v.level}, type="${v.type}")`, 'remove(.bs.samples)');
+    } }),
+  // The table of parameters and their names (b0, b1, ...) is shown as a list.
+  DeltaMethodConfInt: on({
+    fields: [note('n', 'Confidence Interval by the Delta Method'),
+      { k: 'pars', type: 'rlist', min: 0, label: '', prompt: 'Parameter', labelColumn: 2,
+        expr: c => `local({ p <- names(coef(${c.model})); paste0(if (p[1] == "(Intercept)") paste0("b", seq_along(p) - 1) else paste0("b", seq_along(p)), "\\t", p) })` },
+      { k: 'level', type: 'num', min: 0.0001, max: 0.9999, def: '0.95', label: 'Confidence level:' },
+      { k: 'expression', type: 'text', label: 'Expression to evaluate; use parameter names:', def: '', sample: 'b1/b2' }],
+    code: (v, c) => `DeltaMethod(${c.model}, "${v.expression.trim()}", level=${v.level})` }),
+  anovaTable: on({
+    fields: [cls, choice('type', 'Type of Tests', [['I', 'Sequential ("Type I")'], ['II', 'Partial obeying marginality ("Type II")'], ['III', 'Partial ignoring marginality ("Type III")']], 'II'),
+      ...sandwichFields('Use sandwich estimator of\ncoefficient covariance matrix   ')],
+    check: v => (v.type === 'I' && isLm(v) && v.sandwich?.sandwich ? 'sandwich covariance matrix unavailable with type I tests' : undefined),
+    async after(v, ui) { v.family = await familyOf(ui, ui.ctx.model); return true; },
+    code(v, c) {
+      const binpois = ['binomial', 'poisson'].includes(v.family);
+      if (v.type === 'I') return isGlm(v) ? `anova(${c.model}, test="${binpois ? 'Chisq' : 'F'}")` : `anova(${c.model})`;
+      if (isGlm(v)) return `Anova(${c.model}, type="${v.type}", test="${binpois ? 'LR' : 'F'}")`;
+      return `Anova(${c.model}, type="${v.type}"${vcovArg(v, c.model)})`;
+    } }),
   compareModels: { ds: false,
-    fields: [{ k: 'm1', type: 'model', label: 'First model' }, { k: 'm2', type: 'model', label: 'Second model' }],
-    code: v => `anova(${S(v.m1)}, ${S(v.m2)})` },
-  testLinearHypothesis: on({ pkgs: ['car', 'sandwich'],
-    fields: [{ k: 'hyp', type: 'text', label: 'Hypotheses separated by ";", e.g. x1 = 0; x2 = x3', def: '', sample: 'n2 = 0' }, sandwich],
+    fields: [{ k: 'm1', type: 'model', label: 'First model (pick one)' }, { k: 'm2', type: 'model', label: 'Second model (pick one)' }],
+    check: v => (v.m1 === v.m2 ? 'You can\'t compare a model to itself.' : undefined),
     async after(v, ui) {
-      const names = await ui.query(`names(coef(${ui.ctx.model}))`);
-      const text = await ui.text({ label: ui.t('Hypotheses separated by ";" using the coefficient names: {0}', (names || []).join(', ')), def: v.hyp,
-        validate: s => s.trim() ? undefined : ui.t('A value is required.') });
-      if (text === undefined) return false;
-      v.hyp = text;
+      v.family = await familyOf(ui, v.m1);
+      if (v.family && v.family !== await familyOf(ui, v.m2)) { await ui.vscode.window.showWarningMessage(ui.t('Models do not have the same family.')); return false; }
       return true;
     },
-    code: (v, c) => `car::linearHypothesis(${c.model}, c(${v.hyp.split(';').map(s => s.trim()).filter(Boolean).map(rs).join(', ')})${vcov(c.model, v)})` }),
-  VIF: simple(m => `car::vif(${m})`, ['car']),
-  BreuschPaganTest: on({ ds: true, pkgs: ['lmtest'],
-    fields: [{ k: 'var', type: 'choice', label: 'Variance depends on', choices: [['fitted', 'Fitted values'], ['expl', 'Explanatory variables'], ['custom', 'A formula']] },
-      { k: 'f', type: 'text', label: 'Right-hand side of the variance formula', def: '', when: v => v.var === 'custom' },
-      flagsOf('Options', [['student', 'Studentized test statistic', true]])],
-    code: (v, c) => `lmtest::bptest(${c.model}, ${v.var === 'fitted' ? `varformula = ~fitted.values(${c.model}), ` : v.var === 'custom' ? `varformula = ~${v.f.trim()}, ` : ''}studentize = ${rbool(v.flags.student)}, data = ${c.ds})` }),
-  DurbinWatsonTest: on({ pkgs: ['lmtest'],
-    fields: [{ k: 'alt', type: 'choice', label: 'Alternative hypothesis', choices: [['greater', 'Positive serial correlation'], ['less', 'Negative serial correlation'], ['two.sided', 'Two-sided']] }],
-    code: (v, c) => `lmtest::dwtest(${c.model}, alternative = ${rs(v.alt)})` }),
-  RESETtest: on({ pkgs: ['lmtest'],
-    fields: [{ k: 'type', type: 'choice', label: 'Powers of', choices: [['regressor', 'Each regressor'], ['fitted', 'Fitted values'], ['princomp', 'First principal component']] },
-      { k: 'power', type: 'numlist', label: 'Powers to include', def: '2, 3' }],
-    code: (v, c) => `lmtest::resettest(${c.model}, power = c(${v.power.join(', ')}), type = ${rs(v.type)})` }),
-  OutlierTest: simple(m => `car::outlierTest(${m})`, ['car']),
-  transformResponse: on({ pkgs: ['car'], fields: [{ k: 'family', type: 'choice', label: 'Transformation Family', choices: [['bcPower', 'Box-Cox'], ['yjPower', 'Yeo-Johnson']] }],
-    code: (v, c) => `summary(car::powerTransform(${c.model}, family = ${rs(v.family)}))` }),
-  plotModel: simple(m => lines('local({', '  .old <- par(oma = c(0, 0, 3, 0), mfrow = c(2, 2))', `  plot(${m})`, '  par(.old)', '})')),
-  residualQQPlot: on({ pkgs: ['car'], fields: [{ k: 'flags', type: 'flags', label: 'Options', items: [['sim', 'Simulated confidence envelope', false]] }, idField],
-    code: (v, c) => `car::qqPlot(${c.model}, id = list(method = "y", n = ${v.idn})${v.flags.sim ? ', simulate = TRUE' : ''})` }),
-  CRPlots: on({ pkgs: ['car'], fields: [{ k: 'span', type: 'num', min: 0.05, max: 1, def: '0.5', label: 'Span for smooth' }],
-    code: (v, c) => `car::crPlots(${c.model}, smooth = list(span = ${v.span}))` }),
-  AVPlots: on({ pkgs: ['car'], fields: [idField], code: (v, c) => `car::avPlots(${c.model}, id = list(n = ${v.idn}, method = "mahal"))` }),
-  InfluencePlot: on({ pkgs: ['car'], fields: [idField], code: (v, c) => `car::influencePlot(${c.model}, id = list(n = ${v.idn}, method = "noteworthy"))` }),
-  InfluenceIndexPlot: on({ pkgs: ['car'],
-    fields: [{ k: 'flags', type: 'flags', label: 'Case statistics to plot', items: [['Cook', 'Cook\'s distances', true], ['studentized', 'Studentized residuals', true], ['Bonf', 'Bonferroni p-values for outliers', true], ['hat', 'Hat-values', true]] }, idField],
-    code: (v, c) => `car::influenceIndexPlot(${c.model}, vars = ${rc(Object.keys(v.flags).filter(k => v.flags[k]))}, id = list(n = ${v.idn}))` }),
-  effectPlots: on({ pkgs: ['effects'], fields: effectFields('names(effects::allEffects({m}))', 'Plot All High-Order Effects?'),
-    code: (v, c) => `plot(effects::allEffects(${c.model}${v.flags.resid ? ', residuals = TRUE' : ''})${v.flags.all ? '' : `[${rc(v.terms)}]`}, ask = FALSE${v.style === 'multiline' ? ', multiline = TRUE' : ''}${v.flags.resid ? `, span = ${v.span}` : ''})` }),
-  predictorEffectPlots: on({ pkgs: ['effects'], fields: effectFields('all.vars(formula({m}))[-1]', 'Plot all predictor effects?'),
-    code: (v, c) => `plot(effects::predictorEffects(${c.model}${v.flags.all ? '' : `, predictors = ${rc(v.terms)}`}${v.flags.resid ? ', residuals = TRUE' : ''}), ask = FALSE${v.style === 'multiline' ? ', multiline = TRUE' : ''}${v.flags.resid ? `, span = ${v.span}` : ''})` })
+    code: v => (v.family ? `anova(${v.m1}, ${v.m2}, test="${['binomial', 'poisson'].includes(v.family) ? 'Chisq' : 'F'}")` : `anova(${v.m1}, ${v.m2})`) },
+  testLinearHypothesis: on({
+    fields: [cls, { k: 'nrows', type: 'num', int: true, min: 1, max: 20, def: '1', label: 'Number of Rows:' },
+      { k: 'matrix', type: 'table', rowsOf: 'nrows', colsExpr: c => `names(coef(${c.model}))`, rhsLabel: 'Right-hand side', cellDefault: '0',
+        label: 'Enter hypothesis matrix and right-hand side vector:' },
+      ...sandwichFields('Use sandwich estimator of\ncoefficient covariance matrix   ')],
+    check: v => (v.matrix.cells.some(r => r.every(x => Number(x) === 0)) ? 'Hypothesis matrix contains a row of 0s' : undefined),
+    async after(v, ui) { v.family = await familyOf(ui, ui.ctx.model); return true; },
+    code(v, c) {
+      const { cells, rhs } = v.matrix;
+      const test = isGlm(v) ? (['binomial', 'poisson'].includes(v.family) ? ', test="Chisq"' : ', test="F"') : '';
+      return `local({\n  .Hypothesis <- matrix(c(${cells.flat().join(',')}), ${cells.length}, ${cells[0].length}, byrow=TRUE)\n  .RHS <- c(${rhs.join(',')})` +
+        `\n  linearHypothesis(${c.model}, .Hypothesis, rhs=.RHS${vcovArg(v, c.model)}${test})\n})`;
+    } }),
+  VIF: simple(m => `vif(${m})`),
+  BreuschPaganTest: on({ ds: true,
+    fields: [note('n', 'Score Test for Nonconstant Error Variance'), check('student', 'Studentized test statistic'),
+      choice('var', 'Variance Formula', [['fitted', 'Fitted values'], ['predictors', 'Explanatory variables'], ['other', 'Other (specify)']]),
+      { k: 'formula', type: 'formula', label: '', prompt: 'Variance Formula', hasLhs: false, when: v => v.var === 'other' }],
+    async after(v, ui) { v.modelFormula = await formulaOf(ui, ui.ctx.model); return Boolean(v.modelFormula); },
+    code(v, c) {
+      const type = v.var === 'fitted' ? `, varformula = ~ fitted.values(${c.model})` : v.var === 'predictors' ? '' : `, varformula = ~${v.formula.rhs}`;
+      return 'library(lmtest)\n' + `bptest(${v.modelFormula}${type}, studentize=${v.student.student ? 'TRUE' : 'FALSE'}, data=${c.ds})`;
+    } }),
+  DurbinWatsonTest: on({ ds: true,
+    fields: [note('n', 'Test for First-Order Error Autocorrelation'),
+      choice('alt', 'Alternative Hypothesis', [['greater', 'rho >  0'], ['two.sided', 'rho != 0'], ['less', 'rho <  0']])],
+    async after(v, ui) { v.modelFormula = await formulaOf(ui, ui.ctx.model); return Boolean(v.modelFormula); },
+    code: (v, c) => 'library(lmtest)\n' + `dwtest(${v.modelFormula}, alternative="${v.alt}", data=${c.ds})` }),
+  RESETtest: on({ ds: true,
+    fields: [note('n', 'Test for Nonlinearity'),
+      { k: 'powers', type: 'flags', label: 'Powers to Include', items: [['square', '2 (squares)', true], ['cube', '3 (cubes)   ', true]] },
+      choice('type', 'Type of Test', [['regressor', 'Explanatory variables'], ['fitted', 'Fitted values'], ['princomp', 'First principal component']])],
+    check: v => (!v.powers.square && !v.powers.cube ? 'No powers are checked.' : undefined),
+    async after(v, ui) { v.modelFormula = await formulaOf(ui, ui.ctx.model); return Boolean(v.modelFormula); },
+    code: (v, c) => 'library(lmtest)\n' + `resettest(${v.modelFormula}, power=${v.powers.square && v.powers.cube ? '2:3' : v.powers.square ? '2' : '3'}, type="${v.type}", data=${c.ds})` }),
+  OutlierTest: simple(m => `outlierTest(${m})`),
+  transformResponse: on({
+    fields: [choice('family', 'Transformation Family', [['bcPower', 'Box-Cox'], ['bcnPower', 'Box-Cox with negatives'], ['yjPower', 'Yeo-Johnson']])],
+    code: (v, c) => `summary(powerTransform(${c.model}, family="${v.family}"))` }),
+  plotModel: simple(m => lines('oldpar <- par(oma=c(0,0,3,0), mfrow=c(2,2))', `plot(${m})`, 'par(oldpar)')),
+  residualQQPlot: on({
+    fields: [check('simulate', 'Simulated confidence envelope', true), identify(), idn],
+    code: (v, c) => `qqPlot(${c.model}, simulate=${v.simulate.simulate ? 'TRUE' : 'FALSE'}, id=list(method="y", n=${v.identify === 'not' ? 0 : v.idn}))` }),
+  CRPlots: on({ fields: [{ k: 'span', type: 'num', int: true, min: 5, max: 100, def: '50', label: 'Span for smooth' }],
+    code: (v, c) => `crPlots(${c.model}, smooth=list(span=${Number(v.span) / 100}))` }),
+  AVPlots: on({ fields: [identify(), idn],
+    code: (v, c) => `avPlots(${c.model}, id=list(method="mahal", n=${v.identify === 'not' ? 0 : v.idn}))` }),
+  InfluencePlot: on({ fields: [identify(false), idn],
+    code: (v, c) => `influencePlot(${c.model}, id=list(method="noteworthy", n=${v.idn}))` }),
+  InfluenceIndexPlot: on({
+    fields: [identify(false), idn,
+      { k: 'vars', type: 'flags', label: 'Case statistics to plot', items: [['Cook', 'Cook\'s distances', true], ['Studentized', 'Studentized residuals', true], ['Bonf', 'Bonferroni p-values', true], ['hat', 'Hat-values', true]] }],
+    check: v => (!Object.values(v.vars).some(Boolean) ? 'No statistics selected.' : undefined),
+    code: (v, c) => `influenceIndexPlot(${c.model}, id=list(method="y", n=${v.idn}), vars=c(${Object.keys(v.vars).filter(k => v.vars[k]).map(k => `"${k}"`).join(', ')}))` }),
+  effectPlots: on({
+    fields: effectFields('Plot All High-Order Effects?', 'all.vars(formula({m})[[3]])'),
+    check: v => (v.all === 'FALSE' && !(v.predictors || []).length ? 'No predictors selected.' : undefined),
+    code(v, c) {
+      const [after, inner] = effectArgs(v);
+      return v.all === 'TRUE' ? `plot(allEffects(${c.model}${inner})${after})`
+        : `plot(Effect(c(${v.predictors.map(p => `"${p}"`).join(', ')}), ${c.model}${inner})${after})`;
+    } }),
+  predictorEffectPlots: on({
+    fields: effectFields('Plot all predictor effects?', 'all.vars(formula({m})[[3]])'),
+    check: v => (v.all === 'FALSE' && !(v.predictors || []).length ? 'No predictors selected.' : undefined),
+    code(v, c) {
+      const [after, inner] = effectArgs(v);
+      return v.all === 'TRUE' ? `plot(predictorEffects(${c.model}${inner})${after})`
+        : `plot(predictorEffects(${c.model}, c(${v.predictors.map(p => `"${p}"`).join(', ')})${inner})${after})`;
+    } })
 };
