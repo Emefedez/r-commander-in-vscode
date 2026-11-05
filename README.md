@@ -167,15 +167,5 @@ make test
 - Las pruebas son sin ventanas: `tests/headless.js` desactiva `rgl` y la pantalla
 
 ## Limitaciones
-
-- Sin ventana Tk de R Commander
-- Sin comandos: *Cerrar desde Commander*, *Guardar opciones de Rcmdr*, *App Nap* (macOS), *Instalar software auxiliar*
 - El documento R Markdown / knitr se edita en VS Code, no en el editor de Rcmdr
 - La identificación con el ratón necesita X11 o XWayland
-
-## Créditos y licencia
-
-- Menús, etiquetas y traducción: paquete [Rcmdr](https://cran.r-project.org/package=Rcmdr) de John Fox y
-  colaboradores (GPL ≥ 2); `build/Rcmdr-menus.txt` y `build/Rcmdr-es.po` son copias
-- Funciones de `car`, `RcmdrMisc`, `effects`, `aplpack`, `lme4`, `rgl` y demás paquetes
-- Sin archivo de licencia todavía: debe ser compatible con la GPL de los archivos de Rcmdr
