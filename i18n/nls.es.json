@@ -447,6 +447,8 @@
 	"rCommanderPlay.interruptR": "Interrumpir R",
 	"rCommanderPlay.toggleSyntaxColors": "Colorear sintaxis en el terminal",
 	"rCommanderPlay.toggleInsertInScript": "Pegar el código de los menús en el script",
+	"rCommanderPlay.runInTerminal": "Ejecutar el código R en el terminal",
+	"rCommanderPlay.runInArf": "Ejecutar el código R en el panel de arf",
 	"rCommanderPlay.searchMenus": "Buscar en los menús",
 	"rCommanderPlay.clearMenuSearch": "Quitar filtro de búsqueda",
 	"rCommanderPlay.syntaxColors.description": "Colorea el código R que muestran en el terminal el botón verde y los menús de R Commander. Usa la paleta del terminal; los resultados conservan su formato habitual.",

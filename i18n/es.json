@@ -568,6 +568,7 @@
 	"Quantiles:": "Cuantiles:",
 	"Quantity variable (pick one)": "Variable cantidad (elegir una)",
 	"Quotes around character values": "Entrecomillar valores tipo carácter",
+	"R code now runs in the {0}.": "El código R ahora se ejecuta en {0}.",
 	"R did not answer. Open an R terminal and make sure it is idle; names will be typed by hand.": "R no respondió. Abre un terminal de R y comprueba que esté libre; los nombres se escribirán a mano.",
 	"R did not answer; type variable names separated by commas": "R no respondió; escribe los nombres de las variables separados por comas",
 	"R-squared": "R cuadrado",

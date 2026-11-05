@@ -84,6 +84,18 @@
 				"toggled": "config.rCommanderPlay.syntaxColors"
 			},
 			{
+				"command": "rCommanderPlay.runInTerminal",
+				"title": "%rCommanderPlay.runInTerminal%",
+				"category": "R Commander",
+				"icon": "$(terminal)"
+			},
+			{
+				"command": "rCommanderPlay.runInArf",
+				"title": "%rCommanderPlay.runInArf%",
+				"category": "R Commander",
+				"icon": "$(notebook)"
+			},
+			{
 				"command": "rCommanderPlay.toggleInsertInScript",
 				"title": "%rCommanderPlay.toggleInsertInScript%",
 				"category": "R Commander",
@@ -4949,6 +4961,16 @@
 					"command": "rCommanderPlay.clearMenuSearch",
 					"when": "view == rCommanderMenu",
 					"group": "navigation@4"
+				},
+				{
+					"command": "rCommanderPlay.runInArf",
+					"when": "view == rInteractiveSessions && config.rCommanderPlay.runTarget != arf",
+					"group": "navigation@90"
+				},
+				{
+					"command": "rCommanderPlay.runInTerminal",
+					"when": "view == rInteractiveSessions && config.rCommanderPlay.runTarget != terminal",
+					"group": "navigation@91"
 				},
 				{
 					"command": "rCommanderPlay.toggleCloseMenus",

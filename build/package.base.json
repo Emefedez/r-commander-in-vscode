@@ -83,6 +83,18 @@
 				"toggled": "config.rCommanderPlay.syntaxColors"
 			},
 			{
+				"command": "rCommanderPlay.runInTerminal",
+				"title": "Run R Code in the Terminal",
+				"category": "R Commander",
+				"icon": "$(terminal)"
+			},
+			{
+				"command": "rCommanderPlay.runInArf",
+				"title": "Run R Code in the arf Panel",
+				"category": "R Commander",
+				"icon": "$(notebook)"
+			},
+			{
 				"command": "rCommanderPlay.toggleInsertInScript",
 				"title": "Paste Menu Code into the Script",
 				"category": "R Commander",

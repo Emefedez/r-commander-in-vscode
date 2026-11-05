@@ -447,6 +447,8 @@
 	"rCommanderPlay.interruptR": "Interrupt R",
 	"rCommanderPlay.toggleSyntaxColors": "Syntax Colors in Terminal",
 	"rCommanderPlay.toggleInsertInScript": "Paste Menu Code into the Script",
+	"rCommanderPlay.runInTerminal": "Run R Code in the Terminal",
+	"rCommanderPlay.runInArf": "Run R Code in the arf Panel",
 	"rCommanderPlay.searchMenus": "Search Menus",
 	"rCommanderPlay.clearMenuSearch": "Clear Menu Search",
 	"rCommanderPlay.syntaxColors.description": "Color the R code echoed in the terminal by the green play button and R Commander menus. Uses the terminal palette; printed results keep their normal formatting.",

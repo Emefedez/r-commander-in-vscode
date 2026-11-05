@@ -32,7 +32,7 @@ const mock = {
       return {
         get: (key, fallback) => settings[key] ?? fallback,
         update: async (key, value, target) => {
-          assert.equal(target, ['closeMenusAfterChoice', 'menuAction'].includes(key) ? 1 : 3, `${key} is saved where expected`);
+          assert.equal(target, ['closeMenusAfterChoice', 'menuAction', 'runTarget'].includes(key) ? 1 : 3, `${key} is saved where expected`);
           settings[key] = value;
           onConfigurationChange({ affectsConfiguration: () => true });
         }
@@ -193,6 +193,14 @@ async function runAndRead() {
   assert.equal(settings.menuAction, 'run');
   await handlers['rCommanderPlay.toggleInsertInScript']();
   assert.equal(settings.menuAction, 'both');
+
+  // The run-target buttons of the Interactive Sessions view set the target.
+  assert.equal(settings.runTarget, undefined);
+  await handlers['rCommanderPlay.runInTerminal']();
+  assert.equal(settings.runTarget, 'terminal');
+  await handlers['rCommanderPlay.runInArf']();
+  assert.equal(settings.runTarget, 'arf');
+  delete settings.runTarget;
 
   // The toggle reaches the real runner even while the terminal has focus.
   assert.equal(settings.syntaxColors, undefined, 'colors are on by default');

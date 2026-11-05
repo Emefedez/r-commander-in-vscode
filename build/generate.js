@@ -203,6 +203,9 @@ pkg.contributes.menus = {
     { command: 'rcp.cmd.installPackages', when: 'view == rCommanderMenu', group: 'navigation@2' },
     { command: 'rCommanderPlay.searchMenus', when: 'view == rCommanderMenu', group: 'navigation@3' },
     { command: 'rCommanderPlay.clearMenuSearch', when: 'view == rCommanderMenu', group: 'navigation@4' },
+    // Buttons in the R extension's Interactive Sessions view: where R code runs. Each shows while it is not the current target.
+    { command: 'rCommanderPlay.runInArf', when: 'view == rInteractiveSessions && config.rCommanderPlay.runTarget != arf', group: 'navigation@90' },
+    { command: 'rCommanderPlay.runInTerminal', when: 'view == rInteractiveSessions && config.rCommanderPlay.runTarget != terminal', group: 'navigation@91' },
     // In the header's "..." menu, with a check mark while enabled.
     { command: 'rCommanderPlay.toggleCloseMenus', when: 'view == rCommanderMenu', group: '1_menus@1' },
     { command: 'rCommanderPlay.toggleInsertInScript', when: 'view == rCommanderMenu', group: '1_menus@2' }]

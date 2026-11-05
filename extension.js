@@ -158,6 +158,11 @@ function activate(context) {
       const commands = [...new Set(value.split(',').map(command => command.trim()).filter(Boolean))];
       await update(uri, 'skipCommands', commands, commands.length ? `Skipping ${commands.join(', ')}.` : 'Custom command skipping cleared.');
     }),
+    ...[['runInTerminal', 'terminal', 'R terminal'], ['runInArf', 'arf', 'arf panel']].map(([command, value, label]) =>
+      vscode.commands.registerCommand(`rCommanderPlay.${command}`, async () => {
+        await configuration().update('runTarget', value, vscode.ConfigurationTarget.Global);
+        await vscode.window.showInformationMessage(t('R code now runs in the {0}.', t(label)));
+      })),
     vscode.commands.registerCommand('rCommanderPlay.chooseRunTarget', async () => {
       const picked = await vscode.window.showQuickPick([
         { label: 'auto', description: t('Follow the R extension (selected Interactive session, else the R terminal)'), value: 'auto' },
