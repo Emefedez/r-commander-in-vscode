@@ -1,4 +1,5 @@
 // Clicking a classed list (a histogram) in the Workspace panel must not fail.
+require('./headless');
 const assert = require('node:assert/strict');
 const path = require('node:path');
 const { spawnSync } = require('node:child_process');

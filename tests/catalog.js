@@ -1,5 +1,6 @@
 // Drives every command through the real Commander/Dialog code with a scripted
 // fake VS Code, then runs the generated R in a real R session.
+require('./headless');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const os = require('node:os');
@@ -192,7 +193,8 @@ class FakeForm {
             const lines = (await env.session.query(f.exprFor(raw[f.of], env.ctx))) || [];
             const names = lines.map(l => l.split('\t')[0]);
             raw[f.k] = f.single ? [names[f.k === 'level2' ? 1 : 0]] : (f.selectAll || this.pass === 'A' ? names : names.slice(-1));
-          } else raw[f.k] = f.selectAll || f.single || f.selectFirst ? (f.selectAll ? list : list.slice(0, 1)).map(i => i.value) : this.pass === 'A' ? list.slice(0, 1).map(i => i.value) : list.slice(-1).map(i => i.value);
+          } else if (f.selectN) raw[f.k] = (this.pass === 'A' ? list.slice(0, f.selectN) : list.slice(-f.selectN)).map(i => i.value);
+          else raw[f.k] = f.selectAll || f.single || f.selectFirst ? (f.selectAll ? list : list.slice(0, 1)).map(i => i.value) : this.pass === 'A' ? list.slice(0, 1).map(i => i.value) : list.slice(-1).map(i => i.value);
           break;
         case 'matrix': {
           const rows = await env.session.query(`levels(as.factor(${env.ctx.dv(values[f.of])}))`);
@@ -250,6 +252,7 @@ class FakeForm {
   for (const mode of ['steps', 'form']) for (const pass of ['A', 'B']) {
     for (const id of ids) {
       const spec = catalog[id];
+      if (spec.run) continue; // acts on a real editor (R Markdown / knitr documents): see tests/report.js
       const log = [];
       const session = new TestSession();
       const commander = new Commander({
@@ -265,10 +268,11 @@ class FakeForm {
         failures.push(`${mode}/${pass} ${id}: dialog threw ${error.message}`);
         continue;
       }
-      const problems = log.filter(l => l[0] === 'warn' || l[0] === 'error');
+      // a command that needs something drawn first (Identify3D) says so instead of producing code
+      const problems = log.filter(l => (l[0] === 'warn' || l[0] === 'error') && !(spec.emptyMessage && String(l[1]).includes(spec.emptyMessage)));
       if (problems.length) failures.push(`${mode}/${pass} ${id}: ${JSON.stringify(problems)}`);
       for (const r of session.records) scripts.push({ id: `${mode[0]}${pass}:${id}`, ...r });
-      if (!session.records.length && !spec.vscode && !spec.url && !spec.select && !spec.refresh && !problems.length) failures.push(`${mode}/${pass} ${id}: produced no code`);
+      if (!session.records.length && !spec.vscode && !spec.url && !spec.run && !spec.emptyMessage && !spec.select && !spec.refresh && !problems.length) failures.push(`${mode}/${pass} ${id}: produced no code`);
     }
   }
   fs.writeFileSync(path.join(tmp, 'cases.json'), JSON.stringify(scripts));
@@ -289,9 +293,13 @@ for (case in cases) {
   rm(list = ls(envir = globalenv(), all.names = TRUE), envir = globalenv())
   source(${JSON.stringify(setupR)})
   runner <- new.env(); sys.source(${JSON.stringify(runnerR)}, runner)
+  # the runner's helpers (save_output...) live on the search path as "R Play" in the real extension
+  if ("R Play" %in% search()) detach("R Play", character.only = TRUE)
+  attach(runner, name = "R Play")
   id <- sub("^..:", "", case$id)
   res <- tryCatch({
-    if (id %in% parse_only) { parse(text = case$code); "OK" } else {
+    # mouse identification waits for clicks on a window: only check that the code parses
+    if (id %in% parse_only || grepl("method *= *.identify.", case$code)) { parse(text = case$code); "OK" } else {
       invisible(capture.output(runner$run_code(case$code, skip_help = FALSE, limit_output = FALSE, require = unlist(case$pkgs), quiet = TRUE)))
       "OK" }
   }, error = function(e) paste("FAIL:", conditionMessage(e)))

@@ -1,4 +1,5 @@
 // What the console shows: one short line to start a run, and the code echoed as it was written.
+require('./headless');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
@@ -45,6 +46,17 @@ const { RSession } = require('../lib/rsession');
   const failed = spawnSync('Rscript', ['--vanilla', '-e', sent[0]], { encoding: 'utf8' });
   assert.match(failed.stderr, /Error: boom/);
   assert.ok(!failed.stdout.includes('> b <- 2'), 'nothing runs after the error');
+  // Fixed notation prints small numbers in full (scipen only for the length of the run).
+  const fixedSent = [];
+  const fixedSession = new RSession({ commands: { executeCommand: async (name, text) => fixedSent.push(text) } }, path.join(__dirname, '..', 'runner.R'));
+  const fixedCode = 'x <- 2.78900236799773e-05\nprint(x)';
+  await fixedSession.run(fixedCode, { settings: { fixedNotation: true, loadRcmdrFunctions: false } });
+  await fixedSession.run(fixedCode, { settings: { loadRcmdrFunctions: false } });
+  const fixedOut = fixedSent.map(c => spawnSync('Rscript', ['--vanilla', '-e', c, '-e', 'cat("after:", getOption("scipen"), "\\n")'], { encoding: 'utf8' }).stdout);
+  assert.match(fixedOut[0], /\[1\] 0\.00002789002/);
+  assert.match(fixedOut[0], /after: 0/, 'scipen is restored after the run');
+  assert.match(fixedOut[1], /2\.789002e-05/, 'off by default');
+
   // The run-target hook runs before every send (runs and queries), so terminal/arf routing is applied first.
   const order = [];
   const routed = new RSession({ commands: { executeCommand: async () => order.push('send') } }, path.join(__dirname, '..', 'runner.R'), async () => order.push('route'));

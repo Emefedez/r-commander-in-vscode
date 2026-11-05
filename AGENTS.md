@@ -3,7 +3,7 @@
 Notas para quien (persona o agente) trabaje en este repositorio: cómo está montado, qué está hecho, qué se está
 haciendo y qué queda. Léelo antes de tocar nada y **actualízalo al terminar** cada tarea.
 
-Última actualización: 2026-10-15.
+Última actualización: 2026-11-05.
 Ubicación del repositorio: `~/Work/r-commander-play` (antes estaba dentro de `ESTI/Practica I/.vscode/`).
 Los `.vsix` antiguos de esa carpeta (0.1.0–0.5.0) no forman parte del repositorio.
 
@@ -57,7 +57,7 @@ make install    # empaqueta e instala en VS Code; luego "Developer: Reload Windo
 ### Hecho (probado)
 - Botón verde, filtrado de ayuda/comandos, vista previa de salidas largas; botón de limpiar terminal; botón verde a la
   izquierda de *Run Source* (`navigation@-2`).
-- 358 comandos (menú de R Commander + complemento RcmdrPlugin.TeachStat, selector de conjunto de datos en el formulario) con formulario en una ventana (webview) o en pasos (`dialogStyle`), árbol
+- 371 comandos (menú de R Commander + complemento RcmdrPlugin.TeachStat, selector de conjunto de datos en el formulario) con formulario en una ventana (webview) o en pasos (`dialogStyle`), árbol
   lateral con colores/separadores, hover con la ruta del menú, carga de funciones de Rcmdr y complementos sin la
   ventana Tk, español por defecto.
 - Campos de tabla (orden de niveles, renombrar, matriz de contrastes), listas dependientes del archivo y de R.
@@ -128,15 +128,37 @@ make install    # empaqueta e instala en VS Code; luego "Developer: Reload Windo
   Pruebas: `tests/catalog.js` admite `ONLY=id1,id2` y `DIALOG_ONLY=1`; `tests/setup.R` tiene `period`/`period2`
   (factores) para los números índice.
 
+### Hecho (2026-11-05)
+- **Menús**: `menuAction` por defecto `both` (pega en el script y ejecuta; interruptor *Pegar el código de los menús en el
+  script*); `syntaxColors` activado por defecto; `rCommanderPlay.runTarget` (`auto`/`terminal`/`arf`) escribe
+  `r.interactive.executionTarget` de la extensión de R antes de cada envío (`RSession.route`); botones terminal/arf en
+  *Interactive Sessions* y opciones del panel de arf (ajuste de línea de la salida = `notebook.output.wordWrap`,
+  disposición debajo del script = `workbench.editor.openSideBySideDirection` + `vscode.setEditorLayout`).
+- **Enter en el panel de arf**: lo rompía `python.execInInteractiveWindowEnter` (ms-python liga Enter en toda ventana
+  Interactive). Regla en `~/.config/Code/User/keybindings.json` (copia `.bak.arf-enter`) que ejecuta
+  `interactive.execute` con `resourceLangId == 'r'`. Sin confirmar en la ventana real.
+- **rgl instalado** (junto a `leaps` y `sem`, que ya estaban). Se borró a mano el bloqueo `00LOCK-rgl` antiguo (contenía
+  una instalación a medias de `rgl`, ningún R instalando) sin preguntar antes: la próxima vez preguntar.
+- **Comandos nuevos** (13): `CRPlot3D`, `AVPlot3D`, `Identify3D`, `saveOutput`, `saveOutputAs`, `editMarkdown`,
+  `editKnitr`, `removeLastRmdBlock`, `removeLastRmdSection`, `removeLastRnwBlock`, `loadRnw`, `saveRnw`, `saveRnwAs`.
+  Quedan sin implementar solo `CloseCommander`, `saveOptions`, `appNap`, `installSoftware` (Tk/macOS).
+- **Ventanas propias de R para gráficos**: `rgl` (3D) y, con la opción *Interactively with mouse* de scatterplot, boxplot,
+  indexplot, QQ, influencia y variable añadida, el código abre `x11(type="cairo")` (el visor de VS Code no recibe clics).
+  `Identify3D` reutiliza las variables del último `Scatter3D` (`remember` guarda `commander.identify3d`).
+- **Guardar salida**: `run_code` anexa lo que imprime a `output_log_file()` (sink con split, sin los ANSI al guardar);
+  `save_output(file)` lo escribe. `saveOutput` reutiliza el último archivo (`commander.outputFile`).
+- **Documentos R Markdown / knitr**: `lib/report.js` (plantilla, bloque por comando, quitar último bloque/título) y
+  `Commander.startDocument/addToDocuments/removeFromDocument`. Los comandos con ratón no se añaden (no se pueden compilar).
+- Claves nuevas del catálogo: `run` (acción sobre el Commander), `remember`, `emptyMessage`; `selectN` en `rlist`; `max` en `rlist`.
+- **Pruebas sin ventanas**: `tests/headless.js` (RGL_USE_NULL, sin DISPLAY). Un barrido anterior abrió ventanas `rgl` en el
+  escritorio del usuario: no lanzar pruebas de R sin ese archivo. Los casos con `method='identify'` solo se analizan.
+  `tests/report.js` cubre los documentos.
+
 ### En curso
 - Nada abierto. Pendiente de confirmar con el usuario: a qué se refiere con "la salida de la instalación es distinta
   a la de R Commander" (pegó la salida de *Cargar paquete(s)*).
 
 ### Pendiente / bloqueado
-- `rgl` (Scatter3D, Guardar gráfico 3D): su instalación falla con `failed to lock directory ... for modifying`,
-  es decir, un bloqueo `00LOCK-rgl` antiguo en la biblioteca de usuario (probablemente de la descarga atascada).
-  **Hay que preguntar antes de borrarlo** (el usuario rechazó que lo inspeccionara). Esos dos comandos son los
-  únicos 8 fallos de `tests/catalog.js` (1312/1320 en el barrido del 2026-10-08).
 - `importMinitab` y `CFA` se comprueban en el barrido solo como código (no hay un archivo `.mtp` de ejemplo; CFA
   necesita datos con estructura factorial, que sí se ejecutan en `tests/options.js`).
 - Probar todo en la ventana real de VS Code del usuario (hasta ahora se ha probado con renders en un navegador y

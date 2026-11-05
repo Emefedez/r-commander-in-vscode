@@ -1,79 +1,74 @@
 # R Commander Play
 
-Extensión de VS Code para trabajar con R al estilo de **R Commander**, sin salir del editor:
+Extensión de VS Code para trabajar con R al estilo de **R Commander**.
 
-- un **botón verde ▶** que ejecuta la selección o el archivo completo con la salida visible, y
-- los **menús de R Commander** (Fichero, Editar, Datos, Estadísticos, Gráficas, Modelos, Distribuciones,
-  Herramientas, Ayuda) con sus diálogos, que generan y ejecutan el código R por ti.
+- Botón verde ▶ que ejecuta la selección o el archivo con la salida visible
+- Menús de R Commander con sus diálogos (371 comandos: Rcmdr y RcmdrPlugin.TeachStat)
+- Español por defecto, inglés opcional
 
-Funciona encima de la extensión [REditorSupport.r](https://marketplace.visualstudio.com/items?itemName=REditorSupport.r)
-(que aporta el terminal de R, los gráficos y la ayuda). No abre la ventana Tk de R Commander.
-Los menús en español y en inglés salen del propio paquete Rcmdr.
+## Requisitos
 
-## Contenido
-
-1. [Qué incluye](#qué-incluye)
-2. [Instalación](#instalación)
-3. [Uso](#uso)
-4. [Ajustes](#ajustes)
-5. [El botón verde](#el-botón-verde)
-6. [Estructura del repositorio](#estructura-del-repositorio)
-7. [Añadir o cambiar un comando](#añadir-o-cambiar-un-comando)
-8. [Pruebas](#pruebas)
-9. [Limitaciones](#limitaciones)
-10. [Créditos y licencia](#créditos-y-licencia)
-
-## Qué incluye
-
-- **Menú R Commander**: submenú dentro del menú **⋯** de cualquier archivo R, con 358 comandos (Rcmdr y el complemento TeachStat: menú «Estadística Básica») y la barra de
-  herramientas de Rcmdr (conjunto de datos activo, editar, visualizar, modelo activo).
-- **Formulario en una sola ventana** (como Rcmdr): listas de variables una al lado de otra, botones de opción,
-  casillas, campos de texto y los botones *Aceptar*, *Aplicar*, *Cancelar* y *Reiniciar*. Las variables salen de
-  los data frames de tu sesión de R. Hay tablas para reordenar niveles, renombrar variables y escribir
-  contrastes.
-- **Árbol en la barra lateral de R**: los mismos menús, con icono y color por menú y una línea fina donde
-  Rcmdr tiene separadores.
-- **Hover**: al pasar el ratón sobre una llamada a una función de R (`t.test(`, `Hist(`, `pie(`...) dice en qué
-  parte del menú de R Commander está, con un enlace que abre el diálogo.
-- **Funciones de R Commander disponibles en la sesión** (`Recode`, `Hist`, `calcular_frecuencia`...), cargadas
-  sin abrir la ventana Tk: se enlazan los paquetes de los que depende Rcmdr y los complementos
-  `RcmdrPlugin.*` instalados.
-- **Instalador de paquetes** (lo que ofrece el menú *Paquetes* de RGui, que no existe en Linux ni en VS Code): elegir
-  mirror, instalar con lista filtrable de CRAN, actualizar, instalar desde archivos locales, ver los instalados.
-  Solo descarga lo que falta y puede conservar las descargas en una carpeta permanente para no repetirlas.
-- **Botones en la barra del editor**: interrumpir R, instalar paquetes, limpiar el terminal y el play verde.
-- **Arreglo del visor del Workspace** para listas con clase (por ejemplo un `histogram`), que daban
-  `No method asJSON S3 class`.
-- **Español por defecto** (diálogos, menús y árbol), con inglés opcional.
+- VS Code ≥ 1.85
+- R
+- Extensión [REditorSupport.r](https://marketplace.visualstudio.com/items?itemName=REditorSupport.r)
+- Paquete `Rcmdr` con sus dependencias (`car`, `RcmdrMisc`...)
+- Complemento `RcmdrPlugin.TeachStat` (menú Estadística Básica) y `distr`
+- Según el comando: `rgl`, `mgcv`, `leaps`, `sem`, `aplpack`, `lme4`, `nnet`...
+  (*Herramientas ▸ Instalar paquete(s)...* los instala desde `cloud.r-project.org`)
+- Opcional: [arf](https://github.com/eitsupi/arf) para el panel Interactive
+- Para `rgl` y la identificación con el ratón: una sesión gráfica (X11 o XWayland)
 
 ## Instalación
 
-Requisitos: VS Code ≥ 1.85, R, la extensión REditorSupport.r y, para casi todos los comandos, el paquete
-`Rcmdr` con sus dependencias (`car`, `RcmdrMisc`...). Algunos comandos piden paquetes extra
-(`aplpack`, `rgl`, `leaps`, `lme4`, `nnet`...): *Herramientas ▸ Instalar paquete(s)...* los instala siempre desde
-`cloud.r-project.org`.
-
 ```sh
-make install          # genera, empaqueta dist/r-commander-play-<versión>.vsix e instala en VS Code
-# o a mano:
-make package          # solo crea el .vsix
-code --install-extension dist/r-commander-play-*.vsix --force
+make install       # genera, empaqueta dist/r-commander-play-<versión>.vsix e instala en VS Code
+make package       # solo crea el .vsix
 ```
 
-Después, **Developer: Reload Window**.
+Después: **Developer: Reload Window**.
+
+## Qué incluye
+
+- Menú **R Commander** en el menú **⋯** de los archivos R y en la barra lateral de R (árbol con colores y búsqueda)
+- Formulario en una ventana (o en pasos) con listas de variables, opciones, tablas y *Aceptar / Aplicar / Cancelar / Reiniciar*
+- El código generado se pega en el script y se ejecuta con eco
+- Salida en el terminal de R o en el panel Interactive de arf
+- Colores de sintaxis en el terminal
+- Hover sobre funciones de R con su ruta en los menús
+- Funciones de Rcmdr disponibles sin abrir la ventana Tk
+- Instalador de paquetes (mirror, lista filtrable, actualizar, archivos locales, descargas permanentes)
+- Documentos R Markdown y knitr que recogen los comandos
+- *Guardar salida* a un archivo de texto
+- Gráficos 3D de `rgl` (dispersión, componente+residuo, variable añadida) en su ventana
+- Identificación de puntos con el ratón en una ventana X11 de R
+- Arreglo del visor del Workspace para listas con clase
 
 ## Uso
 
-1. Abre un archivo R y carga o crea datos (*Datos ▸ Cargar conjunto de datos...*, *Importar datos*, o un `data(iris)` en
-   tu script). El conjunto activo aparece en la barra de estado.
-2. Abre el menú **⋯ ▸ R Commander** (o la vista *R Commander* de la barra lateral de R) y elige un comando.
-3. Rellena el formulario y pulsa **Aceptar**. El código R generado se ejecuta en el terminal de R con eco.
+1. Abre un archivo R y carga datos (*Datos ▸ Cargar conjunto de datos...*)
+2. Elige un comando en **⋯ ▸ R Commander** o en la barra lateral
+3. Rellena el formulario y pulsa **Aceptar**
 
-Con `rCommanderPlay.menuAction` puedes hacer que el código solo se **inserte** al final del script (como la
-ventana de script de Rcmdr) o que se inserte **y** se ejecute.
+### Botones
 
-Los comandos que en Rcmdr abren su propia ventana (`View`, ayuda, gráficos, editor de datos) usan los visores
-de REditorSupport o las ventanas de R.
+- Barra del editor: interrumpir R, instalar paquetes, limpiar terminal, play verde
+- Vista *Interactive Sessions*: ejecutar en el terminal / en arf
+- Panel de arf, barra: ⚙ ajustes de R Play, vista previa corta de resultados largos
+- Panel de arf, menú ⋯: todos los ajustes (formulario), notación fija, tamaño de la vista previa, salidas con
+  desplazamiento, colapsar / expandir salidas, ajustar líneas largas, panel debajo del script, ejecutar en terminal
+- Menú ⋯ de *Interactive Sessions*: las mismas opciones
+- Menú ⋯ de la barra lateral: cerrar menús al elegir, pegar el código en el script
+
+### Menú Editar y Fichero
+
+- *Editar documento R Markdown / knitr*: crea `<script>.Rmd` o `.Rnw` y añade título y bloque de cada comando
+- *Quitar último bloque / título*: deshace en ese documento
+- *Guardar salida* y *Guardar salida como*: texto impreso por los comandos, sin colores
+
+### Gráficos con ventana propia
+
+- `rgl`: *Gráfico 3D*, *Componente+residuo 3D*, *Variable añadida 3D*, *Identificar observaciones con el ratón*
+- Ratón en 2D (diagrama de dispersión, boxplot, índices, QQ, influencia, variable añadida): abre una ventana X11
 
 ## Ajustes
 
@@ -89,72 +84,43 @@ de REditorSupport o las ventanas de R.
 | `rCommanderPlay.rcmdrPlugins` | `[]` | Complementos a cargar; vacío = todos los `RcmdrPlugin.*` instalados. |
 | `rCommanderPlay.skipHelp`, `skipCommands` | `true`, `[]` | Qué omite el botón verde (ver más abajo). |
 | `rCommanderPlay.limitOutput`, `maxOutputItems` | `true`, `24` | Vista previa de resultados largos. |
-| `rCommanderPlay.syntaxColors` | `false` | Colores de sintaxis en el código R que aparece en el terminal. |
+| `rCommanderPlay.fixedNotation` | `false` | Imprime `0.00002789` en vez de `2.789e-05` (opción `scipen` de R, solo durante cada ejecución). |
+| `rCommanderPlay.syntaxColors` | `true` | Colores de sintaxis en el código R que aparece en el terminal. |
 | `rCommanderPlay.closeMenusAfterChoice` | `false` | Pliega los menús del árbol al elegir una opción, como los menús desplegables de R Commander. |
 
-## El botón verde
+`runTarget` `terminal`/`arf` escribe `r.interactive.executionTarget` de la extensión de R; las opciones del panel de
+arf escriben `notebook.output.wordWrap` y `workbench.editor.openSideBySideDirection`.
 
-El botón ▶ verde (a la izquierda de *Run Source*) ejecuta la selección o, si no hay selección, guarda y ejecuta
-todo el archivo en el terminal de R interactivo. Los gráficos, la ayuda y las variables siguen funcionando como
-siempre; `Ctrl+Enter` conserva su comportamiento.
+## Botón verde
 
-- **Omitir ayuda** (`?x`, `??x`, `help(...)`, `help.search(...)`) y **comandos a omitir** (`fix, View, utils::example`):
-  se filtran expresiones sueltas del nivel superior; lo que está dentro de funciones, cadenas o comentarios se
-  conserva. Los comandos de los menús ignoran esta opción.
-- **Limitar salidas largas**: muestra una vista previa de vectores, matrices y data frames (24 entradas por
-  defecto) usando `max.print` y lo restablece después de cada ejecución.
-- **Colorear sintaxis en el terminal**: interruptor en *Configurar el botón verde*, en la paleta de comandos y
-  en el menú del editor. Colorea comentarios, cadenas, números, funciones y palabras clave usando la paleta
-  del terminal. Se aplica en la siguiente ejecución del botón verde o de un menú de R Commander. Los resultados
-  impresos conservan su formato habitual. No requiere paquetes de R adicionales.
-- La barra de estado muestra el estado de estas opciones; al pulsarla se abre *Configurar el botón verde*.
+- Ejecuta la selección o, sin selección, guarda y ejecuta el archivo
+- Omitir ayuda (`?x`, `help(...)`) y comandos a omitir (`fix, View, utils::example`); los menús ignoran esto
+- Limitar salidas largas con `max.print`
+- Colorear sintaxis (interruptor en *Configurar el botón verde*, paleta de comandos y menú del editor)
+- La barra de estado muestra estas opciones y abre *Configurar el botón verde*
 
-## Buscar en los menús
-
-Pulsa la lupa de la cabecera del árbol **R Commander**. La caja de búsqueda filtra el árbol mientras escribes;
-puedes buscar por nombre, ruta del menú o identificador del comando, en español o inglés, con o sin tildes.
-Selecciona un resultado para abrir su formulario. Al cerrar la caja, el filtro se conserva; pulsa
-**Quitar filtro de búsqueda** en la cabecera para volver a ver todos los menús.
-
-## Cerrar los menús al elegir una opción
-
-En R Commander, un menú desplegable se cierra al elegir una opción. Para que el árbol haga lo mismo, marca
-**⋯ ▸ Cerrar los menús al elegir una opción** en la cabecera del árbol **R Commander** (o activa
-`rCommanderPlay.closeMenusAfterChoice`). Al elegir un comando, todos los menús se pliegan antes de abrir su
-formulario. Los resultados de una búsqueda no se pliegan: los desplegó la búsqueda, no tú.
-
-## Estructura del repositorio
+## Estructura
 
 ```
-extension.js        activación: botón verde, comandos, árbol, hover, barra de estado
-runner.R            lo que se ejecuta en R: run_code, consultas a la sesión, funciones de Rcmdr, visor
-lib/
-  commander.js      flujo de un comando: conjunto/modelo activo → diálogo → código → ejecutar/insertar
-  form.js           formulario (webview) y su ciclo de mensajes
-  formmodel.js      lógica del formulario sin VS Code: valores iniciales, visibilidad, validación
-  dialog.js         estilo "steps" (preguntas una a una)
-  rsession.js       habla con el terminal de R (ejecutar, consultar mediante un archivo)
-  tree.js, hover.js árbol de la barra lateral y hover con la ruta del menú
-  i18n.js, rhelpers.js
-catalog/            un objeto por comando de Rcmdr: campos del diálogo y código R que genera
-build/              generate.js (package.json, traducciones, datos), functions.js, package.sh,
-                    Rcmdr-menus.txt y Rcmdr-es.po (tomados de Rcmdr)
-data/ i18n/         generado por build/generate.js (no se edita a mano, salvo i18n/es.manual.json)
-tests/              pruebas (ver más abajo)
+extension.js     activación: botón verde, comandos, árbol, hover, barra de estado
+runner.R         run_code, consultas a la sesión, registro de salida, funciones de Rcmdr
+lib/             commander, form, formmodel, dialog, rsession, report, tree, hover, i18n, rhelpers
+catalog/         un objeto por comando de Rcmdr: campos y código R
+build/           generate.js, Rcmdr-menus.txt y Rcmdr-es.po (de Rcmdr), package.base.json
+data/ i18n/      generado (solo se edita i18n/es.manual.json)
+tests/           pruebas
 ```
 
-`package.json`, `package.nls*.json` y `data/` se **generan**: la fuente es `build/package.base.json`, el catálogo y
-los dos archivos de Rcmdr. Tras tocar el catálogo ejecuta `make generate`.
+`package.json`, `package.nls*.json` y `data/` se generan: tras tocar el catálogo, `make generate`.
 
 ## Añadir o cambiar un comando
 
-Cada comando es una entrada de `catalog/*.js` con el nombre de su función en Rcmdr (el mismo que en
-`build/Rcmdr-menus.txt`, que fija su lugar en el menú):
+Una entrada de `catalog/*.js` con el nombre de su función en Rcmdr (el de `build/Rcmdr-menus.txt`):
 
 ```js
 singleSampleTTest: {
-  pkgs: ['car'],                       // paquetes que debe tener R (opcional)
-  fields: [                            // lo que pide el formulario, en orden
+  pkgs: ['car'],
+  fields: [
     numVar('x', 'Variable (pick one)'),
     alt('Population mean < mu0', 'Population mean > mu0'),
     { k: 'mu', type: 'num', label: 'Null hypothesis: mu =', def: '0.0' },
@@ -164,29 +130,16 @@ singleSampleTTest: {
 }
 ```
 
-- Cada diálogo copia el de Rcmdr (o TeachStat): mismos campos, etiquetas (las cadenas exactas de Rcmdr, para que
-  salga su traducción), valores por defecto, orden y código R. Lo que Rcmdr pregunta en una ventana después de
-  Aceptar (el archivo, los nombres de niveles...) va en `after`.
-- Tipos de campo: `var` (una o varias variables, filtradas por `kind`: `numeric`, `factor`, `twolevel`,
-  `discrete`, `character`, `realfactor`, `nominal`, `ordinal`, `other`, `any`), `dataset`, `model`, `models`,
-  `hclust`, `choice`, `flags`, `num`, `numlist`, `text`, `name`, `file`, `dir`, `installed`, `rlist` (lista que
-  sale de una consulta a R), `levelorder`, `renames`, `matrix`, `formula` (el `modelFormula()` de Rcmdr: variables,
-  botones de operadores y splines, `lhs ~ rhs`; `hasLhs: false` para fórmulas de un lado), `table` (tabla de
-  números con filas/columnas de otros campos o columnas de R con `colsExpr`, y `rhsLabel`), `note` (texto entre
-  campos, como el «O» rojo; `heading: true` para títulos de sección) y `hidden` (un valor del contexto, p. ej. la
-  clase del modelo activo, que otros campos usan en `when`).
-- `when: v => ...` muestra el campo solo en cierto caso; `exclude` evita repetir variables; `optional`, `def`,
-  `min`, `max`, `pattern` validan. `label: ''` es un campo sin título (una casilla suelta); entonces `prompt` es el
-  texto que se usa en el estilo de pasos. `compact: true` lo hace estrecho (desplegables, rejillas). En `choice`,
-  `def` puede ser el valor y `defFor: v => ...` lo calcula a partir de otros campos.
-- Otras claves: `ds: false` (no necesita conjunto de datos), `needsModel`, `activeDataset`/`activeModel` (qué
-  queda activo), `after` (preguntas extra), `check` (reglas entre campos), `noForm: ctx => ...` (sin formulario en
-  ese caso), `vscode` y `url` (acciones que no generan código R).
-- Las cadenas de interfaz van en inglés; el español sale de la traducción de Rcmdr o de `i18n/es.manual.json`.
-  Los títulos de los menús son siempre los de R Commander (con TeachStat), y lo que Rcmdr deja en inglés queda en
-  inglés. `es.manual.json` solo traduce lo propio de la extensión y corrige las traducciones de Rcmdr que no se
-  entienden; si la de Rcmdr está bien, no se toca.
-  `build/generate.js` avisa en `build/missing-es.txt` de lo que no tiene traducción.
+- Mismos campos, etiquetas, valores por defecto y código R que el diálogo de Rcmdr (`deparse(Rcmdr:::<id>)`)
+- Campos: `var` (`kind`: `numeric`, `factor`, `twolevel`, `discrete`, `character`, `any`...), `dataset`, `model`, `models`,
+  `hclust`, `choice`, `flags`, `num`, `numlist`, `text`, `name`, `file`, `dir`, `installed`, `rlist`, `levelorder`,
+  `renames`, `matrix`, `formula`, `table`, `note`, `hidden`
+- Claves: `when`, `exclude`, `optional`, `def`, `min`, `max`, `pattern`, `compact`, `label: ''` + `prompt`
+- Del comando: `ds: false`, `needsModel`, `pkgs`, `activeDataset`, `activeModel`, `after`, `check`, `noForm`,
+  `remember`, `emptyMessage`, `run` (acción sobre el Commander), `vscode`, `url`
+- Cadenas de interfaz en inglés; el español sale de Rcmdr (`build/Rcmdr-es.po`) o de `i18n/es.manual.json`
+  (solo lo propio de la extensión y lo incomprensible de Rcmdr); lo que falta queda en `build/missing-es.txt`
+- Títulos de menú siempre los de Rcmdr
 
 ## Pruebas
 
@@ -194,29 +147,21 @@ singleSampleTTest: {
 make test
 ```
 
-- `tests/catalog.js` pasa **todos** los comandos por los dos estilos de diálogo, con dos juegos de elecciones
-  (primeras y últimas opciones), y ejecuta cada fragmento generado en una sesión real de R. Necesita `Rscript`
-  con `Rcmdr` y sus dependencias. Fallan a propósito solo los comandos que dependen del entorno: archivos
-  de importación reales, URL, y los paquetes `rgl` y `leaps` si no están instalados.
-- `tests/options.js` cubre combinaciones que el barrido no alcanza (contrastes, efectos, tallo y hojas).
-- `tests/formmodel.js`, `hover.js`, `view.js`, `rcmdr.js`, `extension.js` y `runner.R` comprueban la lógica del
-  formulario, el hover, el visor, la carga de funciones de Rcmdr (y que el play verde siga dibujando gráficos),
-  el registro de comandos y el filtrado del botón verde.
+- `tests/catalog.js`: cada comando × 2 estilos × 2 juegos de opciones, ejecutado en R (`ONLY=id1,id2`, `DIALOG_ONLY=1`)
+- `tests/options.js`, `formmodel.js`, `report.js`, `tree.js`, `terminal.js`, `hover.js`, `view.js`, `rcmdr.js`,
+  `extension.js`, `runner.R`
+- Las pruebas son sin ventanas: `tests/headless.js` desactiva `rgl` y la pantalla
 
 ## Limitaciones
 
-- No incluidos: edición de documentos Rmd/knitr, *Guardar salida*, análisis factorial confirmatorio (necesita
-  `sem`), gráficos 3D de componentes y variables añadidas, e identificación de puntos con el ratón.
-- Los comandos que usan `rgl` o `leaps` piden instalarlos.
-- El formulario se ha comprobado con renders en un navegador y con simulaciones de VS Code; el aspecto del árbol
-  (colores, separadores) y del hover depende del tema de VS Code. Si algo se ve distinto, abre una incidencia.
+- Sin ventana Tk de R Commander
+- Sin comandos: *Cerrar desde Commander*, *Guardar opciones de Rcmdr*, *App Nap* (macOS), *Instalar software auxiliar*
+- El documento R Markdown / knitr se edita en VS Code, no en el editor de Rcmdr
+- La identificación con el ratón necesita X11 o XWayland
 
 ## Créditos y licencia
 
-Los menús, las etiquetas y la traducción al español salen del paquete [Rcmdr](https://cran.r-project.org/package=Rcmdr)
-de John Fox y colaboradores (GPL ≥ 2): `build/Rcmdr-menus.txt` y `build/Rcmdr-es.po` son copias de sus
-archivos, y el código R que se genera sigue las convenciones de sus diálogos. Las funciones de gráficos y
-análisis son de `car`, `RcmdrMisc`, `effects`, `aplpack`, `lme4` y demás paquetes citados.
-
-Este repositorio aún no tiene archivo de licencia. Si se publica, debe ser compatible con la GPL de los archivos
-de Rcmdr que incluye.
+- Menús, etiquetas y traducción: paquete [Rcmdr](https://cran.r-project.org/package=Rcmdr) de John Fox y
+  colaboradores (GPL ≥ 2); `build/Rcmdr-menus.txt` y `build/Rcmdr-es.po` son copias
+- Funciones de `car`, `RcmdrMisc`, `effects`, `aplpack`, `lme4`, `rgl` y demás paquetes
+- Sin archivo de licencia todavía: debe ser compatible con la GPL de los archivos de Rcmdr

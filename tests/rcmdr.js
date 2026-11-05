@@ -1,5 +1,6 @@
 // A run with the default settings makes R Commander's and its plug-ins' functions
 // available (calcular_frecuencia, Recode...) without starting the Tk window.
+require('./headless');
 const assert = require('node:assert/strict');
 const path = require('node:path');
 const { spawnSync } = require('node:child_process');

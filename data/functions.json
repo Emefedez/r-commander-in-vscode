@@ -127,6 +127,9 @@
 		"kmeansClustering",
 		"appendHclustGroup"
 	],
+	"avPlot3d": [
+		"AVPlot3D"
+	],
 	"avPlots": [
 		"AVPlots"
 	],
@@ -278,6 +281,9 @@
 		"intervaloConfianzaDiferenciaProporciones",
 		"contrastHipotesisProporcion",
 		"contrasteHipotesisDiferenciaProporciones"
+	],
+	"crPlot3d": [
+		"CRPlot3D"
 	],
 	"crPlots": [
 		"CRPlots"
@@ -574,6 +580,8 @@
 		"BreuschPaganTest",
 		"DurbinWatsonTest",
 		"RESETtest",
+		"CRPlot3D",
+		"AVPlot3D",
 		"genericDistrDefine",
 		"genericDistrQuantiles",
 		"genericProbabilitiesInter",
@@ -1240,6 +1248,10 @@
 		"saveDataSet",
 		"Pindexnumbers"
 	],
+	"save_output": [
+		"saveOutput",
+		"saveOutputAs"
+	],
 	"save.image": [
 		"saveWorkspace",
 		"saveWorkspaceAs"
@@ -1511,6 +1523,10 @@
 	],
 	"write.table": [
 		"exportDataSet"
+	],
+	"x11": [
+		"InfluencePlot",
+		"InfluenceIndexPlot"
 	],
 	"xtabs": [
 		"twoWayTable",

@@ -26,11 +26,26 @@
 	"loadRmd": {
 		"label": "Open R Markdown file..."
 	},
+	"loadRnw": {
+		"label": "Open knitr file..."
+	},
 	"saveRmd": {
 		"label": "Save R Markdown file..."
 	},
+	"saveRnw": {
+		"label": "Save knitr file..."
+	},
 	"saveRmdAs": {
 		"label": "Save R Markdown file as..."
+	},
+	"saveRnwAs": {
+		"label": "Save knitr file as..."
+	},
+	"saveOutput": {
+		"label": "Save output..."
+	},
+	"saveOutputAs": {
+		"label": "Save output as..."
 	},
 	"saveWorkspace": {
 		"label": "Save R workspace..."
@@ -43,6 +58,21 @@
 	},
 	"restartCommander": {
 		"label": "Restart the Commander"
+	},
+	"editMarkdown": {
+		"label": "Edit R Markdown document"
+	},
+	"editKnitr": {
+		"label": "Edit knitr document"
+	},
+	"removeLastRmdBlock": {
+		"label": "Remove last Markdown command block"
+	},
+	"removeLastRmdSection": {
+		"label": "Remove last Markdown section title"
+	},
+	"removeLastRnwBlock": {
+		"label": "Remove last knitr command block"
 	},
 	"onCut": {
 		"label": "Cut"
@@ -398,6 +428,9 @@
 	"Scatter3D": {
 		"label": "3D scatterplot..."
 	},
+	"Identify3D": {
+		"label": "Identify observations with mouse"
+	},
 	"saveRglGraph": {
 		"label": "Save graph to file"
 	},
@@ -477,8 +510,14 @@
 	"CRPlots": {
 		"label": "Component+residual plots..."
 	},
+	"CRPlot3D": {
+		"label": "3D Component+residual plot..."
+	},
 	"AVPlots": {
 		"label": "Added-variable plots..."
+	},
+	"AVPlot3D": {
+		"label": "3D added-variable plot..."
 	},
 	"InfluencePlot": {
 		"label": "Influence plot..."

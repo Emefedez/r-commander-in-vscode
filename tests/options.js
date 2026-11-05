@@ -1,4 +1,5 @@
 // Option combinations the generic sweep does not reach, run in real R.
+require('./headless');
 const assert = require('node:assert/strict');
 const path = require('node:path');
 const { spawnSync } = require('node:child_process');

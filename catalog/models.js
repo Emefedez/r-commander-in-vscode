@@ -13,7 +13,9 @@ const SANDWICH = [['HC0', 'HC0'], ['HC1', 'HC1'], ['HC2', 'HC2'], ['HC3', 'HC3']
 const sandwichFields = text => [check('sandwich', text, false, { when: isLm }),
   choice('sandwichType', 'Sandwich estimator', SANDWICH, 'HC3', { when: v => isLm(v) && v.sandwich.sandwich })];
 const vcovArg = (v, m) => (isLm(v) && v.sandwich?.sandwich ? (v.sandwichType === 'HAC' ? `, vcov=vcovHAC(${m})` : `, vcov=hccm(${m}, type="${v.sandwichType.toLowerCase()}")`) : '');
-const identify = (withNot = true) => choice('identify', 'Identify Points', [['auto', 'Automatically'], ...(withNot ? [['not', 'Do not identify']] : [])]);
+const identify = (withNot = true) => choice('identify', 'Identify Points', [['auto', 'Automatically'], ['mouse', 'Interactively with mouse'], ...(withNot ? [['not', 'Do not identify']] : [])]);
+// Mouse identification needs a window that takes clicks: R's own X11 window (the VS Code plot viewer cannot).
+const withWindow = (v, code) => (v.identify === 'mouse' ? `x11(type="cairo")\n${code}` : code);
 const idn = { k: 'idn', type: 'num', int: true, min: 0, def: '2', label: 'Number of points to identify  ' };
 // The family of a GLM, read from R (Rcmdr chooses its tests with it).
 const familyOf = async (ui, m) => (await ui.query(`if (inherits(${m}, "glm")) ${m}$family$family else ""`))?.[0] || '';
@@ -28,6 +30,22 @@ const effectFields = (allLabel, expr) => [cls,
   { k: 'span', type: 'num', int: true, min: 5, max: 100, def: '50', label: 'Span for smooth', when: v => v.partial?.partial }];
 const effectArgs = v => ['multinom', 'polr'].includes(v.cls) ? [`, axes=list(y=list(style="${v.style}"))`, '']
   : v.partial.partial ? [`, partial.residuals=list(span=${Number(v.span) / 100})`, ', residuals=TRUE'] : ['', ''];
+
+// Fields shared by Rcmdr's two 3D model plots (rgl windows): scales, grid, ellipsoid, background, identification, rotations.
+const AUTO = '<auto>';
+const plot3dOptions = (identifyDefault, extra = []) => [
+  { k: 'show', type: 'flags', label: '', items: [['scales', 'Show axis scales', true], ['grid', 'Show surface grid lines', true], ['ellipsoid', 'Plot 50% concentration ellipsoid', false]] },
+  ...extra,
+  choice('bg', 'Background Color', [['black', 'Black'], ['white', 'White']], 'white'),
+  choice('identify', 'Identify Points', [['auto', 'Automatically'], ['mouse', 'Interactively with mouse'], ['not', 'Do not identify']], identifyDefault),
+  { k: 'mouseNote', type: 'note', label: 'Drag the right mouse button to identify points,\nclick the right button to exit.', when: v => v.identify === 'mouse' },
+  { ...idn, when: v => v.identify === 'auto' },
+  { k: 'rotations', type: 'num', int: true, min: 0, max: 10, def: '0', label: 'Number of automatic rotations  ' }];
+const plot3dArgs = (v, notIdentified, afterEllipsoid = '') => {
+  const id = v.identify === 'auto' ? `, id=list(method='mahal', n =${v.idn})` : v.identify === 'mouse' ? ", id=list(method='identify')" : notIdentified;
+  return `, bg="${v.bg}", axis.scales=${v.show.scales ? 'TRUE' : 'FALSE'}, grid=${v.show.grid ? 'TRUE' : 'FALSE'}, ellipsoid=${v.show.ellipsoid ? 'TRUE' : 'FALSE'}${afterEllipsoid}`
+    + `${id}${v.rotations !== '0' ? `, revolutions = ${v.rotations}` : ''}`;
+};
 
 module.exports = {
   selectActiveModel: { ds: false, select: 'model' },
@@ -155,18 +173,33 @@ module.exports = {
   plotModel: simple(m => lines('oldpar <- par(oma=c(0,0,3,0), mfrow=c(2,2))', `plot(${m})`, 'par(oldpar)')),
   residualQQPlot: on({
     fields: [check('simulate', 'Simulated confidence envelope', true), identify(), idn],
-    code: (v, c) => `qqPlot(${c.model}, simulate=${v.simulate.simulate ? 'TRUE' : 'FALSE'}, id=list(method="y", n=${v.identify === 'not' ? 0 : v.idn}))` }),
+    code: (v, c) => withWindow(v, `qqPlot(${c.model}, simulate=${v.simulate.simulate ? 'TRUE' : 'FALSE'}, id=list(${v.identify === 'mouse' ? 'method="identify"' : `method="y", n=${v.identify === 'not' ? 0 : v.idn}`}))`) }),
   CRPlots: on({ fields: [{ k: 'span', type: 'num', int: true, min: 5, max: 100, def: '50', label: 'Span for smooth' }],
     code: (v, c) => `crPlots(${c.model}, smooth=list(span=${Number(v.span) / 100}))` }),
   AVPlots: on({ fields: [identify(), idn],
-    code: (v, c) => `avPlots(${c.model}, id=list(method="mahal", n=${v.identify === 'not' ? 0 : v.idn}))` }),
+    code: (v, c) => withWindow(v, `avPlots(${c.model}, id=list(${v.identify === 'mouse' ? 'method="identify"' : `method="mahal", n=${v.identify === 'not' ? 0 : v.idn}`}))`) }),
+  CRPlot3D: on({ ds: true, pkgs: ['rgl', 'mgcv'],
+    fields: [{ k: 'x', type: 'rlist', label: 'Explanatory variables (pick two)', min: 2, max: 2, selectN: 2,
+      expr: c => `intersect(names(Filter(is.numeric, ${c.ds})), all.vars(formula(${c.model})[[3]]))` },
+      ...plot3dOptions('not', [{ k: 'dfNonpar', type: 'text', label: 'Smooth regression   df = ', def: AUTO, compact: true }])],
+    check: v => (v.x.length !== 2 ? 'You must select 2 explanatory variables.' : undefined),
+    code: (v, c) => `library(rgl)\ncrPlot3d(${c.model}, "${v.x[0]}", "${v.x[1]}"${plot3dArgs(v, '', `, df.mgcv = ${v.dfNonpar.trim() === AUTO ? 'NULL' : Number(v.dfNonpar)}`)})` }),
+  AVPlot3D: on({ ds: true, pkgs: ['rgl'],
+    fields: [{ k: 'x', type: 'rlist', label: 'Coefficients (pick two)', min: 2, max: 2, selectN: 2, expr: c => `setdiff(names(coef(${c.model})), "(Intercept)")` },
+      ...plot3dOptions('auto', [{ k: 'surfaces', type: 'flags', label: 'Surfaces to Fit', items: [['linear', 'Linear least-squares', true], ['robust', 'Robust linear regression', false]] }])],
+    check: v => (v.x.length !== 2 ? 'You must select 2 coefficients.' : undefined),
+    code(v, c) {
+      const fits = ['linear', 'robust'].filter(s => v.surfaces[s]).map(s => `"${s}"`);
+      const fit = !fits.length ? ', surface=FALSE' : fits.length === 1 ? `, fit=${fits[0]}` : `, fit=c(${fits.join(',')})`;
+      return `library(rgl)\navPlot3d(${c.model}, "${v.x[0]}", "${v.x[1]}"${plot3dArgs(v, ', id=FALSE')}${fit})`;
+    } }),
   InfluencePlot: on({ fields: [identify(false), idn],
-    code: (v, c) => `influencePlot(${c.model}, id=list(method="noteworthy", n=${v.idn}))` }),
+    code: (v, c) => withWindow(v, `influencePlot(${c.model}, id=list(${v.identify === 'mouse' ? 'method="identify"' : `method="noteworthy", n=${v.idn}`}))`) }),
   InfluenceIndexPlot: on({
     fields: [identify(false), idn,
       { k: 'vars', type: 'flags', label: 'Case statistics to plot', items: [['Cook', 'Cook\'s distances', true], ['Studentized', 'Studentized residuals', true], ['Bonf', 'Bonferroni p-values', true], ['hat', 'Hat-values', true]] }],
     check: v => (!Object.values(v.vars).some(Boolean) ? 'No statistics selected.' : undefined),
-    code: (v, c) => `influenceIndexPlot(${c.model}, id=list(method="y", n=${v.idn}), vars=c(${Object.keys(v.vars).filter(k => v.vars[k]).map(k => `"${k}"`).join(', ')}))` }),
+    code: (v, c) => withWindow(v, `influenceIndexPlot(${c.model}, id=list(${v.identify === 'mouse' ? 'method="identify"' : `method="y", n=${v.idn}`}), vars=c(${Object.keys(v.vars).filter(k => v.vars[k]).map(k => `"${k}"`).join(', ')}))`) }),
   effectPlots: on({
     fields: effectFields('Plot All High-Order Effects?', 'all.vars(formula({m})[[3]])'),
     check: v => (v.all === 'FALSE' && !(v.predictors || []).length ? 'No predictors selected.' : undefined),

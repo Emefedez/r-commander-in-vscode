@@ -212,6 +212,10 @@ async function runAndRead() {
   assert.equal(other['notebook.output.wordWrap'], true);
   await handlers['rCommanderPlay.toggleArfWordWrap']();
   assert.equal(other['notebook.output.wordWrap'], false);
+  await handlers['rCommanderPlay.toggleArfScrollOutput']();
+  assert.equal(other['notebook.output.scrolling'], true);
+  await handlers['rCommanderPlay.toggleArfScrollOutput']();
+  assert.equal(other['notebook.output.scrolling'], false);
   await handlers['rCommanderPlay.toggleArfPanelLayout']();
   assert.equal(other['workbench.editor.openSideBySideDirection'], 'down');
   assert.equal(layouts.at(-1).orientation, 1);

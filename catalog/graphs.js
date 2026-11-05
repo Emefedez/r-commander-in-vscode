@@ -12,7 +12,11 @@ const plotLabels = (keys = ['xlab', 'ylab', 'main']) => keys.map(k => labelField
 const given = text => text !== undefined && text.trim() !== '' && text.trim() !== AUTO;
 const labelArg = (v, k) => (given(v[k]) ? `, ${k}="${v[k].trim()}"` : '');
 const labelArgs = (v, keys = ['xlab', 'ylab', 'main']) => keys.map(k => labelArg(v, k)).join('');
-const identify = choice('identify', 'Identify Points', [['auto', 'Automatically'], ['not', 'Do not identify']]);
+// Identifying points with the mouse needs a window that takes clicks, so R's own X11 window opens first
+// (the VS Code plot viewer cannot report mouse clicks).
+const MOUSE = ['mouse', 'Interactively with mouse'];
+const withWindow = (v, code) => (v.identify === 'mouse' || v.identify === 'identify' ? `x11(type="cairo")\n${code}` : code);
+const identify = choice('identify', 'Identify Points', [['auto', 'Automatically'], MOUSE, ['not', 'Do not identify']]);
 const idn = (label = 'Number of points to identify  ', def = '2') => ({ k: 'idn', type: 'num', int: true, min: 0, def, label });
 const subsetField = { k: 'subset', type: 'text', optional: true, def: '<all valid cases>', label: 'Subset expression', sample: 'n1 > 0.5' };
 const subsetArg = v => (v.subset && v.subset.trim() && v.subset.trim() !== '<all valid cases>' ? `, subset=${v.subset.trim()}` : '');
@@ -34,7 +38,8 @@ module.exports = {
       choice('type', 'Style of plot', [['h', 'Spikes'], ['p', 'Points']]), identify, idn(), ...plotLabels(['ylab', 'main'])],
     code(v, c) {
       const x = v.xs.length === 1 ? `'${v.xs[0]}'` : `c(${v.xs.map(n => `'${n}'`).join(', ')})`;
-      return `indexplot(${c.ds}[,${x}, drop=FALSE], type='${v.type}', id.method='y', id.n=${v.identify === 'not' ? 0 : v.idn}${labelArgs(v, ['ylab', 'main'])}${v.g ? `, groups=${c.ds}$${v.g}` : ''})`;
+      const id = v.identify === 'mouse' ? "id.method='identify'" : `id.method='y', id.n=${v.identify === 'not' ? 0 : v.idn}`;
+      return withWindow(v, `indexplot(${c.ds}[,${x}, drop=FALSE], type='${v.type}', ${id}${labelArgs(v, ['ylab', 'main'])}${v.g ? `, groups=${c.ds}$${v.g}` : ''})`);
     } },
   DotPlot: {
     fields: [{ k: 'x', type: 'var', kind: 'numeric', label: 'Variable (pick one)' }, groupsBox(),
@@ -83,9 +88,9 @@ module.exports = {
     async after(v, ui) { v.levels = v.g ? await ui.query(`levels(as.factor(${ui.ctx.ds}$${v.g}))`) || [] : []; return true; } },
   boxPlot: {
     fields: [{ k: 'ys', type: 'var', kind: 'numeric', multi: true, label: 'Variable (pick one or more)' }, groupsBox(),
-      choice('identify', 'Identify Outliers', [['y', 'Automatically'], ['none', 'No']]), ...plotLabels()],
+      choice('identify', 'Identify Outliers', [['y', 'Automatically'], ['identify', 'Interactively with mouse'], ['none', 'No']]), ...plotLabels()],
     check: v => (v.g && v.ys.length > 1 ? 'You cannot plot by groups with more than one variable selected' : undefined),
-    code: (v, c) => (v.g ? `Boxplot(${v.ys[0]} ~ ${v.g}, data=${c.ds}, id=list(method="${v.identify}")${labelArgs(v)})`
+    code: (v, c) => withWindow(v, v.g ? `Boxplot(${v.ys[0]} ~ ${v.g}, data=${c.ds}, id=list(method="${v.identify}")${labelArgs(v)})`
       : `Boxplot( ~ ${v.ys.join(' + ')}, data=${c.ds}, id=list(method="${v.identify}")${labelArgs(v, ['ylab', 'main'])})`) },
   QQPlot: {
     fields: [{ k: 'x', type: 'var', kind: 'numeric', label: 'Variable (pick one)' }, groupsBox(),
@@ -108,7 +113,8 @@ module.exports = {
     code(v, c) {
       const args = v.dist === 'norm' ? 'dist="norm"' : v.dist === 't' ? `dist="t", df=${v.df}` : v.dist === 'chisq' ? `dist="chisq", df=${v.chisqdf}`
         : v.dist === 'f' ? `dist="f", df1=${v.fdf1}, df2=${v.fdf2}` : `dist="${v.othername.trim()}", ${v.otherparam.trim()}`;
-      return `with(${c.ds}, qqPlot(${v.x}, ${args}, id=list(method="y", n=${v.identify === 'not' ? 0 : v.idn}, labels=rownames(${c.ds}))${labelArgs(v)}${v.g ? `, groups=${v.g}` : ''}))`;
+      const id = v.identify === 'mouse' ? 'method="identify"' : `method="y", n=${v.identify === 'not' ? 0 : v.idn}`;
+      return withWindow(v, `with(${c.ds}, qqPlot(${v.x}, ${args}, id=list(${id}, labels=rownames(${c.ds}))${labelArgs(v)}${v.g ? `, groups=${v.g}` : ''}))`);
     } },
   Symbox: {
     fields: [{ k: 'x', type: 'var', kind: 'numeric', label: 'Variable (pick one)' },
@@ -127,7 +133,7 @@ module.exports = {
         ['logY', 'Log y-axis', false], ['boxplots', 'Marginal boxplots', false], ['lsLine', 'Least-squares line', false], ['smoothLine', 'Smooth line', false], ['spread', 'Show spread', false]] },
       { k: 'span', type: 'num', int: true, min: 5, max: 100, def: '50', label: 'Span for smooth' },
       check('ellipse', 'Plot concentration ellipse(s)'), { k: 'levels', type: 'text', label: 'Concentration levels: ', def: '.5, .9' },
-      choice('identify', 'Identify Points', [['auto', 'Automatically'], ['not', 'Do not identify']], 'not'), idn(),
+      choice('identify', 'Identify Points', [['auto', 'Automatically'], MOUSE, ['not', 'Do not identify']], 'not'), idn(),
       ...plotLabels(), { k: 'pch', type: 'text', label: 'Plotting characters', def: AUTO },
       { k: 'cex', type: 'num', min: 0.5, max: 2.5, def: '1', label: 'Point size' }, { k: 'cexAxis', type: 'num', min: 0.5, max: 2.5, def: '1', label: 'Axis text size' },
       { k: 'cexLab', type: 'num', min: 0.5, max: 2.5, def: '1', label: 'Axis-labels text size' },
@@ -137,13 +143,13 @@ module.exports = {
       const jitter = o.jitterX && o.jitterY ? ', jitter=list(x=1, y=1)' : o.jitterX ? ', jitter=list(x=1)' : o.jitterY ? ', jitter=list(y=1)' : '';
       const log = `${o.logX ? 'x' : ''}${o.logY ? 'y' : ''}`;
       const smooth = o.smoothLine ? `, smooth=list(span=${Number(v.span) / 100}, spread=${o.spread ? 'TRUE' : 'FALSE'})` : ', smooth=FALSE';
-      const id = v.identify === 'auto' ? `, id=list(method='mahal', n=${v.idn})` : '';
+      const id = v.identify === 'auto' ? `, id=list(method='mahal', n=${v.idn})` : v.identify === 'mouse' ? ", id=list(method='identify')" : '';
       const ellipse = v.ellipse.ellipse ? `, ellipse=list(levels=${levelsVector(v.levels)})` : '';
       const cex = ['cex', 'cexAxis', 'cexLab'].map((k, i) => (Number(v[k]) === 1 ? '' : `, ${['cex', 'cex.axis', 'cex.lab'][i]}=${v[k]}`)).join('');
       const pch = v.pch.trim() === AUTO ? '' : `, pch=c(${v.pch.replace(/ /g, ',')})`;
       const groups = v.g ? `, by.groups=${v.byGroup.byGroup ? 'TRUE' : 'FALSE'}${v.legend !== 'above' ? `, legend=list(coords="${v.legend}")` : ''}` : '';
-      return `scatterplot(${v.y}~${v.x}${v.g ? ` | ${v.g}` : ''}${log ? `, log="${log}"` : ''}, regLine=${o.lsLine ? 'TRUE' : 'FALSE'}${smooth}${id}, boxplots=${o.boxplots ? "'xy'" : 'FALSE'}` +
-        `${ellipse}${jitter}${labelArgs(v)}${cex}${pch}${groups}, data=${c.ds}${subsetArg(v)})`;
+      return withWindow(v, `scatterplot(${v.y}~${v.x}${v.g ? ` | ${v.g}` : ''}${log ? `, log="${log}"` : ''}, regLine=${o.lsLine ? 'TRUE' : 'FALSE'}${smooth}${id}, boxplots=${o.boxplots ? "'xy'" : 'FALSE'}` +
+        `${ellipse}${jitter}${labelArgs(v)}${cex}${pch}${groups}, data=${c.ds}${subsetArg(v)})`);
     } },
   scatterPlotMatrix: {
     fields: [{ k: 'xs', type: 'var', kind: 'numeric', multi: true, min: 3, label: 'Select variables (three or more)' },
@@ -257,7 +263,11 @@ module.exports = {
     code: (v, c) => `with(${c.ds}, piechart(${v.f}, xlab="${given(v.xlab) ? v.xlab.trim() : ''}", ylab="${given(v.ylab) ? v.ylab.trim() : ''}", main="${given(v.main) ? v.main.trim() : v.f}"` +
       `${v.colors === 'default' ? `, col=colorspace::rainbow_hcl(${v.nlevels})` : `, col=palette()[2:${v.nlevels + 1}]`}, scale="${v.scale}"))` },
 
+  // The rgl window is R's own. Identify3D (Identify observations with mouse) reuses the variables of the last Scatter3D.
   Scatter3D: { pkgs: ['rgl'],
+    remember: (v, c, commander) => {
+      commander.identify3d = `Identify3d(${c.ds}$${v.xs[0]}, ${c.ds}$${v.y}, ${c.ds}$${v.xs[1]}${v.g ? `, groups=${c.ds}$${v.g}` : ''}, axis.scales=${v.show.scales ? 'TRUE' : 'FALSE'}, labels=row.names(${c.ds}))`;
+    },
     fields: [{ k: 'xs', type: 'var', kind: 'numeric', multi: true, min: 2, max: 2, label: 'Explanatory variables (pick two)' },
       { k: 'y', type: 'var', kind: 'numeric', exclude: ['xs'], label: 'Response variable (pick one)' },
       groupsBox(), check('parallel', 'Parallel regression surfaces', false, { when: v => Boolean(v.g) }),
@@ -268,14 +278,15 @@ module.exports = {
       { k: 'dfAdd', type: 'text', label: 'df(each term) = ', def: AUTO, compact: true, when: v => v.surfaces.additive },
       check('ellipsoid', 'Plot 50% concentration ellipsoid'),
       choice('bg', 'Background Color', [['black', 'Black'], ['white', 'White']], 'white'),
-      choice('identify', 'Identify Points', [['auto', 'Automatically'], ['not', 'Do not identify']], 'not'), idn(),
+      choice('identify', 'Identify Points', [['auto', 'Automatically'], MOUSE, ['not', 'Do not identify']], 'not'),
+      { k: 'mouseNote', type: 'note', label: 'Drag the right mouse button to identify points,\nclick the right button to exit.', when: v => v.identify === 'mouse' }, idn(),
       { k: 'rotations', type: 'num', int: true, min: 0, def: '0', label: 'Number of automatic rotations  ' }],
     code(v, c) {
       const surfaces = ['linear', 'quadratic', 'robust', 'smooth', 'additive'].filter(s => v.surfaces[s]).map(s => `"${s}"`);
       const fit = !surfaces.length ? ', surface=FALSE' : surfaces.length === 1 ? `, fit=${surfaces[0]}` : `, fit=c(${surfaces.join(',')})`;
       const dfs = `${v.surfaces.smooth && v.dfSmooth.trim() !== AUTO ? `, df.smooth=${Number(v.dfSmooth)}` : ''}${v.surfaces.additive && v.dfAdd.trim() !== AUTO ? `, df.additive=${Number(v.dfAdd)}` : ''}`;
-      const id = v.identify === 'auto' ? `, id=list(method='mahal', n =${v.idn})` : '';
-      return 'library(rgl)\nlibrary(mgcv)\n' + `scatter3d(${v.y}~${v.xs[0]}+${v.xs[1]}${v.g ? `|${v.g}` : ''}, data=${c.ds}${fit}${v.show.squares ? ', residuals="squares"' : ', residuals=TRUE'}${dfs}` +
+      const id = v.identify === 'auto' ? `, id=list(method='mahal', n =${v.idn})` : v.identify === 'mouse' ? ", id=list(method='identify')" : '';
+      return 'library(rgl)\n' + `scatter3d(${v.y}~${v.xs[0]}+${v.xs[1]}${v.g ? `|${v.g}` : ''}, data=${c.ds}${fit}${v.show.squares ? ', residuals="squares"' : ', residuals=TRUE'}${dfs}` +
         `${v.g ? `, parallel=${v.parallel.parallel ? 'TRUE' : 'FALSE'}` : ''}, bg="${v.bg}", axis.scales=${v.show.scales ? 'TRUE' : 'FALSE'}, grid=${v.show.grid ? 'TRUE' : 'FALSE'}` +
         `, ellipsoid=${v.ellipsoid.ellipsoid ? 'TRUE' : 'FALSE'}${id}${v.rotations !== '0' ? `, revolutions = ${v.rotations}` : ''})`;
     } },
@@ -299,6 +310,9 @@ module.exports = {
       return (v.type === 'eps' ? `dev.copy(postscript, file="${v.file}", width=${size(v.width)}, height=${size(v.height)}, pointsize=${v.pointsize}, onefile=FALSE, horizontal=FALSE, paper="special")`
         : `dev.copy(${v.type}, file="${v.file}", width=${size(v.width)}, height=${size(v.height)}, pointsize=${v.pointsize})`) + '\ninvisible(dev.off())';
     } },
+  Identify3D: { ds: false, pkgs: ['rgl', 'car'],
+    emptyMessage: 'There is no current RGL graphics device. Draw a 3D scatterplot first.',
+    code: (v, c) => (c.identify3d ? `library(rgl)\n${c.identify3d}` : '') },
   saveRglGraph: { ds: false, pkgs: ['rgl'],
     async after(v, ui) { v.file = await ui.file({ mode: 'save', filters: { 'PNG Files': ['png'] }, def: 'RGLGraph.png' }, ui.t('Save the graph as')); return Boolean(v.file); },
     code: v => `library(rgl)\nrgl.snapshot("${v.file}")` }

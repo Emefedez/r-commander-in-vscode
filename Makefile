@@ -5,6 +5,7 @@ generate:  ## regenerate package.json, translations and data/ from the catalog a
 
 test:  ## unit tests, then every command run in real R (needs Rscript with Rcmdr and its dependencies)
 	node tests/formmodel.js
+	node tests/report.js
 	node tests/tree.js
 	node tests/terminal.js
 	node tests/hover.js

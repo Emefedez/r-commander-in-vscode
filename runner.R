@@ -1,6 +1,19 @@
+# Everything run_code prints is also kept in this file, which "Save output" writes out (Rcmdr's output window).
+output_log_file <- function() file.path(tempdir(), "rcp-output.txt")
+
+# Writes the kept output to `file` without the terminal colors, as Rcmdr saves its output window.
+save_output <- function(file) {
+  log <- output_log_file()
+  text <- if (file.exists(log)) readLines(log, warn = FALSE, encoding = "UTF-8") else character()
+  text <- gsub("\033\\[[0-9;]*m", "", text)
+  writeLines(text, file, useBytes = TRUE)
+  message("Output saved to ", file)
+  invisible(file)
+}
+
 run_code <- function(code, skip_help = TRUE, skip_commands = character(),
                      limit_output = TRUE, max_output_items = 24L, require = character(),
-                     quiet = FALSE, syntax_colors = FALSE) {
+                     quiet = FALSE, syntax_colors = FALSE, fixed_notation = FALSE) {
   try(patch_view(), silent = TRUE)
   for (pkg in require) {
     if (!requireNamespace(pkg, quietly = TRUE)) {
@@ -11,6 +24,11 @@ run_code <- function(code, skip_help = TRUE, skip_commands = character(),
   if (!quiet) message("R Play: ", if (limit_output) paste0("preview ", max_output_items, " entries") else "normal output",
           "; help skipping ", if (skip_help) "ON" else "OFF",
           if (length(skip_commands)) paste0("; skipping ", paste(skip_commands, collapse = ", ")) else "")
+  # Fixed notation: 2.789e-05 prints as 0.00002789 (R's scipen penalty), only while this run lasts.
+  if (isTRUE(fixed_notation)) {
+    previous_scipen <- options(scipen = 999L)
+    on.exit(options(previous_scipen), add = TRUE)
+  }
   if (limit_output) {
     if (length(max_output_items) != 1L || !is.numeric(max_output_items) ||
         !is.finite(max_output_items) || max_output_items < 1L ||
@@ -66,6 +84,9 @@ run_code <- function(code, skip_help = TRUE, skip_commands = character(),
     cat(paste0(prompts, lines), sep = "\n")
   }
 
+  # What is printed while an expression runs is also appended to the output log (but not the saving itself).
+  sinks <- sink.number()
+  on.exit(while (sink.number() > sinks) sink(), add = TRUE)
   previous_end <- 0L
   for (i in seq_along(expressions)) {
     first <- srcrefs[[i]][1L]
@@ -74,6 +95,7 @@ run_code <- function(code, skip_help = TRUE, skip_commands = character(),
     lines <- source_lines(start, last)
     previous_end <- last
     if (skip[i]) next
+    if (!unqualified[i] %in% "save_output") sink(output_log_file(), append = TRUE, split = TRUE)
     echo(lines, last - first + 1L)
     result <- tryCatch(withVisible(eval(expressions[[i]], globalenv())), error = function(e) {
       # An error at the top level of the script reads "Error: message", as in the console.
@@ -82,6 +104,7 @@ run_code <- function(code, skip_help = TRUE, skip_commands = character(),
       stop(e)
     })
     if (result$visible) print(result$value)
+    while (sink.number() > sinks) sink()
   }
   trailing <- source_lines(previous_end + 1L, length(srcfile$lines))
   trailing <- sub("[ \t\r]+$", "", trailing[nzchar(trimws(trailing))])

@@ -50,6 +50,7 @@
 				"command": "rCommanderPlay.toggleLimitOutput",
 				"title": "Limit Long Output",
 				"category": "R",
+				"icon": "$(fold)",
 				"toggled": "config.rCommanderPlay.limitOutput"
 			},
 			{
@@ -60,6 +61,12 @@
 			{
 				"command": "rCommanderPlay.showSettings",
 				"title": "Configure Green Play Button",
+				"category": "R",
+				"icon": "$(gear)"
+			},
+			{
+				"command": "rCommanderPlay.openSettingsForm",
+				"title": "%rCommanderPlay.openSettingsForm%",
 				"category": "R"
 			},
 			{
@@ -77,10 +84,22 @@
 				"enablement": "editorLangId == r"
 			},
 			{
+				"command": "rCommanderPlay.toggleFixedNotation",
+				"title": "%rCommanderPlay.toggleFixedNotation%",
+				"category": "R",
+				"toggled": "config.rCommanderPlay.fixedNotation"
+			},
+			{
 				"command": "rCommanderPlay.toggleSyntaxColors",
 				"title": "Syntax Colors in Terminal",
 				"category": "R",
 				"toggled": "config.rCommanderPlay.syntaxColors"
+			},
+			{
+				"command": "rCommanderPlay.toggleArfScrollOutput",
+				"title": "arf Panel: Scroll Long Outputs (fixed height)",
+				"category": "R Commander",
+				"toggled": "config.notebook.output.scrolling"
 			},
 			{
 				"command": "rCommanderPlay.toggleArfWordWrap",
@@ -164,6 +183,12 @@
 					"scope": "resource",
 					"description": "Maximum printed entries per result when Limit Long Output is enabled. R reports the omitted entries or rows. Applies to print methods that respect max.print."
 				},
+				"rCommanderPlay.fixedNotation": {
+					"type": "boolean",
+					"default": false,
+					"scope": "resource",
+					"description": "%rCommanderPlay.fixedNotation.description%"
+				},
 				"rCommanderPlay.syntaxColors": {
 					"type": "boolean",
 					"default": true,
@@ -209,6 +234,11 @@
 					"command": "rCommanderPlay.toggleSyntaxColors",
 					"when": "editorLangId == r",
 					"group": "3_rCommanderPlayOutput@3"
+				},
+				{
+					"command": "rCommanderPlay.toggleFixedNotation",
+					"when": "editorLangId == r",
+					"group": "3_rCommanderPlayOutput@5"
 				},
 				{
 					"command": "rCommanderPlay.toggleInsertInScript",

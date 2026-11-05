@@ -98,6 +98,15 @@
 				}
 			},
 			{
+				"id": "loadRnw",
+				"color": "charts.blue",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Open knitr file...",
+					"es": "Abrir archivo knitr..."
+				}
+			},
+			{
 				"id": "saveRmd",
 				"color": "charts.blue",
 				"icon": "circle-filled",
@@ -107,12 +116,51 @@
 				}
 			},
 			{
+				"id": "saveRnw",
+				"color": "charts.blue",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Save knitr file...",
+					"es": "Guardar fichero knitr..."
+				}
+			},
+			{
 				"id": "saveRmdAs",
 				"color": "charts.blue",
 				"icon": "circle-filled",
 				"label": {
 					"en": "Save R Markdown file as...",
 					"es": "Guardar el fichero R Markdown como..."
+				}
+			},
+			{
+				"id": "saveRnwAs",
+				"color": "charts.blue",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Save knitr file as...",
+					"es": "Guardar fichdero knitr como..."
+				}
+			},
+			{
+				"sep": true
+			},
+			{
+				"id": "saveOutput",
+				"color": "charts.blue",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Save output...",
+					"es": "Guardar los resultados..."
+				}
+			},
+			{
+				"id": "saveOutputAs",
+				"color": "charts.blue",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Save output as...",
+					"es": "Guardar los resultados como..."
 				}
 			},
 			{
@@ -177,6 +225,54 @@
 		"color": "charts.yellow",
 		"icon": "edit",
 		"children": [
+			{
+				"id": "editMarkdown",
+				"color": "charts.yellow",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Edit R Markdown document",
+					"es": "Editar el documento R Markdown"
+				}
+			},
+			{
+				"id": "editKnitr",
+				"color": "charts.yellow",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Edit knitr document",
+					"es": "Editar documento knitr"
+				}
+			},
+			{
+				"id": "removeLastRmdBlock",
+				"color": "charts.yellow",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Remove last Markdown command block",
+					"es": "Borrar el último bloque de instrucciones Markdown"
+				}
+			},
+			{
+				"id": "removeLastRmdSection",
+				"color": "charts.yellow",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Remove last Markdown section title",
+					"es": "Borrar el título del último bloque de instrucciones Markdown"
+				}
+			},
+			{
+				"id": "removeLastRnwBlock",
+				"color": "charts.yellow",
+				"icon": "circle-filled",
+				"label": {
+					"en": "Remove last knitr command block",
+					"es": "Borrar el último bloque de instrucciones knitr"
+				}
+			},
+			{
+				"sep": true
+			},
 			{
 				"id": "onCut",
 				"color": "charts.yellow",
@@ -1441,6 +1537,15 @@
 						}
 					},
 					{
+						"id": "Identify3D",
+						"color": "charts.orange",
+						"icon": "circle-filled",
+						"label": {
+							"en": "Identify observations with mouse",
+							"es": "Identificar observaciones con el ratón"
+						}
+					},
+					{
 						"id": "saveRglGraph",
 						"color": "charts.orange",
 						"icon": "circle-filled",
@@ -1744,12 +1849,30 @@
 						}
 					},
 					{
+						"id": "CRPlot3D",
+						"color": "charts.red",
+						"icon": "circle-filled",
+						"label": {
+							"en": "3D Component+residual plot...",
+							"es": "Gráfica 3D de componentes+residuos..."
+						}
+					},
+					{
 						"id": "AVPlots",
 						"color": "charts.red",
 						"icon": "circle-filled",
 						"label": {
 							"en": "Added-variable plots...",
 							"es": "Gráfica de variables agregadas..."
+						}
+					},
+					{
+						"id": "AVPlot3D",
+						"color": "charts.red",
+						"icon": "circle-filled",
+						"label": {
+							"en": "3D added-variable plot...",
+							"es": "Gráfica 3D de variable agregada..."
 						}
 					},
 					{

@@ -113,6 +113,7 @@ function activate(context) {
           skipHelp: config.get('skipHelp', true), skipCommands: config.get('skipCommands', []),
           limitOutput: config.get('limitOutput', true),
           syntaxColors: config.get('syntaxColors', true),
+          fixedNotation: config.get('fixedNotation', false),
           maxOutputItems: Number.isInteger(configuredMax) && configuredMax >= 1 && configuredMax <= 1000000 ? configuredMax : 24,
           loadRcmdrFunctions: config.get('loadRcmdrFunctions', true), rcmdrPlugins: config.get('rcmdrPlugins', [])
         } });
@@ -131,6 +132,10 @@ function activate(context) {
     vscode.commands.registerCommand('rCommanderPlay.toggleSyntaxColors', async resource => {
       const enabled = !configuration(resource).get('syntaxColors', true);
       await update(resource, 'syntaxColors', enabled, enabled ? t('Syntax colors enabled.') : t('Syntax colors disabled.'));
+    }),
+    vscode.commands.registerCommand('rCommanderPlay.toggleFixedNotation', async resource => {
+      const enabled = !configuration(resource).get('fixedNotation', false);
+      await update(resource, 'fixedNotation', enabled, enabled ? t('Fixed notation enabled (0.00002789 instead of 2.789e-05).') : t('Fixed notation disabled.'));
     }),
     vscode.commands.registerCommand('rCommanderPlay.configureOutputLimit', async resource => {
       const uri = resourceFor(resource);
@@ -166,6 +171,13 @@ function activate(context) {
       await notebook.update('wordWrap', wrap, vscode.ConfigurationTarget.Global);
       await vscode.window.showInformationMessage(wrap ? t('Long output lines in the arf panel will wrap.') : t('Long output lines in the arf panel will not wrap.'));
     }),
+    // Outputs keep a fixed height and scroll inside the cell, instead of growing as long as the table.
+    vscode.commands.registerCommand('rCommanderPlay.toggleArfScrollOutput', async () => {
+      const notebook = vscode.workspace.getConfiguration('notebook.output');
+      const scroll = !notebook.get('scrolling', false);
+      await notebook.update('scrolling', scroll, vscode.ConfigurationTarget.Global);
+      await vscode.window.showInformationMessage(scroll ? t('Long outputs in the arf panel now scroll.') : t('Long outputs in the arf panel now take their full height.'));
+    }),
     vscode.commands.registerCommand('rCommanderPlay.toggleArfPanelLayout', async () => {
       const editorConfig = vscode.workspace.getConfiguration('workbench.editor');
       const below = editorConfig.get('openSideBySideDirection', 'right') !== 'down';
@@ -189,13 +201,17 @@ function activate(context) {
       await configuration().update('runTarget', picked.value, vscode.ConfigurationTarget.Global);
       await vscode.window.showInformationMessage(`R Play: ${picked.label}.`);
     }),
+    // The whole list of R Play settings in VS Code's settings form.
+    vscode.commands.registerCommand('rCommanderPlay.openSettingsForm', () => vscode.commands.executeCommand('workbench.action.openSettings', 'rCommanderPlay')),
     vscode.commands.registerCommand('rCommanderPlay.showSettings', async resource => {
       const uri = resourceFor(resource);
       const config = configuration(uri);
       const chosen = await vscode.window.showQuickPick([
+        { label: t('Fixed notation: {0}', config.get('fixedNotation', false) ? 'ON' : 'OFF'), description: t('Print 0.00002789 instead of 2.789e-05'), command: 'rCommanderPlay.toggleFixedNotation' },
         { label: t('Syntax colors: {0}', config.get('syntaxColors', true) ? 'ON' : 'OFF'), description: t('Color the R code echoed in the terminal'), command: 'rCommanderPlay.toggleSyntaxColors' },
         { label: t('Paste menu code into script: {0}', config.get('menuAction', 'both') === 'both' ? 'ON' : 'OFF'), description: t('Insert the code of menu commands in the script, or only run it'), command: 'rCommanderPlay.toggleInsertInScript' },
         { label: t('arf panel: wrap long lines'), description: t('Toggle word wrap of the output in the arf panel'), command: 'rCommanderPlay.toggleArfWordWrap' },
+        { label: t('arf panel: scroll long outputs'), description: t('Fixed-height outputs that scroll, instead of full-height tables'), command: 'rCommanderPlay.toggleArfScrollOutput' },
         { label: t('arf panel: below the script'), description: t('Stack the arf panel under the script instead of beside it'), command: 'rCommanderPlay.toggleArfPanelLayout' },
         { label: t('Run in: {0}', { auto: 'auto', terminal: 'R terminal', arf: 'arf panel' }[config.get('runTarget', 'auto')]), description: t('Where R code runs: R terminal or arf Interactive panel'), command: 'rCommanderPlay.chooseRunTarget' },
         { label: `Output preview: ${config.get('limitOutput', true) ? 'ON' : 'OFF'}`, description: 'Toggle short previews of long results', command: 'rCommanderPlay.toggleLimitOutput' },
@@ -221,6 +237,7 @@ function registerMenus(context, resourceFor, configuration, refreshPlayStatus, s
       return {
         limitOutput: config.get('limitOutput', true), maxOutputItems: Number(config.get('maxOutputItems', 24)),
         syntaxColors: config.get('syntaxColors', true),
+        fixedNotation: config.get('fixedNotation', false),
         menuAction: config.get('menuAction', 'both'), dialogStyle: config.get('dialogStyle', 'form'),
         cranMirror: config.get('cranMirror', 'https://cloud.r-project.org'),
         packageDownloads: config.get('packageDownloads', '~/.cache/r-commander-play/packages'),

@@ -51,6 +51,7 @@
 				"command": "rCommanderPlay.toggleLimitOutput",
 				"title": "%rCommanderPlay.toggleLimitOutput%",
 				"category": "R",
+				"icon": "$(fold)",
 				"toggled": "config.rCommanderPlay.limitOutput"
 			},
 			{
@@ -61,6 +62,12 @@
 			{
 				"command": "rCommanderPlay.showSettings",
 				"title": "%rCommanderPlay.showSettings%",
+				"category": "R",
+				"icon": "$(gear)"
+			},
+			{
+				"command": "rCommanderPlay.openSettingsForm",
+				"title": "%rCommanderPlay.openSettingsForm%",
 				"category": "R"
 			},
 			{
@@ -78,10 +85,22 @@
 				"enablement": "editorLangId == r"
 			},
 			{
+				"command": "rCommanderPlay.toggleFixedNotation",
+				"title": "%rCommanderPlay.toggleFixedNotation%",
+				"category": "R",
+				"toggled": "config.rCommanderPlay.fixedNotation"
+			},
+			{
 				"command": "rCommanderPlay.toggleSyntaxColors",
 				"title": "%rCommanderPlay.toggleSyntaxColors%",
 				"category": "R",
 				"toggled": "config.rCommanderPlay.syntaxColors"
+			},
+			{
+				"command": "rCommanderPlay.toggleArfScrollOutput",
+				"title": "%rCommanderPlay.toggleArfScrollOutput%",
+				"category": "R Commander",
+				"toggled": "config.notebook.output.scrolling"
 			},
 			{
 				"command": "rCommanderPlay.toggleArfWordWrap",
@@ -186,14 +205,44 @@
 				"enablement": "isWorkspaceTrusted"
 			},
 			{
+				"command": "rcp.cmd.loadRnw",
+				"title": "%rcp.cmd.loadRnw%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
 				"command": "rcp.cmd.saveRmd",
 				"title": "%rcp.cmd.saveRmd%",
 				"category": "R Commander",
 				"enablement": "isWorkspaceTrusted"
 			},
 			{
+				"command": "rcp.cmd.saveRnw",
+				"title": "%rcp.cmd.saveRnw%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
 				"command": "rcp.cmd.saveRmdAs",
 				"title": "%rcp.cmd.saveRmdAs%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.saveRnwAs",
+				"title": "%rcp.cmd.saveRnwAs%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.saveOutput",
+				"title": "%rcp.cmd.saveOutput%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.saveOutputAs",
+				"title": "%rcp.cmd.saveOutputAs%",
 				"category": "R Commander",
 				"enablement": "isWorkspaceTrusted"
 			},
@@ -218,6 +267,36 @@
 			{
 				"command": "rcp.cmd.restartCommander",
 				"title": "%rcp.cmd.restartCommander%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.editMarkdown",
+				"title": "%rcp.cmd.editMarkdown%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.editKnitr",
+				"title": "%rcp.cmd.editKnitr%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.removeLastRmdBlock",
+				"title": "%rcp.cmd.removeLastRmdBlock%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.removeLastRmdSection",
+				"title": "%rcp.cmd.removeLastRmdSection%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.removeLastRnwBlock",
+				"title": "%rcp.cmd.removeLastRnwBlock%",
 				"category": "R Commander",
 				"enablement": "isWorkspaceTrusted"
 			},
@@ -930,6 +1009,12 @@
 				"enablement": "isWorkspaceTrusted"
 			},
 			{
+				"command": "rcp.cmd.Identify3D",
+				"title": "%rcp.cmd.Identify3D%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
 				"command": "rcp.cmd.saveRglGraph",
 				"title": "%rcp.cmd.saveRglGraph%",
 				"category": "R Commander",
@@ -1086,8 +1171,20 @@
 				"enablement": "isWorkspaceTrusted"
 			},
 			{
+				"command": "rcp.cmd.CRPlot3D",
+				"title": "%rcp.cmd.CRPlot3D%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
 				"command": "rcp.cmd.AVPlots",
 				"title": "%rcp.cmd.AVPlots%",
+				"category": "R Commander",
+				"enablement": "isWorkspaceTrusted"
+			},
+			{
+				"command": "rcp.cmd.AVPlot3D",
+				"title": "%rcp.cmd.AVPlot3D%",
 				"category": "R Commander",
 				"enablement": "isWorkspaceTrusted"
 			},
@@ -2319,6 +2416,12 @@
 					"scope": "resource",
 					"description": "Maximum printed entries per result when Limit Long Output is enabled. R reports the omitted entries or rows. Applies to print methods that respect max.print."
 				},
+				"rCommanderPlay.fixedNotation": {
+					"type": "boolean",
+					"default": false,
+					"scope": "resource",
+					"description": "%rCommanderPlay.fixedNotation.description%"
+				},
 				"rCommanderPlay.syntaxColors": {
 					"type": "boolean",
 					"default": true,
@@ -2462,76 +2565,126 @@
 					"group": "03_rcp@1"
 				},
 				{
-					"command": "rcp.cmd.saveRmd",
+					"command": "rcp.cmd.loadRnw",
 					"when": "editorLangId == r",
 					"group": "03_rcp@2"
 				},
 				{
-					"command": "rcp.cmd.saveRmdAs",
+					"command": "rcp.cmd.saveRmd",
 					"when": "editorLangId == r",
 					"group": "03_rcp@3"
 				},
 				{
-					"command": "rcp.cmd.saveWorkspace",
+					"command": "rcp.cmd.saveRnw",
+					"when": "editorLangId == r",
+					"group": "03_rcp@4"
+				},
+				{
+					"command": "rcp.cmd.saveRmdAs",
+					"when": "editorLangId == r",
+					"group": "03_rcp@5"
+				},
+				{
+					"command": "rcp.cmd.saveRnwAs",
+					"when": "editorLangId == r",
+					"group": "03_rcp@6"
+				},
+				{
+					"command": "rcp.cmd.saveOutput",
 					"when": "editorLangId == r",
 					"group": "04_rcp@1"
 				},
 				{
-					"command": "rcp.cmd.saveWorkspaceAs",
+					"command": "rcp.cmd.saveOutputAs",
 					"when": "editorLangId == r",
 					"group": "04_rcp@2"
 				},
 				{
-					"submenu": "rcp.exitMenu",
+					"command": "rcp.cmd.saveWorkspace",
 					"when": "editorLangId == r",
 					"group": "05_rcp@1"
+				},
+				{
+					"command": "rcp.cmd.saveWorkspaceAs",
+					"when": "editorLangId == r",
+					"group": "05_rcp@2"
+				},
+				{
+					"submenu": "rcp.exitMenu",
+					"when": "editorLangId == r",
+					"group": "06_rcp@1"
 				}
 			],
 			"rcp.editMenu": [
 				{
-					"command": "rcp.cmd.onCut",
+					"command": "rcp.cmd.editMarkdown",
 					"when": "editorLangId == r",
 					"group": "01_rcp@1"
 				},
 				{
-					"command": "rcp.cmd.onCopy",
+					"command": "rcp.cmd.editKnitr",
 					"when": "editorLangId == r",
 					"group": "01_rcp@2"
 				},
 				{
-					"command": "rcp.cmd.onPaste",
+					"command": "rcp.cmd.removeLastRmdBlock",
 					"when": "editorLangId == r",
 					"group": "01_rcp@3"
 				},
 				{
-					"command": "rcp.cmd.onDelete",
+					"command": "rcp.cmd.removeLastRmdSection",
 					"when": "editorLangId == r",
 					"group": "01_rcp@4"
 				},
 				{
-					"command": "rcp.cmd.onFind",
+					"command": "rcp.cmd.removeLastRnwBlock",
+					"when": "editorLangId == r",
+					"group": "01_rcp@5"
+				},
+				{
+					"command": "rcp.cmd.onCut",
 					"when": "editorLangId == r",
 					"group": "02_rcp@1"
 				},
 				{
-					"command": "rcp.cmd.onSelectAll",
+					"command": "rcp.cmd.onCopy",
 					"when": "editorLangId == r",
 					"group": "02_rcp@2"
 				},
 				{
-					"command": "rcp.cmd.onUndo",
+					"command": "rcp.cmd.onPaste",
+					"when": "editorLangId == r",
+					"group": "02_rcp@3"
+				},
+				{
+					"command": "rcp.cmd.onDelete",
+					"when": "editorLangId == r",
+					"group": "02_rcp@4"
+				},
+				{
+					"command": "rcp.cmd.onFind",
 					"when": "editorLangId == r",
 					"group": "03_rcp@1"
 				},
 				{
-					"command": "rcp.cmd.onRedo",
+					"command": "rcp.cmd.onSelectAll",
 					"when": "editorLangId == r",
 					"group": "03_rcp@2"
 				},
 				{
-					"command": "rcp.cmd.onClear",
+					"command": "rcp.cmd.onUndo",
 					"when": "editorLangId == r",
 					"group": "04_rcp@1"
+				},
+				{
+					"command": "rcp.cmd.onRedo",
+					"when": "editorLangId == r",
+					"group": "04_rcp@2"
+				},
+				{
+					"command": "rcp.cmd.onClear",
+					"when": "editorLangId == r",
+					"group": "05_rcp@1"
 				}
 			],
 			"rcp.importMenu": [
@@ -3091,9 +3244,14 @@
 					"group": "01_rcp@1"
 				},
 				{
-					"command": "rcp.cmd.saveRglGraph",
+					"command": "rcp.cmd.Identify3D",
 					"when": "editorLangId == r",
 					"group": "01_rcp@2"
+				},
+				{
+					"command": "rcp.cmd.saveRglGraph",
+					"when": "editorLangId == r",
+					"group": "01_rcp@3"
 				}
 			],
 			"rcp.saveGraphsMenu": [
@@ -3281,29 +3439,39 @@
 					"group": "01_rcp@3"
 				},
 				{
-					"command": "rcp.cmd.AVPlots",
+					"command": "rcp.cmd.CRPlot3D",
 					"when": "editorLangId == r",
 					"group": "01_rcp@4"
 				},
 				{
-					"command": "rcp.cmd.InfluencePlot",
+					"command": "rcp.cmd.AVPlots",
 					"when": "editorLangId == r",
 					"group": "01_rcp@5"
 				},
 				{
-					"command": "rcp.cmd.InfluenceIndexPlot",
+					"command": "rcp.cmd.AVPlot3D",
 					"when": "editorLangId == r",
 					"group": "01_rcp@6"
 				},
 				{
-					"command": "rcp.cmd.effectPlots",
+					"command": "rcp.cmd.InfluencePlot",
 					"when": "editorLangId == r",
 					"group": "01_rcp@7"
 				},
 				{
-					"command": "rcp.cmd.predictorEffectPlots",
+					"command": "rcp.cmd.InfluenceIndexPlot",
 					"when": "editorLangId == r",
 					"group": "01_rcp@8"
+				},
+				{
+					"command": "rcp.cmd.effectPlots",
+					"when": "editorLangId == r",
+					"group": "01_rcp@9"
+				},
+				{
+					"command": "rcp.cmd.predictorEffectPlots",
+					"when": "editorLangId == r",
+					"group": "01_rcp@10"
 				}
 			],
 			"rcp.modelsMenu": [
@@ -4948,12 +5116,57 @@
 					"group": "3_rCommanderPlayOutput@3"
 				},
 				{
+					"command": "rCommanderPlay.toggleFixedNotation",
+					"when": "editorLangId == r",
+					"group": "3_rCommanderPlayOutput@5"
+				},
+				{
 					"command": "rCommanderPlay.toggleInsertInScript",
 					"when": "editorLangId == r",
 					"group": "3_rCommanderPlayOutput@4"
 				}
 			],
 			"interactive/toolbar": [
+				{
+					"command": "rCommanderPlay.showSettings",
+					"when": "notebookType == interactive && notebookKernel =~ /^REditorSupport[.]r\\/r-/i",
+					"group": "navigation/rplay@0"
+				},
+				{
+					"command": "rCommanderPlay.openSettingsForm",
+					"when": "notebookType == interactive && notebookKernel =~ /^REditorSupport[.]r\\/r-/i",
+					"group": "rplay_settings@1"
+				},
+				{
+					"command": "rCommanderPlay.toggleLimitOutput",
+					"when": "notebookType == interactive && notebookKernel =~ /^REditorSupport[.]r\\/r-/i",
+					"group": "navigation/rplay@1"
+				},
+				{
+					"command": "rCommanderPlay.toggleFixedNotation",
+					"when": "notebookType == interactive && notebookKernel =~ /^REditorSupport[.]r\\/r-/i",
+					"group": "rplay_output@0"
+				},
+				{
+					"command": "rCommanderPlay.configureOutputLimit",
+					"when": "notebookType == interactive && notebookKernel =~ /^REditorSupport[.]r\\/r-/i",
+					"group": "rplay_output@1"
+				},
+				{
+					"command": "rCommanderPlay.toggleArfScrollOutput",
+					"when": "notebookType == interactive && notebookKernel =~ /^REditorSupport[.]r\\/r-/i",
+					"group": "rplay_output@2"
+				},
+				{
+					"command": "notebook.cell.collapseAllCellOutputs",
+					"when": "notebookType == interactive && notebookKernel =~ /^REditorSupport[.]r\\/r-/i",
+					"group": "rplay_output@3"
+				},
+				{
+					"command": "notebook.cell.expandAllCellOutputs",
+					"when": "notebookType == interactive && notebookKernel =~ /^REditorSupport[.]r\\/r-/i",
+					"group": "rplay_output@4"
+				},
 				{
 					"command": "rCommanderPlay.toggleArfWordWrap",
 					"when": "notebookType == interactive && notebookKernel =~ /^REditorSupport[.]r\\/r-/i",
@@ -5000,6 +5213,26 @@
 					"command": "rCommanderPlay.runInTerminal",
 					"when": "view == rInteractiveSessions && config.rCommanderPlay.runTarget != terminal",
 					"group": "navigation@91"
+				},
+				{
+					"command": "rCommanderPlay.showSettings",
+					"when": "view == rInteractiveSessions",
+					"group": "arf_options@-1"
+				},
+				{
+					"command": "rCommanderPlay.openSettingsForm",
+					"when": "view == rInteractiveSessions",
+					"group": "arf_options@-1"
+				},
+				{
+					"command": "rCommanderPlay.toggleLimitOutput",
+					"when": "view == rInteractiveSessions",
+					"group": "arf_options@0"
+				},
+				{
+					"command": "rCommanderPlay.toggleArfScrollOutput",
+					"when": "view == rInteractiveSessions",
+					"group": "arf_options@0"
 				},
 				{
 					"command": "rCommanderPlay.toggleArfWordWrap",
