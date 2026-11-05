@@ -45,5 +45,12 @@ const { RSession } = require('../lib/rsession');
   const failed = spawnSync('Rscript', ['--vanilla', '-e', sent[0]], { encoding: 'utf8' });
   assert.match(failed.stderr, /Error: boom/);
   assert.ok(!failed.stdout.includes('> b <- 2'), 'nothing runs after the error');
+  // The run-target hook runs before every send (runs and queries), so terminal/arf routing is applied first.
+  const order = [];
+  const routed = new RSession({ commands: { executeCommand: async () => order.push('send') } }, path.join(__dirname, '..', 'runner.R'), async () => order.push('route'));
+  await routed.run('1+1', { settings: { loadRcmdrFunctions: false } });
+  routed.query('1', 50).catch(() => {});
+  await new Promise(r => setTimeout(r, 20));
+  assert.deepEqual(order, ['route', 'send', 'route', 'send']);
   console.log('the terminal shows one short line and the code as written.');
 })();

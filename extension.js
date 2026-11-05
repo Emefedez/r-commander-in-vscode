@@ -31,12 +31,24 @@ function configurationTarget(resource) {
     : vscode.ConfigurationTarget.Global;
 }
 
+// Where R code goes: the R terminal or the arf Interactive panel. The R extension decides that
+// from r.interactive.executionTarget, so rCommanderPlay.runTarget (auto | terminal | arf) sets it,
+// and only when the user picked something other than "auto".
+async function routeToTarget() {
+  const wanted = { terminal: 'terminal', arf: 'interactive' }[configuration().get('runTarget', 'auto')];
+  if (!wanted) return;
+  const rConfig = vscode.workspace.getConfiguration('r');
+  if (rConfig.get('interactive.executionTarget') !== wanted) {
+    await rConfig.update('interactive.executionTarget', wanted, vscode.ConfigurationTarget.Global);
+  }
+}
+
 // The R terminal that REditorSupport.r manages.
 const rTerminal = () => (vscode.window.terminals || []).find(terminal => /^R\b/.test(terminal.name));
 
 function activate(context) {
   // One channel to the R terminal, shared by the green button and the R Commander menus.
-  const session = new RSession(vscode, context.asAbsolutePath('runner.R'));
+  const session = new RSession(vscode, context.asAbsolutePath('runner.R'), routeToTarget);
   const status = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 10);
   status.command = 'rCommanderPlay.showSettings';
   const refresh = () => {
@@ -100,7 +112,7 @@ function activate(context) {
         await session.run(code, { settings: {
           skipHelp: config.get('skipHelp', true), skipCommands: config.get('skipCommands', []),
           limitOutput: config.get('limitOutput', true),
-          syntaxColors: config.get('syntaxColors', false),
+          syntaxColors: config.get('syntaxColors', true),
           maxOutputItems: Number.isInteger(configuredMax) && configuredMax >= 1 && configuredMax <= 1000000 ? configuredMax : 24,
           loadRcmdrFunctions: config.get('loadRcmdrFunctions', true), rcmdrPlugins: config.get('rcmdrPlugins', [])
         } });
@@ -117,7 +129,7 @@ function activate(context) {
       await update(resource, 'limitOutput', enabled, `Output preview ${enabled ? 'enabled' : 'disabled'}.`);
     }),
     vscode.commands.registerCommand('rCommanderPlay.toggleSyntaxColors', async resource => {
-      const enabled = !configuration(resource).get('syntaxColors', false);
+      const enabled = !configuration(resource).get('syntaxColors', true);
       await update(resource, 'syntaxColors', enabled, enabled ? t('Syntax colors enabled.') : t('Syntax colors disabled.'));
     }),
     vscode.commands.registerCommand('rCommanderPlay.configureOutputLimit', async resource => {
@@ -146,11 +158,22 @@ function activate(context) {
       const commands = [...new Set(value.split(',').map(command => command.trim()).filter(Boolean))];
       await update(uri, 'skipCommands', commands, commands.length ? `Skipping ${commands.join(', ')}.` : 'Custom command skipping cleared.');
     }),
+    vscode.commands.registerCommand('rCommanderPlay.chooseRunTarget', async () => {
+      const picked = await vscode.window.showQuickPick([
+        { label: 'auto', description: t('Follow the R extension (selected Interactive session, else the R terminal)'), value: 'auto' },
+        { label: 'R terminal', description: t('Always run in the R terminal'), value: 'terminal' },
+        { label: 'arf', description: t('Always run in the arf Interactive panel'), value: 'arf' }
+      ], { title: t('Where should R code run?') });
+      if (!picked) return;
+      await configuration().update('runTarget', picked.value, vscode.ConfigurationTarget.Global);
+      await vscode.window.showInformationMessage(`R Play: ${picked.label}.`);
+    }),
     vscode.commands.registerCommand('rCommanderPlay.showSettings', async resource => {
       const uri = resourceFor(resource);
       const config = configuration(uri);
       const chosen = await vscode.window.showQuickPick([
-        { label: t('Syntax colors: {0}', config.get('syntaxColors', false) ? 'ON' : 'OFF'), description: t('Color the R code echoed in the terminal'), command: 'rCommanderPlay.toggleSyntaxColors' },
+        { label: t('Syntax colors: {0}', config.get('syntaxColors', true) ? 'ON' : 'OFF'), description: t('Color the R code echoed in the terminal'), command: 'rCommanderPlay.toggleSyntaxColors' },
+        { label: t('Run in: {0}', { auto: 'auto', terminal: 'R terminal', arf: 'arf panel' }[config.get('runTarget', 'auto')]), description: t('Where R code runs: R terminal or arf Interactive panel'), command: 'rCommanderPlay.chooseRunTarget' },
         { label: `Output preview: ${config.get('limitOutput', true) ? 'ON' : 'OFF'}`, description: 'Toggle short previews of long results', command: 'rCommanderPlay.toggleLimitOutput' },
         { label: `Preview size: ${config.get('maxOutputItems', 24)} entries`, description: 'Choose a size and enable previews', command: 'rCommanderPlay.configureOutputLimit' },
         { label: `Skip help: ${config.get('skipHelp', true) ? 'ON' : 'OFF'}`, description: 'Toggle skipping ?topic, ??topic and help()', command: 'rCommanderPlay.toggleSkipHelp' },
@@ -173,8 +196,8 @@ function registerMenus(context, resourceFor, configuration, refreshPlayStatus, s
       const config = configuration();
       return {
         limitOutput: config.get('limitOutput', true), maxOutputItems: Number(config.get('maxOutputItems', 24)),
-        syntaxColors: config.get('syntaxColors', false),
-        menuAction: config.get('menuAction', 'run'), dialogStyle: config.get('dialogStyle', 'form'),
+        syntaxColors: config.get('syntaxColors', true),
+        menuAction: config.get('menuAction', 'both'), dialogStyle: config.get('dialogStyle', 'form'),
         cranMirror: config.get('cranMirror', 'https://cloud.r-project.org'),
         packageDownloads: config.get('packageDownloads', '~/.cache/r-commander-play/packages'),
         loadRcmdrFunctions: config.get('loadRcmdrFunctions', true), rcmdrPlugins: config.get('rcmdrPlugins', [])

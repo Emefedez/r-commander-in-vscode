@@ -188,6 +188,9 @@ async function runAndRead() {
   assert.match((await runAndRead()).stdout, /omitted 188 entries/);
 
   // The toggle reaches the real runner even while the terminal has focus.
+  assert.equal(settings.syntaxColors, undefined, 'colors are on by default');
+  await handlers['rCommanderPlay.toggleSyntaxColors'](uri);
+  assert.equal(settings.syntaxColors, false);
   await handlers['rCommanderPlay.toggleSyntaxColors'](uri);
   assert.equal(settings.syntaxColors, true);
   const colored = (await runAndRead()).stdout;

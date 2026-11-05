@@ -83,7 +83,8 @@ de REditorSupport o las ventanas de R.
 | `rCommanderPlay.packageDownloads` | `~/.cache/r-commander-play/packages` | Carpeta permanente de descargas del instalador; es también un repositorio local que se consulta antes que CRAN. |
 | `rCommanderPlay.language` | `es` | Idioma de los diálogos y del árbol (`es`, `en`, `auto`). Las etiquetas de los menús se fijan al arrancar VS Code: usa **R Commander: Cambiar idioma (English / Español)** y recarga la ventana. |
 | `rCommanderPlay.dialogStyle` | `form` | `form`: una ventana con todo. `steps`: una pregunta cada vez en la barra superior. |
-| `rCommanderPlay.menuAction` | `run` | `run`, `insert` o `both`. |
+| `rCommanderPlay.menuAction` | `both` | `run`, `insert` o `both` (insertar en el script y ejecutar, como Rcmdr). |
+| `rCommanderPlay.runTarget` | `auto` | Dónde se ejecuta el código: `terminal`, `arf` (panel Interactive de arf) o `auto` (lo que use la extensión de R). |
 | `rCommanderPlay.loadRcmdrFunctions` | `true` | Carga las funciones de Rcmdr y sus complementos antes de cada ejecución. |
 | `rCommanderPlay.rcmdrPlugins` | `[]` | Complementos a cargar; vacío = todos los `RcmdrPlugin.*` instalados. |
 | `rCommanderPlay.skipHelp`, `skipCommands` | `true`, `[]` | Qué omite el botón verde (ver más abajo). |

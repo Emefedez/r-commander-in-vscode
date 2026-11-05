@@ -136,7 +136,7 @@
 				},
 				"rCommanderPlay.syntaxColors": {
 					"type": "boolean",
-					"default": false,
+					"default": true,
 					"scope": "resource",
 					"description": "%rCommanderPlay.syntaxColors.description%"
 				},

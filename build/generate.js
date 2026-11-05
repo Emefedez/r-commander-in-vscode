@@ -233,9 +233,14 @@ pkg.contributes.configuration.properties['rCommanderPlay.dialogStyle'] = {
   description: 'How the R Commander menus ask for their options.'
 };
 pkg.contributes.configuration.properties['rCommanderPlay.menuAction'] = {
-  type: 'string', enum: ['run', 'insert', 'both'], default: 'run', scope: 'window',
-  enumDescriptions: ['Run the generated R code in the R terminal', 'Only insert the generated code at the end of the R script', 'Insert it in the script and run it'],
-  description: 'What the R Commander menus do with the R code they generate.'
+  type: 'string', enum: ['run', 'insert', 'both'], default: 'both', scope: 'window',
+  enumDescriptions: ['Run the generated R code in R (terminal or arf panel, see Run Target)', 'Only insert the generated code at the end of the R script', 'Insert it in the script and run it'],
+  description: 'What the R Commander menus do with the R code they generate. "both" pastes it into the R script and runs it, like the script window of R Commander.'
+};
+pkg.contributes.configuration.properties['rCommanderPlay.runTarget'] = {
+  type: 'string', enum: ['auto', 'terminal', 'arf'], default: 'auto', scope: 'window',
+  enumDescriptions: ['Follow the R extension (the selected Interactive session, else the R terminal)', 'Always the R terminal', 'Always the arf Interactive panel (offers to start one if none is open)'],
+  description: 'Where the green button and the R Commander menus run R code. "terminal" and "arf" set r.interactive.executionTarget of the R extension.'
 };
 
 // --- translations --------------------------------------------------------------
