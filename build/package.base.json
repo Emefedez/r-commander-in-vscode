@@ -83,6 +83,18 @@
 				"toggled": "config.rCommanderPlay.syntaxColors"
 			},
 			{
+				"command": "rCommanderPlay.toggleArfWordWrap",
+				"title": "arf Panel: Wrap Long Output Lines",
+				"category": "R Commander",
+				"toggled": "config.notebook.output.wordWrap"
+			},
+			{
+				"command": "rCommanderPlay.toggleArfPanelLayout",
+				"title": "arf Panel: Below the Script (horizontal)",
+				"category": "R Commander",
+				"toggled": "config.workbench.editor.openSideBySideDirection == down"
+			},
+			{
 				"command": "rCommanderPlay.runInTerminal",
 				"title": "Run R Code in the Terminal",
 				"category": "R Commander",

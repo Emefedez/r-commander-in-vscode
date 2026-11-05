@@ -189,6 +189,8 @@ pkg.contributes.views = { workspaceViewer: [{ id: 'rCommanderMenu', name: 'R Com
 pkg.activationEvents = [...new Set([...(base.activationEvents || []), 'onView:rCommanderMenu'])];
 const ours = new Set(['rCommanderPlay.run', 'rCommanderPlay.clearTerminal', 'rCommanderPlay.interruptR']);
 const title = pkg.contributes.menus['editor/title'].filter(m => !ours.has(m.command));
+// The Interactive Window of an arf session (same condition the R extension uses for its own toolbar items).
+const arfWindow = "notebookType == interactive && notebookKernel =~ /^REditorSupport[.]r\\/r-/i";
 pkg.contributes.menus = {
   ...menuEntries,
   // VS Code's "Run or Debug" split button (Run Source lives in it) is navigation@-1;
@@ -197,6 +199,11 @@ pkg.contributes.menus = {
     { command: 'rCommanderPlay.clearTerminal', when: 'editorLangId == r', group: 'navigation@-3' },
     { command: 'rCommanderPlay.run', when: 'editorLangId == r && isWorkspaceTrusted', group: 'navigation@-2' },
     { submenu: 'rcp.top', when: 'editorLangId == r', group: '1_rcommander@1' }, ...title],
+  // The arf panel's own "..." menu (an Interactive Window driven by the R extension's controller).
+  'interactive/toolbar': [
+    { command: 'rCommanderPlay.toggleArfWordWrap', when: arfWindow, group: 'rplay_arf@1' },
+    { command: 'rCommanderPlay.toggleArfPanelLayout', when: arfWindow, group: 'rplay_arf@2' },
+    { command: 'rCommanderPlay.runInTerminal', when: `${arfWindow} && config.rCommanderPlay.runTarget != terminal`, group: 'rplay_arf@3' }],
   // The two side-by-side buttons in the R Commander sidebar header (keeps the editor toolbar short).
   'view/title': [
     { command: 'rCommanderPlay.interruptR', when: 'view == rCommanderMenu', group: 'navigation@1' },
@@ -206,6 +213,9 @@ pkg.contributes.menus = {
     // Buttons in the R extension's Interactive Sessions view: where R code runs. Each shows while it is not the current target.
     { command: 'rCommanderPlay.runInArf', when: 'view == rInteractiveSessions && config.rCommanderPlay.runTarget != arf', group: 'navigation@90' },
     { command: 'rCommanderPlay.runInTerminal', when: 'view == rInteractiveSessions && config.rCommanderPlay.runTarget != terminal', group: 'navigation@91' },
+    // Options of the arf panel itself: its own "..." toolbar menu once open, and the Interactive Sessions "..." menu.
+    { command: 'rCommanderPlay.toggleArfWordWrap', when: 'view == rInteractiveSessions', group: 'arf_options@1' },
+    { command: 'rCommanderPlay.toggleArfPanelLayout', when: 'view == rInteractiveSessions', group: 'arf_options@2' },
     // In the header's "..." menu, with a check mark while enabled.
     { command: 'rCommanderPlay.toggleCloseMenus', when: 'view == rCommanderMenu', group: '1_menus@1' },
     { command: 'rCommanderPlay.toggleInsertInScript', when: 'view == rCommanderMenu', group: '1_menus@2' }]

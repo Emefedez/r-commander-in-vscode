@@ -12,6 +12,7 @@ const document = {
   languageId: 'r', uri, save: async () => true,
   getText: () => '?sample\nplay_value <- rep(TRUE,200)\nplay_value'
 };
+const other = {}, layouts = [];
 const editor = { document, selections: [{ isEmpty: true }] };
 const mock = {
   env: { language: 'en' },
@@ -27,7 +28,9 @@ const mock = {
     isTrusted: true, workspaceFolders: [{}], getWorkspaceFolder: resource => resource === uri ? {} : undefined,
     onDidChangeConfiguration: callback => { onConfigurationChange = callback; return {}; },
     getConfiguration: (section, resource) => {
-      assert.equal(section, 'rCommanderPlay');
+      if (section !== 'rCommanderPlay') { // VS Code's own settings (notebook output wrap, side-by-side direction)
+        return { get: (key, fallback) => other[`${section}.${key}`] ?? fallback, update: async (key, value, target) => { assert.equal(target, 1); other[`${section}.${key}`] = value; } };
+      }
       assert.equal(resource, uri);
       return {
         get: (key, fallback) => settings[key] ?? fallback,
@@ -62,6 +65,8 @@ const mock = {
     registerCommand: (name, handler) => { handlers[name] = handler; return {}; },
     executeCommand: async (name, argument) => {
       if (handlers[name]) return handlers[name](argument);
+      if (name === 'vscode.getEditorLayout') return { orientation: 0, groups: [{ size: 0.5 }, { size: 0.5 }] };
+      if (name === 'vscode.setEditorLayout') { layouts.push(argument); return; }
       assert.equal(name, 'r.runCommand');
       sent.push(argument);
     }
@@ -201,6 +206,18 @@ async function runAndRead() {
   await handlers['rCommanderPlay.runInArf']();
   assert.equal(settings.runTarget, 'arf');
   delete settings.runTarget;
+
+  // arf panel options: output wrapping, and stacking the panel below the script.
+  await handlers['rCommanderPlay.toggleArfWordWrap']();
+  assert.equal(other['notebook.output.wordWrap'], true);
+  await handlers['rCommanderPlay.toggleArfWordWrap']();
+  assert.equal(other['notebook.output.wordWrap'], false);
+  await handlers['rCommanderPlay.toggleArfPanelLayout']();
+  assert.equal(other['workbench.editor.openSideBySideDirection'], 'down');
+  assert.equal(layouts.at(-1).orientation, 1);
+  await handlers['rCommanderPlay.toggleArfPanelLayout']();
+  assert.equal(other['workbench.editor.openSideBySideDirection'], 'right');
+  assert.equal(layouts.at(-1).orientation, 0);
 
   // The toggle reaches the real runner even while the terminal has focus.
   assert.equal(settings.syntaxColors, undefined, 'colors are on by default');

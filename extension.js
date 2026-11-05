@@ -158,6 +158,22 @@ function activate(context) {
       const commands = [...new Set(value.split(',').map(command => command.trim()).filter(Boolean))];
       await update(uri, 'skipCommands', commands, commands.length ? `Skipping ${commands.join(', ')}.` : 'Custom command skipping cleared.');
     }),
+    // arf panel options. Output wrapping is VS Code's notebook setting; the layout flips the editor groups between
+    // side by side and stacked (the panel below the script) and makes new panels open the same way.
+    vscode.commands.registerCommand('rCommanderPlay.toggleArfWordWrap', async () => {
+      const notebook = vscode.workspace.getConfiguration('notebook.output');
+      const wrap = !notebook.get('wordWrap', false);
+      await notebook.update('wordWrap', wrap, vscode.ConfigurationTarget.Global);
+      await vscode.window.showInformationMessage(wrap ? t('Long output lines in the arf panel will wrap.') : t('Long output lines in the arf panel will not wrap.'));
+    }),
+    vscode.commands.registerCommand('rCommanderPlay.toggleArfPanelLayout', async () => {
+      const editorConfig = vscode.workspace.getConfiguration('workbench.editor');
+      const below = editorConfig.get('openSideBySideDirection', 'right') !== 'down';
+      await editorConfig.update('openSideBySideDirection', below ? 'down' : 'right', vscode.ConfigurationTarget.Global);
+      const layout = await vscode.commands.executeCommand('vscode.getEditorLayout');
+      if (layout?.groups?.length > 1) await vscode.commands.executeCommand('vscode.setEditorLayout', { ...layout, orientation: below ? 1 : 0 });
+      await vscode.window.showInformationMessage(below ? t('The arf panel opens below the script.') : t('The arf panel opens beside the script.'));
+    }),
     ...[['runInTerminal', 'terminal', 'R terminal'], ['runInArf', 'arf', 'arf panel']].map(([command, value, label]) =>
       vscode.commands.registerCommand(`rCommanderPlay.${command}`, async () => {
         await configuration().update('runTarget', value, vscode.ConfigurationTarget.Global);
@@ -179,6 +195,8 @@ function activate(context) {
       const chosen = await vscode.window.showQuickPick([
         { label: t('Syntax colors: {0}', config.get('syntaxColors', true) ? 'ON' : 'OFF'), description: t('Color the R code echoed in the terminal'), command: 'rCommanderPlay.toggleSyntaxColors' },
         { label: t('Paste menu code into script: {0}', config.get('menuAction', 'both') === 'both' ? 'ON' : 'OFF'), description: t('Insert the code of menu commands in the script, or only run it'), command: 'rCommanderPlay.toggleInsertInScript' },
+        { label: t('arf panel: wrap long lines'), description: t('Toggle word wrap of the output in the arf panel'), command: 'rCommanderPlay.toggleArfWordWrap' },
+        { label: t('arf panel: below the script'), description: t('Stack the arf panel under the script instead of beside it'), command: 'rCommanderPlay.toggleArfPanelLayout' },
         { label: t('Run in: {0}', { auto: 'auto', terminal: 'R terminal', arf: 'arf panel' }[config.get('runTarget', 'auto')]), description: t('Where R code runs: R terminal or arf Interactive panel'), command: 'rCommanderPlay.chooseRunTarget' },
         { label: `Output preview: ${config.get('limitOutput', true) ? 'ON' : 'OFF'}`, description: 'Toggle short previews of long results', command: 'rCommanderPlay.toggleLimitOutput' },
         { label: `Preview size: ${config.get('maxOutputItems', 24)} entries`, description: 'Choose a size and enable previews', command: 'rCommanderPlay.configureOutputLimit' },

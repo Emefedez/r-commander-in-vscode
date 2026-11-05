@@ -448,6 +448,8 @@
 	"rCommanderPlay.toggleSyntaxColors": "Syntax Colors in Terminal",
 	"rCommanderPlay.toggleInsertInScript": "Paste Menu Code into the Script",
 	"rCommanderPlay.runInTerminal": "Run R Code in the Terminal",
+	"rCommanderPlay.toggleArfWordWrap": "arf Panel: Wrap Long Output Lines",
+	"rCommanderPlay.toggleArfPanelLayout": "arf Panel: Below the Script (horizontal)",
 	"rCommanderPlay.runInArf": "Run R Code in the arf Panel",
 	"rCommanderPlay.searchMenus": "Search Menus",
 	"rCommanderPlay.clearMenuSearch": "Clear Menu Search",

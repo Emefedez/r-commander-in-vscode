@@ -84,6 +84,18 @@
 				"toggled": "config.rCommanderPlay.syntaxColors"
 			},
 			{
+				"command": "rCommanderPlay.toggleArfWordWrap",
+				"title": "%rCommanderPlay.toggleArfWordWrap%",
+				"category": "R Commander",
+				"toggled": "config.notebook.output.wordWrap"
+			},
+			{
+				"command": "rCommanderPlay.toggleArfPanelLayout",
+				"title": "%rCommanderPlay.toggleArfPanelLayout%",
+				"category": "R Commander",
+				"toggled": "config.workbench.editor.openSideBySideDirection == down"
+			},
+			{
 				"command": "rCommanderPlay.runInTerminal",
 				"title": "%rCommanderPlay.runInTerminal%",
 				"category": "R Commander",
@@ -4941,6 +4953,23 @@
 					"group": "3_rCommanderPlayOutput@4"
 				}
 			],
+			"interactive/toolbar": [
+				{
+					"command": "rCommanderPlay.toggleArfWordWrap",
+					"when": "notebookType == interactive && notebookKernel =~ /^REditorSupport[.]r\\/r-/i",
+					"group": "rplay_arf@1"
+				},
+				{
+					"command": "rCommanderPlay.toggleArfPanelLayout",
+					"when": "notebookType == interactive && notebookKernel =~ /^REditorSupport[.]r\\/r-/i",
+					"group": "rplay_arf@2"
+				},
+				{
+					"command": "rCommanderPlay.runInTerminal",
+					"when": "notebookType == interactive && notebookKernel =~ /^REditorSupport[.]r\\/r-/i && config.rCommanderPlay.runTarget != terminal",
+					"group": "rplay_arf@3"
+				}
+			],
 			"view/title": [
 				{
 					"command": "rCommanderPlay.interruptR",
@@ -4971,6 +5000,16 @@
 					"command": "rCommanderPlay.runInTerminal",
 					"when": "view == rInteractiveSessions && config.rCommanderPlay.runTarget != terminal",
 					"group": "navigation@91"
+				},
+				{
+					"command": "rCommanderPlay.toggleArfWordWrap",
+					"when": "view == rInteractiveSessions",
+					"group": "arf_options@1"
+				},
+				{
+					"command": "rCommanderPlay.toggleArfPanelLayout",
+					"when": "view == rInteractiveSessions",
+					"group": "arf_options@2"
 				},
 				{
 					"command": "rCommanderPlay.toggleCloseMenus",
