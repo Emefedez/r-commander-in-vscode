@@ -154,6 +154,10 @@ make install    # empaqueta e instala en VS Code; luego "Developer: Reload Windo
   escritorio del usuario: no lanzar pruebas de R sin ese archivo. Los casos con `method='identify'` solo se analizan.
   `tests/report.js` cubre los documentos.
 
+- **Capturas del README** (`docs/screenshots/`): `overview.png` y `arf-panel.png` son capturas reales de la ventana de VS Code
+  (hypruse, sin tocar el ratón); `dialog.png` sale de `build/render-form.js` (el HTML real del formulario con los colores
+  de Tokyo Night, capturado con chromium headless). No se manejó la ventana del usuario para abrir diálogos.
+
 ### En curso
 - Nada abierto. Pendiente de confirmar con el usuario: a qué se refiere con "la salida de la instalación es distinta
   a la de R Commander" (pegó la salida de *Cargar paquete(s)*).

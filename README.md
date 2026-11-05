@@ -6,6 +6,20 @@ Extensión de VS Code para trabajar con R al estilo de **R Commander**.
 - Menús de R Commander con sus diálogos (371 comandos: Rcmdr y RcmdrPlugin.TeachStat)
 - Español por defecto, inglés opcional
 
+## Capturas
+
+![Ventana de VS Code con el árbol de R Commander, el script y el panel de arf](docs/screenshots/overview.png)
+
+- Barra lateral: menús de R Commander. Editor: el código generado. Abajo: panel de arf
+
+![Diálogo Diagrama de cajas](docs/screenshots/dialog.png)
+
+- Diálogo en una ventana: variables, grupos, identificar atípicos (automático, con el ratón, no), etiquetas
+
+![Panel de arf con la barra de botones y el resultado](docs/screenshots/arf-panel.png)
+
+- Panel de arf: *Limit Long Output*, reiniciar, sesión, historial; el resultado se imprime con eco coloreado
+
 ## Requisitos
 
 - VS Code ≥ 1.85
