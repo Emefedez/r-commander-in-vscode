@@ -62,8 +62,7 @@
 			{
 				"command": "rCommanderPlay.showSettings",
 				"title": "%rCommanderPlay.showSettings%",
-				"category": "R",
-				"icon": "$(gear)"
+				"category": "R"
 			},
 			{
 				"command": "rCommanderPlay.openSettingsForm",
@@ -5128,11 +5127,6 @@
 			],
 			"interactive/toolbar": [
 				{
-					"command": "rCommanderPlay.showSettings",
-					"when": "notebookType == interactive && notebookKernel =~ /^REditorSupport[.]r\\/r-/i",
-					"group": "navigation/rplay@0"
-				},
-				{
 					"command": "rCommanderPlay.openSettingsForm",
 					"when": "notebookType == interactive && notebookKernel =~ /^REditorSupport[.]r\\/r-/i",
 					"group": "rplay_settings@1"
@@ -5213,11 +5207,6 @@
 					"command": "rCommanderPlay.runInTerminal",
 					"when": "view == rInteractiveSessions && config.rCommanderPlay.runTarget != terminal",
 					"group": "navigation@91"
-				},
-				{
-					"command": "rCommanderPlay.showSettings",
-					"when": "view == rInteractiveSessions",
-					"group": "arf_options@-1"
 				},
 				{
 					"command": "rCommanderPlay.openSettingsForm",

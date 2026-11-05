@@ -53,8 +53,8 @@ Después: **Developer: Reload Window**.
 
 - Barra del editor: interrumpir R, instalar paquetes, limpiar terminal, play verde
 - Vista *Interactive Sessions*: ejecutar en el terminal / en arf
-- Panel de arf, barra: ⚙ ajustes de R Play, vista previa corta de resultados largos
-- Panel de arf, menú ⋯: todos los ajustes (formulario), notación fija, tamaño de la vista previa, salidas con
+- Panel de arf, barra: vista previa corta de resultados largos
+- Panel de arf, menú ⋯: todos los ajustes de R Play (formulario), notación fija, tamaño de la vista previa, salidas con
   desplazamiento, colapsar / expandir salidas, ajustar líneas largas, panel debajo del script, ejecutar en terminal
 - Menú ⋯ de *Interactive Sessions*: las mismas opciones
 - Menú ⋯ de la barra lateral: cerrar menús al elegir, pegar el código en el script

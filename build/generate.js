@@ -202,7 +202,6 @@ pkg.contributes.menus = {
   // The arf panel's own "..." menu (an Interactive Window driven by the R extension's controller).
   'interactive/toolbar': [
     // R Play's own settings from the arf panel: the quick settings bar (a button) and the full settings form.
-    { command: 'rCommanderPlay.showSettings', when: arfWindow, group: 'navigation/rplay@0' },
     { command: 'rCommanderPlay.openSettingsForm', when: arfWindow, group: 'rplay_settings@1' },
     // Long results: the short preview (a button) and collapsing or scrolling the outputs that are printed.
     { command: 'rCommanderPlay.toggleLimitOutput', when: arfWindow, group: 'navigation/rplay@1' },
@@ -224,7 +223,6 @@ pkg.contributes.menus = {
     { command: 'rCommanderPlay.runInArf', when: 'view == rInteractiveSessions && config.rCommanderPlay.runTarget != arf', group: 'navigation@90' },
     { command: 'rCommanderPlay.runInTerminal', when: 'view == rInteractiveSessions && config.rCommanderPlay.runTarget != terminal', group: 'navigation@91' },
     // Options of the arf panel itself: its own "..." toolbar menu once open, and the Interactive Sessions "..." menu.
-    { command: 'rCommanderPlay.showSettings', when: 'view == rInteractiveSessions', group: 'arf_options@-1' },
     { command: 'rCommanderPlay.openSettingsForm', when: 'view == rInteractiveSessions', group: 'arf_options@-1' },
     { command: 'rCommanderPlay.toggleLimitOutput', when: 'view == rInteractiveSessions', group: 'arf_options@0' },
     { command: 'rCommanderPlay.toggleArfScrollOutput', when: 'view == rInteractiveSessions', group: 'arf_options@0' },
