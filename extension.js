@@ -173,6 +173,7 @@ function activate(context) {
       const config = configuration(uri);
       const chosen = await vscode.window.showQuickPick([
         { label: t('Syntax colors: {0}', config.get('syntaxColors', true) ? 'ON' : 'OFF'), description: t('Color the R code echoed in the terminal'), command: 'rCommanderPlay.toggleSyntaxColors' },
+        { label: t('Paste menu code into script: {0}', config.get('menuAction', 'both') === 'both' ? 'ON' : 'OFF'), description: t('Insert the code of menu commands in the script, or only run it'), command: 'rCommanderPlay.toggleInsertInScript' },
         { label: t('Run in: {0}', { auto: 'auto', terminal: 'R terminal', arf: 'arf panel' }[config.get('runTarget', 'auto')]), description: t('Where R code runs: R terminal or arf Interactive panel'), command: 'rCommanderPlay.chooseRunTarget' },
         { label: `Output preview: ${config.get('limitOutput', true) ? 'ON' : 'OFF'}`, description: 'Toggle short previews of long results', command: 'rCommanderPlay.toggleLimitOutput' },
         { label: `Preview size: ${config.get('maxOutputItems', 24)} entries`, description: 'Choose a size and enable previews', command: 'rCommanderPlay.configureOutputLimit' },
@@ -250,6 +251,13 @@ function registerMenus(context, resourceFor, configuration, refreshPlayStatus, s
     vscode.commands.registerCommand('rCommanderPlay.chooseMenuItem', id => {
       if (configuration().get('closeMenusAfterChoice', false)) menuTree.closeMenus();
       return vscode.commands.executeCommand(`rcp.cmd.${id}`);
+    }),
+    // Menus paste the generated code into the script and run it ("both"), or only run it ("run").
+    vscode.commands.registerCommand('rCommanderPlay.toggleInsertInScript', async () => {
+      const paste = configuration().get('menuAction', 'both') !== 'both';
+      await configuration().update('menuAction', paste ? 'both' : 'run', vscode.ConfigurationTarget.Global);
+      await vscode.window.showInformationMessage(paste
+        ? t('Menu commands will be pasted into the script and run.') : t('Menu commands will only run, without pasting into the script.'));
     }),
     vscode.commands.registerCommand('rCommanderPlay.toggleCloseMenus', async () => {
       const enabled = !configuration().get('closeMenusAfterChoice', false);

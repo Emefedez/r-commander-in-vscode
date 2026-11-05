@@ -83,6 +83,12 @@
 				"toggled": "config.rCommanderPlay.syntaxColors"
 			},
 			{
+				"command": "rCommanderPlay.toggleInsertInScript",
+				"title": "Paste Menu Code into the Script",
+				"category": "R Commander",
+				"toggled": "config.rCommanderPlay.menuAction == both"
+			},
+			{
 				"command": "rCommanderPlay.toggleCloseMenus",
 				"title": "Close Menus After Choosing an Option",
 				"category": "R Commander",
@@ -179,6 +185,11 @@
 					"command": "rCommanderPlay.toggleSyntaxColors",
 					"when": "editorLangId == r",
 					"group": "3_rCommanderPlayOutput@3"
+				},
+				{
+					"command": "rCommanderPlay.toggleInsertInScript",
+					"when": "editorLangId == r",
+					"group": "3_rCommanderPlayOutput@4"
 				}
 			]
 		}

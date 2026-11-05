@@ -204,7 +204,8 @@ pkg.contributes.menus = {
     { command: 'rCommanderPlay.searchMenus', when: 'view == rCommanderMenu', group: 'navigation@3' },
     { command: 'rCommanderPlay.clearMenuSearch', when: 'view == rCommanderMenu', group: 'navigation@4' },
     // In the header's "..." menu, with a check mark while enabled.
-    { command: 'rCommanderPlay.toggleCloseMenus', when: 'view == rCommanderMenu', group: '1_menus@1' }]
+    { command: 'rCommanderPlay.toggleCloseMenus', when: 'view == rCommanderMenu', group: '1_menus@1' },
+    { command: 'rCommanderPlay.toggleInsertInScript', when: 'view == rCommanderMenu', group: '1_menus@2' }]
 };
 pkg.contributes.configuration.properties['rCommanderPlay.language'] = {
   type: 'string', enum: ['es', 'en', 'auto'], default: 'es', scope: 'window',

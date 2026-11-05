@@ -84,6 +84,12 @@
 				"toggled": "config.rCommanderPlay.syntaxColors"
 			},
 			{
+				"command": "rCommanderPlay.toggleInsertInScript",
+				"title": "%rCommanderPlay.toggleInsertInScript%",
+				"category": "R Commander",
+				"toggled": "config.rCommanderPlay.menuAction == both"
+			},
+			{
 				"command": "rCommanderPlay.toggleCloseMenus",
 				"title": "%rCommanderPlay.toggleCloseMenus%",
 				"category": "R Commander",
@@ -4916,6 +4922,11 @@
 					"command": "rCommanderPlay.toggleSyntaxColors",
 					"when": "editorLangId == r",
 					"group": "3_rCommanderPlayOutput@3"
+				},
+				{
+					"command": "rCommanderPlay.toggleInsertInScript",
+					"when": "editorLangId == r",
+					"group": "3_rCommanderPlayOutput@4"
 				}
 			],
 			"view/title": [
@@ -4943,6 +4954,11 @@
 					"command": "rCommanderPlay.toggleCloseMenus",
 					"when": "view == rCommanderMenu",
 					"group": "1_menus@1"
+				},
+				{
+					"command": "rCommanderPlay.toggleInsertInScript",
+					"when": "view == rCommanderMenu",
+					"group": "1_menus@2"
 				}
 			]
 		},

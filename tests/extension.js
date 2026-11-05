@@ -32,7 +32,7 @@ const mock = {
       return {
         get: (key, fallback) => settings[key] ?? fallback,
         update: async (key, value, target) => {
-          assert.equal(target, key === 'closeMenusAfterChoice' ? 1 : 3, `${key} is saved where expected`);
+          assert.equal(target, ['closeMenusAfterChoice', 'menuAction'].includes(key) ? 1 : 3, `${key} is saved where expected`);
           settings[key] = value;
           onConfigurationChange({ affectsConfiguration: () => true });
         }
@@ -186,6 +186,13 @@ async function runAndRead() {
   assert.doesNotMatch((await runAndRead()).stdout, /omitted/);
   await handlers['rCommanderPlay.toggleLimitOutput'](uri);
   assert.match((await runAndRead()).stdout, /omitted 188 entries/);
+
+  // Menu code is pasted and run by default; the toggle switches to run-only and back.
+  assert.equal(settings.menuAction, undefined);
+  await handlers['rCommanderPlay.toggleInsertInScript']();
+  assert.equal(settings.menuAction, 'run');
+  await handlers['rCommanderPlay.toggleInsertInScript']();
+  assert.equal(settings.menuAction, 'both');
 
   // The toggle reaches the real runner even while the terminal has focus.
   assert.equal(settings.syntaxColors, undefined, 'colors are on by default');
